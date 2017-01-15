@@ -32,9 +32,33 @@ def evalstats(stats):
         {'name': 'Craftpriest', 'primes': [WIS], 'reqs': [(CON, 9)]},
         {'name': 'Spellsword', 'primes': [STR, INT], 'reqs': []},
         {'name': 'Nightblade', 'primes': [DEX, INT], 'reqs': []},
+        {},
+        {'name': 'Anti-paladin', 'primes': [STR, CHA], 'reqs': []},
+        {'name': 'Barbarian', 'primes': [STR, CON], 'reqs': []},
+        {'name': 'Delver', 'primes': [DEX], 'reqs': [(CON, 9)]},
+        {'name': 'Fury', 'primes': [STR], 'reqs': [(CON, 9)]},
+        {'name': 'Machinist', 'primes': [INT, DEX], 'reqs': [(CON, 9)]},
+        {'name': 'Courtier', 'primes': [INT, CHA], 'reqs': [(INT, 9)]},
+        {'name': 'Enchanter', 'primes': [INT, CHA], 'reqs': [(INT, 9)]},
+        {'name': 'Ranger', 'primes': [STR, DEX], 'reqs': [(INT, 9)]},
+        {'name': 'Trickster', 'primes': [CON, CHA], 'reqs': [(CON, 9), (INT, 9)]},
+        {'name': 'Mystic', 'primes': [WIS, DEX, CON, CHA], 'reqs': []},
+        {'name': 'Wonderworker', 'primes': [INT, WIS], 'reqs': [(i, 11) for i in range(6)]},
+        {'name': 'Paladin', 'primes': [STR, CHA], 'reqs': []},
+        {'name': 'Pristess', 'primes': [WIS, CHA], 'reqs': []},
+        {'name': 'Shaman', 'primes': [WIS], 'reqs': []},
+        {'name': 'Gladiator', 'primes': [STR], 'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
+        {'name': 'Venturer', 'primes': [CHA], 'reqs': []},
+        {'name': 'Warlock', 'primes': [INT], 'reqs': []},
+        {'name': 'Witch', 'primes': [WIS, CHA], 'reqs': []},
+        {'name': 'Ruinguard', 'primes': [STR, INT], 'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
         ]
     allowed_classes = ''
     for cls in classes:
+        if cls == {}:
+            allowed_classes += '\n'
+            continue
+
         prime = min((stats[prime] for prime in cls['primes']))
 
         if prime > 15:
