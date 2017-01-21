@@ -107,25 +107,28 @@ def evalstats(stats, showall, color):
             click.echo(click.style(cls['name'] + '  ', fg=stat_colors(prime, color)), nl=False)
 
 
-def printstats(stats, showall, color):
+def printstats(stats, classes, showall, color):
     for i, stat in enumerate(stats):
         click.echo(click.style('{}:{:>3}  '.format(STATS[i], stat), fg=stat_colors(stat, color)), nl=False)
     total_level = 2*sum(stat_level(s) for s in stats) + 10
     click.echo(click.style('  Total:{:>3}'.format(sum(stats)), fg=stat_colors(total_level, color)))
 
-    evalstats(stats, showall, color)
-    click.echo('\n')
+    if classes:
+        evalstats(stats, showall, color)
+        click.echo('')
+    click.echo('')
 
 
 @click.command()
 @click.option('-n', '--number', default=5, help='Number of characters (default 5).')
-@click.option('--showall/--no-showall', default=False, help='Show classes not allowed by stats.')
-@click.option('--color/--no-color', default=True, help='Show class affinities in color.')
-def generate(number, showall, color):
-    """Character roller for ACKS."""
+@click.option('--no-classes', is_flag=True, help="Don't display the list of classes.")
+@click.option('--showall', is_flag=True, help='Show classes not allowed by stats.')
+@click.option('--no-color', is_flag=True, help='Do not use color to print.')
+def generate(number, no_classes, showall, no_color):
+    """Character generator for ACKS."""
     statss = sorted([rollstats() for i in range(number)], key=lambda arr: -sum(arr))
     for stats in statss:
-        printstats(stats, showall, color)
+        printstats(stats, not no_classes, showall, not no_color)
 
 
 if __name__ == '__main__':
