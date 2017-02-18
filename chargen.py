@@ -110,6 +110,7 @@ def evalstats(stats, showall, color):
 def printstats(stats, classes, showall, color):
     for i, stat in enumerate(stats):
         click.echo(click.style('{}:{:>3}  '.format(STATS[i], stat), fg=stat_colors(stat, color)), nl=False)
+    click.echo('Gold:{:>3}  '.format(rollstat()*10), nl=False)
     total_level = 2*sum(stat_level(s) for s in stats) + 10
     click.echo(click.style('  Total:{:>3}'.format(sum(stats)), fg=stat_colors(total_level, color)))
 
