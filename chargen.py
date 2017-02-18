@@ -88,10 +88,14 @@ def evalstats(stats, showall, color):
         {'name': 'Thrassian Gladiator', 'primes': [STR], 'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
         {'name': 'Zaharan Ruinguard', 'primes': [STR, INT], 'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
         ]
+    section = ''
     for cls in classes:
-        section = cls.get('section')
-        if section:
-            click.echo('\n' + section)
+        new_section = cls.get('section')
+        if new_section:
+            if showall:
+                click.echo('\n' + new_section)
+            else:
+                section = new_section
             continue
 
         prime = min((stats[prime] for prime in cls['primes']))
@@ -108,6 +112,9 @@ def evalstats(stats, showall, color):
             if showall:
                 click.echo(''.join([c+'\u0336' for c in cls['name']]) + '  ', nl=False)
         else:
+            if section:
+                click.echo('\n' + section)
+                section = None
             click.echo(click.style(cls['name'] + '  ', fg=stat_colors(prime, color)), nl=False)
 
 
