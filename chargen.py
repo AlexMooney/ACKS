@@ -37,8 +37,8 @@ def stat_level(stat):
     return -3
 
 
-def stat_colors(stat, color=True):
-    if color:
+def stat_colors(stat, opts):
+    if opts['color']:
         return {-3: 'magenta',
                 -2: 'red',
                 -1: 'yellow',
@@ -50,7 +50,7 @@ def stat_colors(stat, color=True):
     return ''
 
 
-def evalstats(stats, showall, color):
+def evalstats(stats, opts):
     classes = [
         {'section': 'Human Classes'},
         {'name': 'Fighter', 'primes': [STR], 'reqs': []},
@@ -83,16 +83,20 @@ def evalstats(stats, showall, color):
         {'name': 'Enchanter', 'primes': [INT, CHA], 'reqs': [(INT, 9)]},
         {'name': 'Ranger', 'primes': [STR, DEX], 'reqs': [(INT, 9)]},
         {'section': 'Other demi-humans'},
-        {'name': 'Gnomish Trickster', 'primes': [CON, CHA], 'reqs': [(CON, 9), (INT, 9)]},
-        {'name': 'Nobrian Wonderworker', 'primes': [INT, WIS], 'reqs': [(i, 11) for i in range(6)]},
-        {'name': 'Thrassian Gladiator', 'primes': [STR], 'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
-        {'name': 'Zaharan Ruinguard', 'primes': [STR, INT], 'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
+        {'name': 'Gnomish Trickster', 'primes': [CON, CHA],
+            'reqs': [(CON, 9), (INT, 9)]},
+        {'name': 'Nobrian Wonderworker', 'primes': [INT, WIS],
+            'reqs': [(i, 11) for i in range(6)]},
+        {'name': 'Thrassian Gladiator', 'primes': [STR],
+            'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
+        {'name': 'Zaharan Ruinguard', 'primes': [STR, INT],
+            'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
         ]
     section = ''
     for cls in classes:
         new_section = cls.get('section')
         if new_section:
-            if showall:
+            if opts['showall']:
                 click.echo('\n' + new_section)
             else:
                 section = new_section
@@ -109,24 +113,30 @@ def evalstats(stats, showall, color):
                 break
 
         if fitness < 0:
-            if showall:
-                click.echo(''.join([c+'\u0336' for c in cls['name']]) + '  ', nl=False)
+            if opts['showall']:
+                click.echo(''.join([c+'\u0336' for c in cls['name']]) + '  ',
+                           nl=False)
         else:
             if section:
                 click.echo('\n' + section)
                 section = None
-            click.echo(click.style(cls['name'] + '  ', fg=stat_colors(prime, color)), nl=False)
+            click.echo(click.style(cls['name'] + '  ',
+                                   fg=stat_colors(prime, opts)),
+                       nl=False)
 
 
-def printstats(stats, classes, showall, color):
+def printstats(stats, opts):
     for i, stat in enumerate(stats):
-        click.echo(click.style('{}:{:>3}  '.format(STATS[i], stat), fg=stat_colors(stat, color)), nl=False)
+        click.echo(click.style('{}:{:>3}  '.format(STATS[i], stat),
+                               fg=stat_colors(stat, opts)),
+                   nl=False)
     click.echo('Gold:{:>3}  '.format(rollstat()*10), nl=False)
     total_level = 2*sum(stat_level(s) for s in stats) + 10
-    click.echo(click.style('  Total:{:>3}'.format(sum(stats)), fg=stat_colors(total_level, color)))
+    click.echo(click.style('  Total:{:>3}'.format(sum(stats)),
+               fg=stat_colors(total_level, opts)))
 
-    if classes:
-        evalstats(stats, showall, color)
+    if opts['show_classes']:
+        evalstats(stats, opts)
         click.echo('')
     click.echo('')
 
@@ -138,9 +148,17 @@ def printstats(stats, classes, showall, color):
 @click.option('--no-color', is_flag=True, help='Do not use color to print.')
 def generate(number, no_classes, showall, no_color):
     """Character generator for ACKS."""
-    statss = sorted([rollstats() for i in range(number)], key=lambda arr: -sum(arr))
+    opts = {
+        'number': number,
+        'show_classes': not no_classes,
+        'showall': showall,
+        'color': not no_color,
+    }
+
+    statss = sorted([rollstats() for i in range(number)],
+                    key=lambda arr: -sum(arr))
     for stats in statss:
-        printstats(stats, not no_classes, showall, not no_color)
+        printstats(stats, opts)
 
 
 if __name__ == '__main__':
