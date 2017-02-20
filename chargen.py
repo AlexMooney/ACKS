@@ -146,17 +146,20 @@ def printstats(stats, opts):
 @click.option('--no-classes', is_flag=True, help="Don't display the list of classes.")
 @click.option('--showall', is_flag=True, help='Show classes not allowed by stats.')
 @click.option('--no-color', is_flag=True, help='Do not use color to print.')
-def generate(number, no_classes, showall, no_color):
+@click.option('--no-sort', is_flag=True, help='Do not sort the characters by total stats.')
+def generate(number, no_classes, showall, no_color, no_sort):
     """Character generator for ACKS."""
     opts = {
         'number': number,
         'show_classes': not no_classes,
         'showall': showall,
         'color': not no_color,
+        'sort': not no_sort,
     }
 
-    statss = sorted([rollstats() for i in range(number)],
-                    key=lambda arr: -sum(arr))
+    statss = [rollstats() for i in range(number)]
+    if opts['sort']:
+        statss = sorted(statss, key=lambda arr: -sum(arr))
     for stats in statss:
         printstats(stats, opts)
 
