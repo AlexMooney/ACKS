@@ -91,6 +91,34 @@ def evalstats(stats, opts):
             'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
         {'name': 'Zaharan Ruinguard', 'primes': [STR, INT],
             'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
+        {'section': 'Heroic Classes'},
+        {'name': 'Beastmaster', 'primes': [STR, DEX, CON, CHA], 'reqs': []},
+        {'name': 'Berserker', 'primes': [STR, CON], 'reqs': []},
+        {'name': 'Chosen', 'primes': [i for i in range(6)],
+            'reqs': [(i, 9) for i in range(6)], 'special': 'chosen'},
+        {'name': 'Ecclesiastic', 'primes': [WIS], 'reqs': []},
+        {'name': 'Elven Spellsinger', 'primes': [INT, CHA], 'reqs': [(INT, 9)]},
+        {'name': 'Freebooter Expeditionary', 'primes': [DEX, WIS], 'reqs': []},
+        {'name': 'Freebooter Ruffian', 'primes': [DEX, STR], 'reqs': []},
+        {'name': 'Freebooter Scoundrel', 'primes': [DEX, CHA], 'reqs': []},
+        {'name': 'Freebooter Wayfarer', 'primes': [DEX, CON], 'reqs': []},
+        {'name': 'Halfling Bounder', 'primes': [STR, DEX], 'reqs': [(DEX, 9)]},
+        {'name': 'Halfling Burglar', 'primes': [DEX], 'reqs': [(DEX, 9)]},
+        {'name': 'Loremaster', 'primes': [INT, WIS], 'reqs': []},
+        {'name': 'Nobrian Champion', 'primes': [STR, CHA],
+            'reqs': [(i, 11) for i in range(6)]},
+        {'name': 'Nobrian Wizard', 'primes': [INT, WIS],
+            'reqs': [(i, 11) for i in range(6)]},
+        {'name': 'Occultist', 'primes': [INT, WIS], 'reqs': []},
+        {'name': 'Rune Maker', 'primes': [STR, WIS], 'reqs': []},
+        {'name': 'Thrassian Deathchanter', 'primes': [STR, INT, CHA],
+            'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
+        {'name': 'Venturer', 'primes': [CHA], 'reqs': []},
+        {'name': 'Warmistress', 'primes': [DEX, CHA], 'reqs': [(STR, 9)]},
+        {'name': 'Zaharan Darklord', 'primes': [INT, CHA],
+            'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
+        {'name': 'Zaharan Sorcerer', 'primes': [INT],
+            'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
         ]
     section = ''
     for cls in classes:
@@ -112,13 +140,19 @@ def evalstats(stats, opts):
                 prime = 3
                 break
 
+        if cls.get('special') == 'chosen':
+            if max(stats) < 18:
+                fitness = -1
+                prime = 3
+                break
+
         if fitness < 0:
             if opts['showall']:
                 click.echo(''.join([c+'\u0336' for c in cls['name']]) + '  ',
                            nl=False)
         else:
             if section:
-                click.echo('\n' + section)
+                click.echo('\n    ' + section)
                 section = None
             click.echo(click.style(cls['name'] + '  ',
                                    fg=stat_colors(prime, opts)),
