@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 from random import randrange
+import random
+from datetime import datetime
 
 import click
 
@@ -181,7 +183,8 @@ def printstats(stats, opts):
 @click.option('--showall', is_flag=True, help='Show classes not allowed by stats.')
 @click.option('--no-color', is_flag=True, help='Do not use color to print.')
 @click.option('--no-sort', is_flag=True, help='Do not sort the characters by total stats.')
-def generate(number, no_classes, showall, no_color, no_sort):
+@click.option('--seed', default=None, help='Override the RNG seed.')
+def generate(number, no_classes, showall, no_color, no_sort, seed):
     """Character generator for ACKS."""
     opts = {
         'number': number,
@@ -189,13 +192,20 @@ def generate(number, no_classes, showall, no_color, no_sort):
         'showall': showall,
         'color': not no_color,
         'sort': not no_sort,
+        'seed': seed,
     }
+
+    if seed is None:
+        time = datetime.now()
+        seed = time.hour*10000 + time.minute*100 + time.second
+    random.seed(seed)
 
     statss = [rollstats() for i in range(number)]
     if opts['sort']:
         statss = sorted(statss, key=lambda arr: -sum(arr))
     for stats in statss:
         printstats(stats, opts)
+    click.echo('\nSeed: {}'.format(seed))
 
 
 if __name__ == '__main__':
