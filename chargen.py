@@ -178,16 +178,16 @@ def printstats(stats, opts):
 
 @click.command()
 @click.option('-n', '--number', default=5, help='Number of characters (default 5).')
-@click.option('--no-classes', is_flag=True, help="Don't display the list of classes.")
+@click.option('--classes', is_flag=True, help="Display the list of classes qualified for.")
 @click.option('--showall', is_flag=True, help='Show classes not allowed by stats.')
 @click.option('--no-color', is_flag=True, help='Do not use color to print.')
 @click.option('--no-sort', is_flag=True, help='Do not sort the characters by total stats.')
 @click.option('--seed', default=None, help='Override the RNG seed.')
-def generate(number, no_classes, showall, no_color, no_sort, seed):
+def generate(number, classes, showall, no_color, no_sort, seed):
     """Character generator for ACKS."""
     opts = {
         'number': number,
-        'show_classes': not no_classes,
+        'show_classes': classes,
         'showall': showall,
         'color': not no_color,
         'sort': not no_sort,
