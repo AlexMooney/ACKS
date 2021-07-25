@@ -173,8 +173,7 @@ def printstats(stats, opts):
 
     if opts['show_classes']:
         evalstats(stats, opts)
-        click.echo('')
-    click.echo('')
+        click.echo('\n')
 
 
 @click.command()
