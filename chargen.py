@@ -170,10 +170,7 @@ def printstats(stats, opts):
         click.echo(click.style('{}:{:>3}  '.format(STATS[i], stat),
                                fg=stat_colors(stat, opts)),
                    nl=False)
-    click.echo('Gold:{:>3}  '.format(rollstat()*10), nl=False)
-    total_level = 2*sum(stat_level(s) for s in stats) + 10
-    click.echo(click.style('  Total:{:>3}'.format(sum(stats)),
-               fg=stat_colors(total_level, opts)))
+    click.echo('Gold:{:>3}  '.format(rollstat(opts)*10))
 
     if opts['show_classes']:
         evalstats(stats, opts)
