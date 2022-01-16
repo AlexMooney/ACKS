@@ -199,7 +199,7 @@ def generate(number, classes, showall, no_color, no_sort, heroic, seed):
 
     if seed is None:
         time = datetime.now()
-        seed = time.hour*10000 + time.minute*100 + time.second
+        seed = str(time.hour*10000 + time.minute*100 + time.second)
     random.seed(seed)
 
     statss = [rollstats(opts) for i in range(number)]
