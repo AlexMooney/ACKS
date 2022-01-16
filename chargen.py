@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from random import randrange
+from random import randint
 import random
 from datetime import datetime
 
@@ -15,12 +15,16 @@ CHA = 5
 STATS = ['STR', 'INT', 'WIS', 'DEX', 'CON', 'CHA']
 
 
-def rollstat():
-    return sum((randrange(6)+1 for x in range(3)))
+def rollstat(opts):
+    if opts['heroic']:
+        rolls = [randint(1, 6) for x in range(4)]
+        return sum(rolls) - min(rolls)
+    else:
+        return sum((randint(1, 6) for x in range(3)))
 
 
-def rollstats():
-    return [rollstat() for stat in range(6)]
+def rollstats(opts):
+    return [rollstat(opts) for stat in range(6)]
 
 
 def stat_level(stat):
@@ -182,8 +186,9 @@ def printstats(stats, opts):
 @click.option('--showall', is_flag=True, help='Show classes not allowed by stats.')
 @click.option('--no-color', is_flag=True, help='Do not use color to print.')
 @click.option('--no-sort', is_flag=True, help='Do not sort the characters by total stats.')
+@click.option('--heroic', is_flag=True, help='Generate stats by 4d6 dropping the lowest.')
 @click.option('--seed', default=None, help='Override the RNG seed.')
-def generate(number, classes, showall, no_color, no_sort, seed):
+def generate(number, classes, showall, no_color, no_sort, heroic, seed):
     """Character generator for ACKS."""
     opts = {
         'number': number,
@@ -191,6 +196,7 @@ def generate(number, classes, showall, no_color, no_sort, seed):
         'showall': showall,
         'color': not no_color,
         'sort': not no_sort,
+        'heroic': heroic,
         'seed': seed,
     }
 
@@ -199,7 +205,7 @@ def generate(number, classes, showall, no_color, no_sort, seed):
         seed = time.hour*10000 + time.minute*100 + time.second
     random.seed(seed)
 
-    statss = [rollstats() for i in range(number)]
+    statss = [rollstats(opts) for i in range(number)]
     if opts['sort']:
         statss = sorted(statss, key=lambda arr: -sum(arr))
     for stats in statss:
