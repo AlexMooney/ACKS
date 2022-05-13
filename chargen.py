@@ -71,7 +71,7 @@ def evalstats(stats, opts):
         {'name': 'Barbarian', 'primes': [STR, CON], 'reqs': []},
         {'name': 'Mystic', 'primes': [WIS, DEX, CON, CHA], 'reqs': []},
         {'name': 'Paladin', 'primes': [STR, CHA], 'reqs': []},
-        {'name': 'Pristess', 'primes': [WIS, CHA], 'reqs': []},
+        {'name': 'Priestess', 'primes': [WIS, CHA], 'reqs': []},
         {'name': 'Shaman', 'primes': [WIS], 'reqs': []},
         {'name': 'Venturer', 'primes': [CHA], 'reqs': []},
         {'name': 'Warlock', 'primes': [INT], 'reqs': []},
