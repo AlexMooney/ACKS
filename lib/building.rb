@@ -3,6 +3,8 @@ require_relative 'dice'
 require_relative 'building/cot'
 require_relative 'building/townhouse'
 require_relative 'building/villa'
+require_relative 'building/shop'
+require_relative 'building/manufactory'
 require_relative 'random_weighted'
 
 class Building
@@ -26,7 +28,7 @@ class Building
     []
   end
 
-  def to_s
+  def description
     "Size: #{size}, Type: #{type.label}, Occupants (#{occupants.size}): #{occupants.map(&:to_s).join(', ')}"
   end
 

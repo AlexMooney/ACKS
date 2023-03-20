@@ -57,7 +57,62 @@ class Occupant
     tavernworker: 90,
     unskilled_laborer: 100,
   }
-  DEPENDANT_OCCUPATIONS = {
+  ARTISAN_SUBTYPES = {
+    apothecary: 2,
+    armorer: 4,
+    baker: 6,
+    blacksmith: 8,
+    bookbinder: 9,
+    bowyer: 10,
+    fletcher: 11,
+    brewer: 14,
+    brickmaker: 16,
+    butcher: 21,
+    cabinetmaker: 22,
+    candlemaker: 25,
+    capper: 26,
+    hatter: 27,
+    carpenter: 28,
+    chaloner: 30,
+    tapicer: 31,
+    clothmaker: 37,
+    cobbler: 38,
+    cordwainer: 39,
+    confectioner: 41,
+    cooper: 42,
+    coppersmith: 44,
+    ropemaker: 45,
+    decorative_artist: 48,
+    florist: 49,
+    gemcutter: 50,
+    glassworker: 52,
+    goldsmith: 56,
+    hornworker: 58,
+    illuminator: 60,
+    jeweler: 61,
+    locksmith: 62,
+    mason: 64,
+    parchmentmaker: 65,
+    perfumer: 66,
+    potter: 69,
+    saddler: 70,
+    fuster: 71,
+    scribe: 75,
+    shipwright: 76,
+    silversmith: 77,
+    spinner: 83,
+    tailor: 86,
+    seamstress: 89,
+    tanner: 92,
+    tawer: 93,
+    taxidermist: 94,
+    tinker: 95,
+    toymaker: 96,
+    wainwright: 97,
+    weaponsmith: 99,
+    wheelwright: 100,
+  }
+  DEPENDANT_SUBTYPES = {
     child: 90,
     elderly: 100,
   }
@@ -68,7 +123,13 @@ class Occupant
       when :laborer
         random_weighted(LABORER_SUBTYPES)
       when :dependent
-        random_weighted(DEPENDANT_OCCUPATIONS)
+        random_weighted(DEPENDANT_SUBTYPES)
+      when :apprentice_crafter
+        random_weighted(ARTISAN_SUBTYPES)
+      when :journeyman_crafter
+        random_weighted(ARTISAN_SUBTYPES)
+      when :master_crafter
+        random_weighted(ARTISAN_SUBTYPES)
       end
     end
 end
