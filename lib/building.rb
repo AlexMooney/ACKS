@@ -13,10 +13,10 @@ class Building
   def self.construct
     size ||= random_weighted(SIZE_WEIGHTS)
     type ||= random_weighted(TYPE_WEIGHTS[size])
-    
+
     type.new(size, type)
   end
-  
+
   attr_accessor :size, :type, :occupants
   def initialize(size, type)
     self.size = size
