@@ -1,6 +1,127 @@
 # frozen_string_literal: true
 
-MONSTERS = {
+Monster = Struct.new('Monster', :floor, :name, :num_no_lair, :num_lair, :lair_chance, :treasure_type) do
+  attr_accessor :lair, :number_appearing
+
+  def to_s
+    "#{number_appearing} #{name} #{lair ? 'lair' : ''} #{treasure}".squeeze(' ').strip
+  end
+
+  def number_appearing
+    @number_appearing ||=
+      if lair && lairs_in_gangs?
+        num_gangs = roll_dice(num_lair)
+        if floor.empty_rooms.count >= num_gangs - 1
+          floor.empty_rooms.each_with_index do |room, index|
+            break if index >= num_gangs - 1
+
+            room.type = :monster
+            room.monster = Monster.new(floor, "#{name} gang").tap do |m|
+              m.number_appearing = roll_dice(num_no_lair)
+              m.lair = false
+            end
+          end
+          "Lair of #{num_gangs} gangs with #{roll_dice(num_no_lair)}"
+        else # not enough empty rooms for gangs
+          @lair = false
+          roll_dice(num_no_lair)
+        end
+      elsif lair
+        roll_dice(num_lair)
+      else
+        roll_dice(num_no_lair)
+      end
+  end
+
+  def roll_dice(dice_string)
+    dice_string.sub('*', '').gsub(/\s/, '').split('+').sum do |fragment|
+      number, sides = fragment.split('d').map(&:to_i)
+      if sides
+        number.times.map { rand(1..sides) }.sum
+      else
+        number
+      end
+    end
+  end
+
+  def lair
+    @lair = if @lair.nil? && lair_chance
+              rand < lair_chance
+            else
+              @lair
+            end
+  end
+
+  def lairs_in_gangs?
+    num_lair&.end_with?('*')
+  end
+
+  def treasure
+    "treasure #{treasure_type}" if lair && treasure_type
+  end
+
+  def <=>(other)
+    if name == other.name
+      case [number_appearing.class, other.number_appearing.class]
+      when [String, String]
+        number_appearing <=> other.number_appearing
+      when [String, Integer]
+        -1
+      when [Integer, String]
+        1
+      when [Integer, Integer]
+        number_appearing <=> other.number_appearing
+      end
+      number_appearing <=> other.number_appearing
+    else
+      name <=> other.name
+    end
+  end
+end
+
+DUNGEON_MONSTERS = {
+  1 => # [Monster name,   no lair #,  lair #, lair chance, treasure type]
+  { 1 => ['Goblin',           '2d4',  '2d6*',  0.4,  'E'],
+    2 => ['Kobold',           '4d4',  '1d6*',  0.4,  'E'],
+    3 => ['Morlock',          '1d12', '1d8*',  0.35, 'E'],
+    4 => ['Orc',              '2d4',  '2d6*',  0.35, 'G'],
+    5 => ['Beetle, Luminous', '1d8',  '2d6',   0.4],
+    6 => ['Centipede, Giant', '2d4',  '2d12',  0.1],
+    7 => ['Ferret, Giant',    '1d8',  '1d12',  0.25, 'A'],
+    8 => ['Rat, Giant',       '3d6',  '3d10',  0.1,  'A'],
+    9 => ['Men, Brigand',     '2d4',  '1d10*', 0.2,  'H'],
+    10 => ['Skeleton',        '3d4',  '3d10',  0.35],
+    11 => ['Strix',           '1d10', '3d12',  0.4, 'F'],
+    12 => ['NPC Party Lvl 1', '1d4+2', '1*',   0] },
+  2 =>
+  { 1 => ['Gnoll',                  '1d6', '2d6*', 0.2, 'G'],
+    2 => ['Hobgoblin',              '1d6', '1d8*', 0.25, 'E'],
+    3 => ['Lizardman',              '2d4', '1d8*', 0.3,  'L'],
+    4 => ['Troglydyte',             '1d8', '1d10*', 0.15, 'J'],
+    5 => ['Bat, Giant',             '1d10', '1d10', 0.35],
+    6 => ['Fly, Giant Carnivorous', '1d8', '2d6', 0.35, 'C'],
+    7 => ['Locust, Cavern',         '1d10', '2d10', 0.3],
+    8 => ['Snake, Pit Viper',       '1d8'],
+    9 => ['Ghoul, Grave',           '1d6', '2d8', 0.2, 'E'],
+    10 => ['Men, Berserker',        '1d6', '1d8*', 0.2, 'J'],
+    11 => ['Zombie',                '2d4', '4d6', 0.35],
+    12 => ['NPC Party Lvl 2',       '1d4+2', '1*', 0] },
+  3 =>
+  { 1 => ['Bugbear',               '2d4', '1d4*', 0.25, 'L'],
+    2 => ['Lycanthrope, Werewolf', '1d6', '2d6', 0.25, 'J'],
+    3 => ['Ogre',                  '1d6', '1d3*', 0.2, 'J and special'],
+    4 => ['Hobgholl',              '1d6', '1d10', 0.35, 'G'],
+    5 => ['Ant, Giant',            '2d4', '4d6', 0.1, 'I and special'],
+    6 => ['Lizard, Giant Draco',   '1d3', '1d6', 0.25],
+    7 => ['Scorpion, Giant',       '1d6', '1d6', 0.5],
+    8 => ['Wolf, Dire',            '1d4', '2d4', 0.1],
+    9 => ['Carrion Horror',        '1d3', '1d3', 0.25],
+    10 => ['Gargoyle',             '1d6', '2d4', 0.2, 'J'],
+    11 => ['Ghoul, Marsh',         '1d10', '2d4*', 0.35, 'N'],
+    12 => ['NPC Party Lvl 4',      '1d4+2', '1*', 0] }
+}.freeze
+
+WILDERNESS_MONSTERS = {
   'HillsEnc' =>
   { 1 => '[HillsMen]',
     2 => '[HillsFlyer]',

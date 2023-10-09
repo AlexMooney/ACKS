@@ -10,9 +10,10 @@ gemfile do
 end
 
 require_relative './monsters'
+require_relative './tables'
 
 class DomainEncounters < Thor
-  desc 'wilderness TERRAIN HEXES', 'Roll encounters one per day for 28 days.'
+  include Tables
 
   DANGER_BY_TERRAIN = {
     'city' => 1,
@@ -58,11 +59,11 @@ class DomainEncounters < Thor
   private
 
   def choose_creature(terrain)
-    table = MONSTERS["#{terrain.capitalize}Enc"]
+    table = WILDERNESS_MONSTERS["#{terrain.capitalize}Enc"]
     result = roll_table(table)
     while result.start_with?('[')
-      binding.pry if MONSTERS[result[1..-2]].nil?
-      result = roll_table(MONSTERS[result[1..-2]])
+      binding.pry if WILDERNESS_MONSTERS[result[1..-2]].nil?
+      result = roll_table(WILDERNESS_MONSTERS[result[1..-2]])
     end
     result
   end
