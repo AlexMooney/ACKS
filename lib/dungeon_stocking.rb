@@ -50,7 +50,7 @@ Room = Struct.new('Room', :type, :monster, :trap, :treasure) do
   def self.choose_monster(floor)
     encounter_level_table = ENCOUNTER_LEVEL_BY_DUNGEON_LEVEL[floor.level]
     encounter_level = roll_table(encounter_level_table)
-    Monster.new(floor, *roll_table(DUNGEON_MONSTERS[encounter_level]))
+    Monster.new(floor, encounter_level, *roll_table(DUNGEON_MONSTERS[encounter_level]))
   end
 
   def to_s

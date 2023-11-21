@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Monster = Struct.new('Monster', :floor, :name, :num_no_lair, :num_lair, :lair_chance, :treasure_type) do
+Monster = Struct.new('Monster', :floor, :native_level, :name, :num_no_lair, :num_lair, :lair_chance, :treasure_type) do
   attr_accessor :lair, :number_appearing
 
   def to_s
@@ -10,13 +10,13 @@ Monster = Struct.new('Monster', :floor, :name, :num_no_lair, :num_lair, :lair_ch
   def number_appearing
     @number_appearing ||=
       if lair && lairs_in_gangs?
-        num_gangs = roll_dice(num_lair)
+        num_gangs = roll_dice_with_level_modifier(num_lair)
         if floor.empty_rooms.count >= num_gangs - 1
           floor.empty_rooms.each_with_index do |room, index|
             break if index >= num_gangs - 1
 
             room.type = :monster
-            room.monster = Monster.new(floor, "#{name} gang").tap do |m|
+            room.monster = Monster.new(floor, floor.level, "#{name} gang").tap do |m| # more gangs, not bigger gangs
               m.number_appearing = roll_dice(num_no_lair)
               m.lair = false
             end
@@ -24,13 +24,23 @@ Monster = Struct.new('Monster', :floor, :name, :num_no_lair, :num_lair, :lair_ch
           "Lair of #{num_gangs} gangs with #{roll_dice(num_no_lair)}"
         else # not enough empty rooms for gangs
           @lair = false
-          roll_dice(num_no_lair)
+          roll_dice_with_level_modifier(num_no_lair)
         end
       elsif lair
-        roll_dice(num_lair)
+        roll_dice_with_level_modifier(num_lair)
       else
-        roll_dice(num_no_lair)
+        roll_dice_with_level_modifier(num_no_lair)
       end
+  end
+
+  def roll_dice_with_level_modifier(dice_string)
+    result = roll_dice(dice_string)
+    if floor.level > native_level
+      result *= 1.5**(floor.level - native_level)
+    elsif floor.level < native_level
+      result *= 0.5**(native_level - floor.level)
+    end
+    [1, result].max.round(half: :even)
   end
 
   def roll_dice(dice_string)
@@ -71,8 +81,9 @@ Monster = Struct.new('Monster', :floor, :name, :num_no_lair, :num_lair, :lair_ch
         1
       when [Integer, Integer]
         number_appearing <=> other.number_appearing
+      else
+        raise "Unexpected comparison: #{number_appearing.class} <=> #{other.number_appearing.class}"
       end
-      number_appearing <=> other.number_appearing
     else
       name <=> other.name
     end
@@ -118,7 +129,35 @@ DUNGEON_MONSTERS = {
     9 => ['Carrion Horror',        '1d3', '1d3', 0.25],
     10 => ['Gargoyle',             '1d6', '2d4', 0.2, 'J'],
     11 => ['Ghoul, Marsh',         '1d10', '2d4*', 0.35, 'N'],
-    12 => ['NPC Party Lvl 4',      '1d4+2', '1*', 0] }
+    12 => ['NPC Party Lvl 4',      '1d4+2', '1*', 0] },
+  4 =>
+  { 1 => ['Lycanthrope, Wereboar',          '1d4', '2d4', 0.2, 'J'],
+    2 => ['Lycanthrope, Weretiger',         '1d4', '1d4', 0.15, 'J'],
+    3 => ['Minotaur',                       '1d6', '1d8', 0.2, 'L,G'],
+    4 => ['Attercop, Monsterous',           '1d3', '1d3', 0.7, 'F'],
+    5 => ['Boar, Giant',                    '1d4', '1d4', 0.25],
+    6 => ['Owlbeast',                       '1d4', '1d4', 0.3, 'I'],
+    7 => ['Acanthaspis, Giant',             '1d6', '1d8', 0.15, 'I'],
+    8 => ['Snake, Giant Python',            '1d4', '1d4', 0.2],
+    9 => ['Lizard, Giant Horned Chameleon', '1d3', '1d6', 0.25],
+    10 => ['Medusa',                        '1d3', '1d4', 0.5, 'H'],
+    11 => ['Mass, Gelatinous',              '1', '1', 1.0, 'C,A'],
+    12 => ['NPC Party Lvl 5',               '1d4+2', '1*', 0] },
+  5 =>
+  { 1 => ['Ettin',               '1d2', '1d4', 0.2, 'N,H'],
+    2 => ['Giant, Hill',         '1d4', '2d4', 0.25, 'N'],
+    3 => ['Giant, Stone',        '1d3', '1d6', 0.25, 'N'],
+    4 => ['Troll',               '1d8', '1*', 0.4, 'O'],
+    5 => ['Arane',               '1',   '1d3', 0.7, 'J'],
+    6 => ['Worm, Great Ice',     '1',   '1d6', 0.25, 'P'],
+    7 => ['Basilisk',            '1d6', '1d6', 0.4, 'P'],
+    8 => ['Hell Hound, Greater', '2d4', '2d4', 0.3, 'P'],
+    9 => ['Salamander, Flame',   '1d4+1', '2d4', 0.25, 'Q'],
+    10 => ['Specter',            '1d4', '1d8', 0.2, 'N,N'],
+    11 => ['Wyvern',             '1d2', '1d6', 0.3, 'M'],
+    12 => ['NPC Party Lvl 8',    '1d4+3', '1*', 0] },
+  6 =>
+  { 1 => ['Level 6 monster', '1', '1d4', 0.2, 'R'] }
 }.freeze
 
 WILDERNESS_MONSTERS = {
