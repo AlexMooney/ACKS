@@ -87,6 +87,9 @@ Floor = Struct.new('Floor', :number_of_rooms, :level) do
       .map(&:to_s)
       .chunk_while { |a, b| a == b }
       .map { |chunk| "#{chunk.size}x #{chunk.first}" }.join("\n")
+  rescue
+    binding.pry
+    raise
   end
 
   def empty_rooms

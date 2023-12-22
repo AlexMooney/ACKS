@@ -56,7 +56,8 @@ class Weather
         precipitation = 'Misty'
       end
 
-      puts "| #{day} | #{day_temperature} | #{night_temperature} | #{precipitation} | #{wind} |"
+      # puts "| #{day} | #{day_temperature} | #{night_temperature} | #{precipitation} | #{wind} |"
+      puts "|#{day}(#{night_temperature})/#{precipitation}/#{wind}|"
     end
   end
 

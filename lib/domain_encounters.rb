@@ -21,7 +21,7 @@ class DomainEncounters < Thor
     'clear' => 1,
     'scrub' => 1,
     'settled' => 1,
-    'river' => 1,
+    'river' => 2,
     'aerial' => 2,
     'hills' => 2,
     'woods' => 2,
@@ -31,8 +31,8 @@ class DomainEncounters < Thor
     'mountain' => 3,
     'swamp' => 3
   }.freeze
-
-  def wilderness(terrain, hexes)
+  desc 'domain_encounters TERRAIN HEXES', 'Roll encounters one per day for 28 days.'
+  def domain_encounters(terrain, hexes)
     terrain = terrain.downcase
     hexes = hexes.to_i
 
@@ -52,6 +52,30 @@ class DomainEncounters < Thor
         lair = rand(1..100)
 
         puts "| #{i + 1} | #{creature} | #{lingering} | #{lair} | #{recon_roll} | #{recon_roll} | #{reaction} |"
+      end
+    end
+  end
+
+  HEX_CHANCE_BY_DANGER = {
+    1 => 15,
+    2 => 35,
+    3 => 50
+  }.freeze
+  desc 'wilderness TERRAIN INDEX', 'Roll 25 wilderness encounters.'
+  def wilderness(terrain, index = 1)
+    terrain = terrain.downcase
+    index = index.to_i
+
+    chance_per_hex = HEX_CHANCE_BY_DANGER[DANGER_BY_TERRAIN[terrain]]
+    puts "### #{terrain.capitalize} Wilderness Encounters"
+    25.times do |i|
+      if rand <= chance_per_hex / 100.0
+        creature = choose_creature(terrain)
+        lair = rand(1..100)
+
+        puts "- [ ] ##{i + index} #{reaction} #{creature} lair(#{lair}%)"
+      else
+        puts "- [ ] ##{i + index} No encounter"
       end
     end
   end
@@ -80,13 +104,14 @@ class DomainEncounters < Thor
 
   def reaction
     roll = rand(1..6) + rand(1..6)
-    case roll
-    when 2 then 'Hostile'
-    when 3..5 then 'Unfriendly'
-    when 6..8 then 'Neutral'
-    when 9..11 then 'Indifferent'
-    when 12 then 'Friendly'
-    end
+    label = case roll
+            when 2 then 'Hostile'
+            when 3..5 then 'Unfriendly'
+            when 6..8 then 'Neutral'
+            when 9..11 then 'Indifferent'
+            when 12 then 'Friendly'
+            end
+    "#{label} (#{roll})"
   end
 end
 
