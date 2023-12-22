@@ -11,6 +11,9 @@ end
 
 require_relative './descriptions'
 require_relative './tables'
+require_relative 'names/tirenean_male_given'
+require_relative 'names/tirenean_female_given'
+require_relative 'names/tirenean_surnames'
 
 class RandomCharacter < Thor
   include Tables
@@ -38,6 +41,18 @@ class RandomCharacter < Thor
 
     puts "Sex: #{sex}, Build: #{build}, Height: #{height_string}, Weight: #{weight_string}, Eyes: #{eye_color}, " \
       "Skin Color: #{skin_color}, Hair: #{hair_texture} #{hair_color}"
+  end
+
+  desc 'name SEX ETHNICITY', 'Generate 10 random names'
+  def name(sex = 'm', ethnicity = 'tirenean')
+    sex = male?(sex) ? 'male' : 'female'
+    given_name_table = Object.const_get("#{ethnicity}_#{sex}_GIVEN".upcase)
+    surname_table = Object.const_get("#{ethnicity}_SURNAMES".upcase)
+
+    puts "#{sex.capitalize} #{ethnicity.capitalize} names:"
+    10.times do
+      puts "#{roll_table(given_name_table)} #{roll_table(surname_table)}"
+    end
   end
 
   private
