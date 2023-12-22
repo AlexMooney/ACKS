@@ -71,7 +71,7 @@ def evalstats(stats, opts):
         {'name': 'Barbarian', 'primes': [STR, CON], 'reqs': []},
         {'name': 'Mystic', 'primes': [WIS, DEX, CON, CHA], 'reqs': []},
         {'name': 'Paladin', 'primes': [STR, CHA], 'reqs': []},
-        {'name': 'Pristess', 'primes': [WIS, CHA], 'reqs': []},
+        {'name': 'Priestess', 'primes': [WIS, CHA], 'reqs': []},
         {'name': 'Shaman', 'primes': [WIS], 'reqs': []},
         {'name': 'Venturer', 'primes': [CHA], 'reqs': []},
         {'name': 'Warlock', 'primes': [INT], 'reqs': []},
@@ -170,7 +170,10 @@ def printstats(stats, opts):
         click.echo(click.style('{}:{:>3}  '.format(STATS[i], stat),
                                fg=stat_colors(stat, opts)),
                    nl=False)
-    click.echo('Gold:{:>3}  '.format(rollstat(opts)*10))
+    if opts['gold']:
+        click.echo('Gold:{:>3}  '.format(rollstat(opts)*10))
+    else:
+        click.echo('')
 
     if opts['show_classes']:
         evalstats(stats, opts)
@@ -183,9 +186,10 @@ def printstats(stats, opts):
 @click.option('--showall', is_flag=True, help='Show classes not allowed by stats.')
 @click.option('--no-color', is_flag=True, help='Do not use color to print.')
 @click.option('--no-sort', is_flag=True, help='Do not sort the characters by total stats.')
+@click.option('--no-gold', is_flag=True, help='Do not roll for gold.')
 @click.option('--heroic', is_flag=True, help='Generate stats by 4d6 dropping the lowest.')
 @click.option('--seed', default=None, help='Override the RNG seed.')
-def generate(number, classes, showall, no_color, no_sort, heroic, seed):
+def generate(number, classes, showall, no_color, no_sort, no_gold, heroic, seed):
     """Character generator for ACKS."""
     opts = {
         'number': number,
@@ -193,6 +197,7 @@ def generate(number, classes, showall, no_color, no_sort, heroic, seed):
         'showall': showall,
         'color': not no_color,
         'sort': not no_sort,
+        'gold': not no_gold,
         'heroic': heroic,
         'seed': seed,
     }
