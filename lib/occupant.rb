@@ -1,18 +1,20 @@
-require_relative 'random_weighted'
+# frozen_string_literal: true
+
+require_relative "random_weighted"
 
 class Occupant
   include RandomWeighted
 
   attr_accessor :type, :subtype, :occupation
+
   def initialize(type: nil, subtype: nil)
     self.type = type || random_weighted(GENERAL_OCCUPATIONS)
     self.subtype = subtype || subtype_from_type
   end
 
   def to_s
-    "#{type} #{subtype ? "(#{subtype})" : ""}".strip
+    "#{type} #{subtype ? "(#{subtype})" : ''}".strip
   end
-
 
   GENERAL_OCCUPATIONS = {
     laborer: 26,
@@ -34,7 +36,7 @@ class Occupant
     minor_magician: 98,
     mage: 99,
     patrician: 100,
-  }
+  }.freeze
 
   LABORER_SUBTYPES = {
     barber: 3,
@@ -55,8 +57,8 @@ class Occupant
     sawyer: 75,
     teamster: 78,
     tavernworker: 90,
-    unskilled_laborer: 100,
-  }
+    unskilled: 100,
+  }.freeze
   ARTISAN_SUBTYPES = {
     apothecary: 2,
     armorer: 4,
@@ -111,25 +113,45 @@ class Occupant
     wainwright: 97,
     weaponsmith: 99,
     wheelwright: 100,
-  }
+  }.freeze
+  MERCHANT_OCCUPATIONS = {
+    bookseller: 1,
+    chandler: 6,
+    coppermonger: 8,
+    cornmonger: 20,
+    draper: 31,
+    fishmonger: 38,
+    fripperer: 44,
+    furrier: 46,
+    greengrocer: 48,
+    horsemonger: 52,
+    ironmonger: 61,
+    lawyer: 66,
+    lumbermonger: 75,
+    mercer: 80,
+    oilmonger: 82,
+    peltmonger: 88,
+    poulterer: 91,
+    salter: 95,
+    vintner: 100,
+  }.freeze
   DEPENDANT_SUBTYPES = {
     child: 90,
     elderly: 100,
-  }
+  }.freeze
 
   private
-    def subtype_from_type
-      case type
-      when :laborer
-        random_weighted(LABORER_SUBTYPES)
-      when :dependent
-        random_weighted(DEPENDANT_SUBTYPES)
-      when :apprentice_crafter
-        random_weighted(ARTISAN_SUBTYPES)
-      when :journeyman_crafter
-        random_weighted(ARTISAN_SUBTYPES)
-      when :master_crafter
-        random_weighted(ARTISAN_SUBTYPES)
-      end
+
+  def subtype_from_type
+    case type
+    when :laborer
+      random_weighted(LABORER_SUBTYPES)
+    when :dependent
+      random_weighted(DEPENDANT_SUBTYPES)
+    when :apprentice_crafter, :journeyman_crafter, :master_crafter
+      random_weighted(ARTISAN_SUBTYPES)
+    when :apprentice_merchant, :licensed_merchant, :master_merchant
+      random_weighted(MERCHANT_OCCUPATIONS)
     end
+  end
 end

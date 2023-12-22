@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Building
   class Manufactory < Building
     def self.label
@@ -5,6 +7,7 @@ class Building
     end
 
     attr_reader :artisan_type
+
     def initialize(size, type)
       @artisan_type = random_weighted(Occupant::ARTISAN_SUBTYPES)
       super(size, type)
@@ -23,7 +26,7 @@ class Building
         ]
       end
       occupants += Dice.new("4d6").roll.times.map do
-        Occupant.new(type: :laborer, subtype: :unskilled_laborer)
+        Occupant.new(type: :laborer, subtype: :unskilled)
       end
       occupants
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Building
   class Townhouse < Building
     def self.label
@@ -6,17 +8,52 @@ class Building
 
     FAMILY_SIZE = 5
     def generate_occupants
-      num_occupants = case size
-      when :medium
-        Dice.new('2d4').roll
-      when :large
-        Dice.new('2d6').roll
-      end
+      occupants = []
+      if size == :huge
+        house_number = 1
+        sqft = 7500
+        while sqft > 2500
+          new_occupants = case Dice.new("1d7").roll
+                          when 6, 7
+                            sqft -= 2500
+                            Townhouse.new(:large, Townhouse).generate_occupants.map do |occupant|
+                              occupant.type = "Large Townhouse ##{house_number} #{occupant.type}"
+                              occupant
+                            end
+                          else
+                            sqft -= 1000
+                            Townhouse.new(:medium, Townhouse).generate_occupants.map do |occupant|
+                              occupant.type = "Medium Townhouse ##{house_number} #{occupant.type}"
+                              occupant
+                            end
+                          end
+          occupants.concat new_occupants
+          house_number += 1
+        end
 
-      occupants = [owner]
-      occupants << spouse if num_occupants > 1
-      (3..[num_occupants, FAMILY_SIZE].min).each { occupants << dependent }
-      (FAMILY_SIZE..num_occupants).each_with_index { |i| occupants << servant(i) }
+        while sqft > 1000
+          sqft -= 1000
+          new_occupants = Townhouse.new(:medium, Townhouse).generate_occupants.map do |occupant|
+            occupant.type = "Medium Townhouse ##{house_number} #{occupant.type}"
+            occupant
+          end
+          occupants.concat new_occupants
+        end
+      else
+        num_occupants = case size
+                        when :medium
+                          Dice.new("2d4").roll
+                        when :large
+                          Dice.new("2d6").roll
+                        else
+                          puts "Invalid size #{size.inspect}"
+                        end
+
+        occupants << owner
+        occupants << spouse if num_occupants > 1
+        (3..[num_occupants, FAMILY_SIZE].min).each { occupants << dependent }
+        (FAMILY_SIZE..num_occupants).each { |i| occupants << servant(i) }
+      end
       occupants
     end
 
@@ -38,7 +75,7 @@ class Building
         specialist: 85,
         thief: 95,
         fighter: 100,
-      }.freeze
+      }.freeze,
     }.freeze
 
     def owner

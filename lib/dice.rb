@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 class Dice
   attr_reader :dice, :constants
+
   def initialize(die_string = nil)
     @dice = []
     @constants = []
 
     return if die_string.nil?
 
-    num, sides = die_string.split('d')
+    num, sides = die_string.split("d")
     num.to_i.times { add_die(sides.to_i) }
   end
 
