@@ -8,10 +8,10 @@ module Tables
   end
 
   def roll_dice(dice_string)
-    dice_string.split('+').sum do |dice_substring|
-      quantity, sides = dice_substring.split('d')
+    dice_string.split("+").sum do |dice_substring|
+      quantity, sides = dice_substring.split("d")
       if sides
-        sides, keep = sides.split('k')
+        sides, keep = sides.split("k")
         keep ||= sides
         rolled = quantity.to_i.times.map { rand(1..sides.to_i) }.sort
         rolled.last(keep.to_i).sum
