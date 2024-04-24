@@ -1,0 +1,51 @@
+Roll (1d100),Common,Uncommon,Rare,Very Rare
+01-02,"Bat, Common","Acanthaspis, Giant","Attercop, Hideous",Arane
+03-04,"Bat, Common",Amphisbaena,"Attercop, Monstrous","Attercop, Demonic"
+05-06,"Boar, Common","Ant, Giant","Barghest, Lesser",Báleygr
+07-08,"Boar, Common","Attercop, Foul","Bat, Giant Vampiric","Barghest, Greater"
+09-10,"Crocodile, Common","Bat, Giant","Bear, Brown","Basilisk, Noxious"
+11-12,"Crocodile, Common","Beastman, Goblin",Blood Hound,"Basilisk, Petrifying"
+13-14,"Dragonfly, Giant","Beastman, Hobgoblin",Carrion Horror,"Bear, Cave"
+15-16,"Dragonfly, Giant","Beastman, Orc",Catoblepas,Bronze Bull
+17-18,"Frog, Giant","Bee, Giant",Catoblepas,Cairn Dweller
+19-20,"Frog, Giant","Beetle, Giant Bombardier",Centaur,Chaos Hulk
+21-22,"Herd Animal, Med. (deer)","Beetle, Giant Luminous","Crocodile, Giant",Child of Nasga
+23-24,"Herd animal, Med. (deer)","Beetle, Giant Tiger","Dakhanavar, Lesser",Chimera
+25-26,"Herd Animal, V. Large (wisent","Boar, Giant",Devil Boar,Chimera
+27-28,"Herd Animal, V. Large (wisent)","Centipede, Giant","Faerie, Redcap",Cyclops
+29-30,Hippopotamus,"Centipede, Giant","Faerie, Spriggan",Cyclops
+31-32,Hippopotamus,"Crab, Giant","Fish, Giant Piranha","Dakhanavar, Greater"
+33-34,"Leech, Giant","Crocodile, Large",Gargoyle,Death Knight
+35-36,"Leech, Giant","Crocodile, Large","Ghoul, Grave",Doppelganger
+37-38,Lizardman,"Dog, Hunting (wild dog)",Hag,"Dragon, Black"
+39-40,Lizardman,Elephant,Harpy,"Dragon, Black"
+41-42,"Raptor, Medium (fish eagle)","Faerie, Nixie",Hydra (1d8+4 heads),"Dragon, Black"
+43-44,"Raptor, Medium (fish owl)","Faerie, Nixie",Lamia,"Dragon, Green"
+45-46,"Raptor, Small (marsh harrier)","Fish, Giant Catfish",Leyak,Dragon Turtle
+47-48,"Raptor, Small (marsh harrier)","Fish, Giant Catfish","Lizard, Giant Horned",Draugr
+49-50,Skeleton,"Fly, Giant Carnivorous",Medusa,Elf
+51-52,Skeleton,"Fly, Giant Carnivorous",Mummy,Ettin
+53-54,"Snake, Asp*","Ghoul, Marsh",Neanderthal,Ettin
+55-56,"Snake, Asp *","Ghoul, Marsh",Necropede,Flay Fiend
+57-58,"Snake, Forest Cobra*","Gorilla, Cave","Nymph, Dryad",Galdrtré (pedunculate oak)
+59-60,"Snake, Green Mamba*",Haunt,"Nymph, Naiad",Galdrtré (weeping willow)
+61-62,"Snake, Python","Jackal, Common (golden jackal)","Nymph, Naiad","Genie, Marid"
+63-64,"Snake, Python","Lizard, Giant Draco",Ogre,"Giant, Hill"
+65-66,"Snake, Sea Snake","Lizard, Giant Draco",Owlbeast,Gorgon
+67-68,"Snake, Sea Snake","Lizard, Giant Gecko","Roc, Small",Hellhawk
+69-70,Strix,"Lizard, Giant Gecko",Skeletal Slayer,Hobgholl
+71-72,Stymph,"Lycanthrope, Wererat",Skittering Maw,Khepri
+73-74,"Swarm, Black Fly* (1d3+1 HD)","Lycanthrope, Wererat",Skittering Maw,Mummy Lord
+75-76,"Swarm, Dragonfly* (1d3+1 HD)","Lycanthrope, Weretiger",Spectre,Rakshasa
+77-78,"Swarm, Mosquito* (1d3+1 HD)","Lycanthrope, Werewolf","Spider, Black Widow","Roc, Large"
+79-80,Swarm,"Man, Bandit","Spider, Tarantula",Rustbeast
+81-82,"Tick, Giant","Man, Brigands",Thrassian,Shadow
+83-84,"Tick, Giant",Rhinoceros,Thrassian,"Slug, Giant"
+85-86,"Toad, Giant","Snake, Giant Constrict. Viper",Troglodyte,Spell Tyrant
+87-88,"Toad, Giant","Snake, Giant Constrict. Viper",Troll,Treeherder
+89-90,Tokay Gull,"Spider, Crab","Varmint, Giant Ferret",Vampire
+91-92,"Varmint, Giant Rat","Spider, Crab","Varmint, Giant Ferret","Varmint, Giant Weasel"
+93-94,"Varmint, Giant Rat","Varmint, Giant Shrew","Wolf, Warg","Varmint, Giant Weasel"
+95-96,Wolf (golden wolf),"Varmint, Giant Shrew","Worm, Giant Grey",Venous Sentinel
+97-98,Zombie,Wight,Wraith,"Worm, Giant Black"
+99-100,Zombie,"Wolf, Dire","Wasp, Giant Parasitic",Wyvern

@@ -1,0 +1,51 @@
+Roll (1d100),Common,Uncommon,Rare,Very Rare
+01-02,"Bat, Common","Acanthaspis, Giant","Attercop, Hideous",Arane
+03-04,"Bear, Black","Ant, Giant","Attercop, Monstrous","Attercop, Demonic"
+05-06,"Bear, Black","Attercop, Foul","Barghest, Greater",Báleygr
+07-08,"Bear, Brown","Baboon, Rock","Bat, Giant Vampiric","Basilisk, Noxious"
+09-10,"Beastman, Goblin","Barghest, Lesser",Blood Hound,"Basilisk, Petrifying"
+11-12,"Beastman, Orc","Bat, Giant","Cat, Lion",Bronze Bull
+13-14,"Bee, Giant","Bear, Cave","Dakhanavar, Lesser",Cairn Dweller
+15-16,"Boar, Common","Beastman, Bugbear",Devil Boar,Catoblepas
+17-18,"Boar, Common","Beastman, Gnoll","Faerie, Nixie","Cat, Saber-Tooth"
+19-20,"Cat, Catamount","Beastman, Hobgoblin","Faerie, Redcap","Cat, Saber-Tooth"
+21-22,"Cat, Catamount","Beetle, Giant Bombardier","Faerie, Spriggan",Chaos Hulk
+23-24,"Cat, Lynx","Beetle, Giant Luminous","Faerie, Sprite",Child of Nasga
+25-26,"Cat, Lynx","Beetle, Giant Tiger",Gargoyle,Chimera
+27-28,"Dog, Hunting (feral windhound)","Boar, Giant","Ghoul, Marsh",Cyclops
+29-30,"Dog, Hunting (feral windhound)","Cat, Leopard",Griffon,Cyclops
+31-32,"Dog, War (feral wolfhound)",Centaur,Hag,"Dakhanavar, Greater"
+33-34,"Dog, War (feral wolfhound)","Centipede, Giant",Harpy,Death Charger
+35-36,Elf,"Dragonfly, Giant",Hippogriff,Death Knight
+37-38,Elf,"Equine, Donkey (wild ass)",Hobgholl,Doppelganger
+39-40,"Equine, Medium Horse (wild horse)","Equine, Light Horse (wild horse)","Hyena, Giant","Dragon, Black"
+41-42,"Gorilla, Cave","Faerie, Piskie","Lizard, Giant Tuatara","Dragon, Green"
+43-44,"Herd Animal, Small (roe)","Faerie, Pixie",Lizardman,"Dragon, Green"
+45-46,"Herd Animal, Small (roe)","Fly, Giant Carnivorous","Lycanthrope, Werebear","Dragon, Green"
+47-48,"Herd Animal, Med. (deer)","Frog, Giant","Lycanthrope, Wereboar",Draugr
+49-50,"Herd Animal, Med. (deer)","Ghoul, Grave","Lycanthrope, Wererat",Ettin
+51-52,"Jackal, Common (golden jackal)",Gnome,Manticore,Ettin
+53-54,"Leech, Giant",Halfling,Medusa,Flay Fiend
+55-56,"Men, Bandits",Haunt,Minotaur,Galdrtré (dawn redwood)
+(57-58,"Men, Brigands","Herd Animal, Small (chamois)",Mummy,Galdrtré (sylvan beech)
+59-60,"Raptor, Medium (golden eagle)","Herd Animal, Small (chamois)",Neanderthal,"Giant, Hill"
+61-62,"Raptor, Small (buzzard)","Herd Animal, V. Large (wisent)","Nymph, Naiad","Giant, Hill"
+63-64,"Raptor, Small (sparrowhawk)","Hyena, Common","Nymph, Oread",Gorgon
+65-66,Skeleton,"Lizard, Giant Draco",Ogre,Hellhawk
+67-68,"Snake, Viper","Lizard, Giant Gecko",Ogre,Hydra (1d8+4 heads)
+69-70,"Snake, Viper","Lizard, Giant Horned",Pegasus,Khepri
+71-72,"Snake, Giant Adder*","Lycanthrope, Werewolf","Raptor, Giant (elfhawk)",Lamia
+73-74,"Snake, Giant Adder*","Man, Berserker","Raptor, Giant (elfhawk)",Leyak
+75-76,"Spider, Crab","Nymph, Dryad","Roc, Large",Mummy Lord
+77-78,Strix,"Nymph, Dryad","Scorpion, Giant","Roc, Giant"
+79-80,"Swarm, Bee* (1d3+1 HD)",Owlbeast,Skeletal Slayer,Rustbeast
+81-82,"Swarm, Fire Ants* (1d3+1 HD)","Raptor, Large (griffon vulture)",Skittering Maw,Shadow
+83-84,Tokay Gull,"Roc, Small",Specter,"Slug, Giant"
+85-86,"Varmint, Giant Rat","Snake, Giant Constrict. Viper",Stymph,Sphinx
+87-88,"Varmint, Giant Shrew","Spider, Black Widow",Treeherder,Thrassian
+89-90,"Varmint, Giant Weasel","Spider, Tarantula",Treeherder,Vampire
+91-92,"Wasp, Giant Parasitic","Tick, Giant",Troll,Wild Huntsman
+93-94,Wolf (grey wolf),"Toad, Giant",Troll,"Worm, Giant Black"
+95-96,Wolf (grey wolf),"Varmint, Giant Ferret",Unicorn,Wyvern
+97-98,"Wolf, Dire",Wight,"Worm, Giant Grey",Wyvern
+99-100,Zombie,"Wolf, Warg",Wraith,Yali

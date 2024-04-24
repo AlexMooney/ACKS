@@ -2,36 +2,39 @@
 
 module Tables
   def roll_table(table, roll = nil)
-    return roll_array_table(table, roll) if table.is_a?(Array)
-
-    roll ||= rand(1..(table.keys.max))
-    roll += 1 while table[roll].nil?
+    case table
+    when Array
+      roll ||= rand(0...table.size)
+    when Hash
+      roll ||= rand(1..(table.keys.max))
+      roll += 1 while table[roll].nil?
+    else
+      raise "Invalid table type #{table.class}"
+    end
     result = table[roll]
-
-    if result.is_a?(Hash)
+    case result
+    when Array, Hash
       roll_table(result)
     else
       result
     end
   end
 
-  def roll_array_table(table, roll = nil)
-    roll ||= rand(0..(table.size - 1))
-    table[roll]
-  end
-
   def roll_dice(dice_string)
     return dice_string if dice_string.is_a? Integer
     return 0 if dice_string.nil? || dice_string.empty?
 
-    dice_string.split(/[+-]/).sum do |dice_substring|
-      quantity, sides = dice_substring.split("d")
-      if sides
-        quantity.to_i.times.map { rand(1..sides.to_i) }.sum
-      elsif dice_substring.end_with?("%")
-        rand(1..100) <= dice_substring.to_i ? 1 : 0
-      else
-        quantity.to_i
+    dice_string.split("+").sum do |dice_substring|
+      dice_substring.split("*").reduce(1) do |product, dice_subsubstring|
+        quantity, sides = dice_subsubstring.split("d")
+        product * if sides
+                    sides, keep = sides.split("k")
+                    keep ||= sides
+                    rolled = quantity.to_i.times.map { rand(1..sides.to_i) }.sort
+                    rolled.last(keep.to_i).sum
+                  else
+                    quantity.to_i
+                  end
       end
     end
   end
