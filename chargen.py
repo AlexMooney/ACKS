@@ -7,24 +7,30 @@ import click
 
 STR = 0
 INT = 1
-WIS = 2
+WIL = 2
 DEX = 3
 CON = 4
 CHA = 5
 
-STATS = ['STR', 'INT', 'WIS', 'DEX', 'CON', 'CHA']
+STATS = ['STR', 'INT', 'WIL', 'DEX', 'CON', 'CHA']
 
 
-def rollstat(opts):
-    if opts['heroic']:
-        rolls = [randint(1, 6) for x in range(4)]
-        return sum(rolls) - min(rolls)
+def rollstat(opts, stat):
+    if stat.lower() in opts['primaries']:
+        rolls = sorted([randint(1, 6) for x in range(5)])
+        return max(sum(rolls[2:]), 13)
+    elif stat.lower() in opts['boosts']:
+        rolls = sorted([randint(1, 6) for x in range(4)])
+        return max(sum(rolls[1:]), 9)
+    elif opts['heroic']:
+        rolls = sorted([randint(1, 6) for x in range(4)])
+        return sum(rolls[1:])
     else:
         return sum((randint(1, 6) for x in range(3)))
 
 
 def rollstats(opts):
-    return [rollstat(opts) for stat in range(6)]
+    return [rollstat(opts, stat) for stat in STATS]
 
 
 def stat_level(stat):
@@ -61,24 +67,24 @@ def evalstats(stats, opts):
         {'section': 'Human Classes'},
         {'name': 'Fighter', 'primes': [STR], 'reqs': []},
         {'name': 'Mage', 'primes': [INT], 'reqs': []},
-        {'name': 'Cleric', 'primes': [WIS], 'reqs': []},
+        {'name': 'Cleric', 'primes': [WIL], 'reqs': []},
         {'name': 'Thief', 'primes': [DEX], 'reqs': []},
         {'name': 'Assassin', 'primes': [STR, DEX], 'reqs': []},
         {'name': 'Bard', 'primes': [CHA, DEX], 'reqs': []},
-        {'name': 'Bladedancer', 'primes': [WIS, DEX], 'reqs': []},
+        {'name': 'Bladedancer', 'primes': [WIL, DEX], 'reqs': []},
         {'name': 'Explorer', 'primes': [STR, DEX], 'reqs': []},
         {'name': 'Anti-paladin', 'primes': [STR, CHA], 'reqs': []},
         {'name': 'Barbarian', 'primes': [STR, CON], 'reqs': []},
-        {'name': 'Mystic', 'primes': [WIS, DEX, CON, CHA], 'reqs': []},
+        {'name': 'Mystic', 'primes': [WIL, DEX, CON, CHA], 'reqs': []},
         {'name': 'Paladin', 'primes': [STR, CHA], 'reqs': []},
-        {'name': 'Priestess', 'primes': [WIS, CHA], 'reqs': []},
-        {'name': 'Shaman', 'primes': [WIS], 'reqs': []},
+        {'name': 'Priestess', 'primes': [WIL, CHA], 'reqs': []},
+        {'name': 'Shaman', 'primes': [WIL], 'reqs': []},
         {'name': 'Venturer', 'primes': [CHA], 'reqs': []},
         {'name': 'Warlock', 'primes': [INT], 'reqs': []},
-        {'name': 'Witch', 'primes': [WIS, CHA], 'reqs': []},
+        {'name': 'Witch', 'primes': [WIL, CHA], 'reqs': []},
         {'section': 'Dwarven Classes'},
         {'name': 'Vaultguard', 'primes': [STR], 'reqs': [(CON, 9)]},
-        {'name': 'Craftpriest', 'primes': [WIS], 'reqs': [(CON, 9)]},
+        {'name': 'Craftpriest', 'primes': [WIL], 'reqs': [(CON, 9)]},
         {'name': 'Delver', 'primes': [DEX], 'reqs': [(CON, 9)]},
         {'name': 'Fury', 'primes': [STR], 'reqs': [(CON, 9)]},
         {'name': 'Machinist', 'primes': [INT, DEX], 'reqs': [(CON, 9)]},
@@ -91,40 +97,40 @@ def evalstats(stats, opts):
         {'section': 'Other demi-humans'},
         {'name': 'Gnomish Trickster', 'primes': [CON, CHA],
             'reqs': [(CON, 9), (INT, 9)]},
-        {'name': 'Nobrian Wonderworker', 'primes': [INT, WIS],
+        {'name': 'Nobrian Wonderworker', 'primes': [INT, WIL],
             'reqs': [(i, 11) for i in range(6)]},
         {'name': 'Thrassian Gladiator', 'primes': [STR],
             'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
         {'name': 'Zaharan Ruinguard', 'primes': [STR, INT],
-            'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
+            'reqs': [(INT, 9), (WIL, 9), (CHA, 9)]},
         {'section': 'Heroic Classes'},
         {'name': 'Beastmaster', 'primes': [STR, DEX, CON, CHA], 'reqs': []},
         {'name': 'Berserker', 'primes': [STR, CON], 'reqs': []},
         {'name': 'Chosen', 'primes': [i for i in range(6)],
             'reqs': [(i, 9) for i in range(6)], 'special': 'chosen'},
-        {'name': 'Ecclesiastic', 'primes': [WIS], 'reqs': []},
+        {'name': 'Ecclesiastic', 'primes': [WIL], 'reqs': []},
         {'name': 'Elven Spellsinger', 'primes': [INT, CHA], 'reqs': [(INT, 9)]},
-        {'name': 'Freebooter Expeditionary', 'primes': [DEX, WIS], 'reqs': []},
+        {'name': 'Freebooter Expeditionary', 'primes': [DEX, WIL], 'reqs': []},
         {'name': 'Freebooter Ruffian', 'primes': [DEX, STR], 'reqs': []},
         {'name': 'Freebooter Scoundrel', 'primes': [DEX, CHA], 'reqs': []},
         {'name': 'Freebooter Wayfarer', 'primes': [DEX, CON], 'reqs': []},
         {'name': 'Halfling Bounder', 'primes': [STR, DEX], 'reqs': [(DEX, 9)]},
         {'name': 'Halfling Burglar', 'primes': [DEX], 'reqs': [(DEX, 9)]},
-        {'name': 'Loremaster', 'primes': [INT, WIS], 'reqs': []},
+        {'name': 'Loremaster', 'primes': [INT, WIL], 'reqs': []},
         {'name': 'Nobrian Champion', 'primes': [STR, CHA],
             'reqs': [(i, 11) for i in range(6)]},
-        {'name': 'Nobrian Wizard', 'primes': [INT, WIS],
+        {'name': 'Nobrian Wizard', 'primes': [INT, WIL],
             'reqs': [(i, 11) for i in range(6)]},
-        {'name': 'Occultist', 'primes': [INT, WIS], 'reqs': []},
-        {'name': 'Rune Maker', 'primes': [STR, WIS], 'reqs': []},
+        {'name': 'Occultist', 'primes': [INT, WIL], 'reqs': []},
+        {'name': 'Rune Maker', 'primes': [STR, WIL], 'reqs': []},
         {'name': 'Thrassian Deathchanter', 'primes': [STR, INT, CHA],
             'reqs': [(STR, 9), (DEX, 9), (CON, 9)]},
         {'name': 'Venturer', 'primes': [CHA], 'reqs': []},
         {'name': 'Warmistress', 'primes': [DEX, CHA], 'reqs': [(STR, 9)]},
         {'name': 'Zaharan Darklord', 'primes': [INT, CHA],
-            'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
+            'reqs': [(INT, 9), (WIL, 9), (CHA, 9)]},
         {'name': 'Zaharan Sorcerer', 'primes': [INT],
-            'reqs': [(INT, 9), (WIS, 9), (CHA, 9)]},
+            'reqs': [(INT, 9), (WIL, 9), (CHA, 9)]},
         ]
     section = ''
     for cls in classes:
@@ -171,7 +177,7 @@ def printstats(stats, opts):
                                fg=stat_colors(stat, opts)),
                    nl=False)
     if opts['gold']:
-        click.echo('Gold:{:>3}  '.format(rollstat(opts)*10))
+        click.echo('Gold:{:>3}  '.format(rollstat(opts, "gold")*10))
     else:
         click.echo('')
 
@@ -188,8 +194,10 @@ def printstats(stats, opts):
 @click.option('--no-sort', is_flag=True, help='Do not sort the characters by total stats.')
 @click.option('--no-gold', is_flag=True, help='Do not roll for gold.')
 @click.option('--heroic', is_flag=True, help='Generate stats by 4d6 dropping the lowest.')
+@click.option('-p', '--primaries', default=None, help='Primary attributes (comma delimited) via rolling 5d6 min 13.')
+@click.option('-b', '--boosts', default=None, help='Boost attributes (comma delimited) via rolling 4d6 min 9.')
 @click.option('--seed', default=None, help='Override the RNG seed.')
-def generate(number, classes, showall, no_color, no_sort, no_gold, heroic, seed):
+def generate(number, classes, showall, no_color, no_sort, no_gold, heroic, primaries, boosts, seed):
     """Character generator for ACKS."""
     opts = {
         'number': number,
@@ -200,7 +208,13 @@ def generate(number, classes, showall, no_color, no_sort, no_gold, heroic, seed)
         'gold': not no_gold,
         'heroic': heroic,
         'seed': seed,
+        'primaries': [stat.lower() for stat in primaries.split(',')] if primaries else [],
+        'boosts': [stat.lower() for stat in boosts.split(',')] if boosts else [],
     }
+    if any([p for p in opts['primaries'] if p.upper() not in STATS]):
+        raise click.BadParameter(f'Invalid primary attribute(s): {opts["primaries"]}')
+    if any([b for b in opts['boosts'] if b.upper() not in STATS]):
+        raise click.BadParameter(f'Invalid boost attribute(s): {opts["boosts"]}')
 
     if seed is None:
         time = datetime.now()
