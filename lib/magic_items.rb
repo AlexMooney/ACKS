@@ -115,14 +115,14 @@ class MasterworkEquipment
   def roll_details
     count = roll_dice(quantity)
     if count > 1
-      count.times.map { MasterworkEquipment.new(quality).roll_details }.join("\n")
+      count.times.map { MasterworkEquipment.new(quality).roll_details }.join(", ")
     else
       type = roll_table(MW_TYPE_BY_ROLL)
       quality_label = case quality
                       when :greater
                         "Masterwork"
                       when :lesser
-                        if type.end_with?("Armor")
+                        if type.end_with?("Armor") || type.end_with?("Shield")
                           "Lightweight"
                         else
                           roll_table(%w[Brutal Accurate])
@@ -130,6 +130,21 @@ class MasterworkEquipment
                       end
       "#{quality_label} #{type}"
     end
+  end
+end
+
+class Armor
+  include Tables
+
+  attr_reader :plus
+
+  def initialize(plus:)
+    @plus = plus
+  end
+
+  def roll_details
+    type = roll_table(ARMOR_TYPE_BY_ROLL)
+    "#{type} +#{plus}"
   end
 end
 
@@ -195,6 +210,7 @@ class SpellScroll
       remaining_levels -= level
       spells << level
     end
-    "#{flavor} Scroll in #{language} with #{spells.sort.join(', ')} level spells"
+    spells_label = spells.tally.map { |l, c| "#{c} level #{l}" }.join(", ")
+    "#{flavor} Scroll in #{language} with #{spells_label} spell#{spells.size > 1 ? 's' : ''}"
   end
 end

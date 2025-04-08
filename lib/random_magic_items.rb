@@ -49,8 +49,19 @@ class RandomMagicItems < Thor
     98 => SpellScroll.new(2),
     100 => "Treasure Map (Treasure Type B)",
   }.freeze
+  UNCOMMON_ITEM_BY_ROLL = {
+    2 => Ammunition.new(plus: 2, quantity: "2d10"),
+    6 => Armor.new(plus: 1),
+    7 => "Arrow +3, Death",
+    100 => "Uncommon",
+  }.freeze
+  RARE_ITEM_BY_ROLL = {
+    1 => "Rare",
+  }.freeze
   TABLE_BY_QUALITY = {
     "common" => COMMON_ITEM_BY_ROLL,
+    "uncommon" => UNCOMMON_ITEM_BY_ROLL,
+    "rare" => RARE_ITEM_BY_ROLL,
   }.freeze
   desc "magic_items QUALITY QUANTITY=1", "Generate magic items"
   def magic_items(quality, quantity = 1)
@@ -66,7 +77,8 @@ class RandomMagicItems < Thor
         item.roll_details
       end
     end
-    puts magic_items.sort
+    puts magic_items.sort if __FILE__ == $PROGRAM_NAME
+    magic_items
   end
 end
 
