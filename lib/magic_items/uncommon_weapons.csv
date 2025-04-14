@@ -1,0 +1,22 @@
+Name,Base Cost,Apparent Value,Share,Weighted Share
+"Arrow +1, Warp Wood",1125,32.5,1,1125
+"Arrow +1, Ascertaining",1200,130,1,1200
+"Arrow +1, Travel (1d2)",1250,65,1,1250
+"Bolt +1, Cobra (1d2)",1250,65,1,1250
+"Arrow +2, Ire",1375,32.5,1,1375
+"Battle Axe +0, Facebiter^",1500,657,1,1500
+"Warhammer +0, Rent Flesh^",1000,655,1,1000
+"Arrow +2, Riotous",1875,32.5,1,1875
+"Arrow +2, Slow Death",2250,32.5,1,2250
+"Club +1, Trollbone",2500,651,1,2500
+"Great Axe +1, Lumbering",2500,660,1,2500
+"Spear +1, Second Line",2500,653,1,2500
+"Arrow +2, Impetus",2750,32.5,1,2750
+"Arrow +2, Lesser Death",2750,32.5,1,2750
+"Arrow +3, Blizzard",3375,32.5,1,3375
+"Arrow +3, Banshee",3875,32.5,1,3875
+"Arrow +3, Conflagration",3875,32.5*,1,3875
+"Arrow +3, Death",4750,32.5,1,4750
+"Mace +1, Salient Sun",5000,655,1,5000
+"Weapon -1, Hallucination",3000,as imitated,2,6000
+Weapon +1,5000,650+,79,395000

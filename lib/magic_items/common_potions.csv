@@ -1,0 +1,63 @@
+Name,Description,Base Cost,Apparent Value,Share,weighted share
+Healing Salve,smell of camphor and wormwood,400,25,6,2400
+Midnight Oil,"dark oil, opaque with no gloss",500,25,8,4000
+Oil of Bane-Rune,"dark oil, silver sheen and metallic scent",500,25,13,6500
+Oil of Ooze,"gooey grey, acidic",500,25,6,3000
+Oil of Relaxing Respite,lavender aroma,100,75,3,300
+Oil of Rust,"dark oil, red-orange flakes within",1000,25,1,1000
+Oil of Sealing,"mustard-yellow oil, highly viscous",500,25,9,4500
+Oil of Sharpness,"dark oil, metallic scent",500,25,14,7000
+Oil of Slickness,"pitch black, greasy smell",500,25,11,5500
+Oil of Unliving Puppetry,"dark brown oil, smells of embalming fluids",500,25,7,3500
+Potion of Adjust Self,slowly changes hue each turn,1000,25,1,1000
+Potion of Allure,"soft pink, warm to touch",500,25,10,5000
+Potion of Antivenom,"opaque violet, taste and smell of meat cooking",1000,25,1,1000
+Potion of Arcane Armor,"shimmering blue tint, savory",500,25,10,5000
+Potion of Blindness^,opaque black,1000,25,1,1000
+Potion of Bottomless Appetite^,smells like a hearty meal,1000,25,1,1000
+Potion of Captain's Presence,"green, sweet",500,25,5,2500
+Potion of Comprehension,smells like musty books and burned candles,500,25,9,4500
+Potion of Cure Light Injury,"golden, honey-scented",500,25,22,11000
+Potion of Cure Moderate Injury,"pink, gooey",1000,25,2,2000
+Potion of Deathly Appearance,"black, smell of licorice",500,25,4,2000
+Potion of Delay Disease,"pale red, taste of stale bread",500,25,12,6000
+Potion of Delay Poison,green and violet emulsion,1000,25,2,2000
+Potion of Discern Evil,"muted yellow, sour smell",500,25,11,5500
+Potion of Discern Invisible,"clear, acrid",1000,25,1,1000
+Potion of Discern Magic,"bright purple, smell of mint",500,25,11,5500
+Potion of Divine Armor,"deep red, thick chunky mix",1000,25,1,1000
+Potion of Dragon Control,"murky, smell of sweat and burning flesh",1000,25,1,1000
+Potion of Energy Protection*,"muted blue, tasteless",1000,25,3,3000
+Potion of Freezing,"clear, light blue at center",500,25,7,3500
+Potion of Giant Control,"sediment-filled, potent smell",1000,25,1,1000
+Potion of Great Hearing,"transluscent blue, sloshes readily",1000,25,1,1000
+Potion of Great Vision,"clear, fluid lenses",1000,25,1,1000
+Potion of Guilelessness^,pale blue,1000,25,1,1000
+Potion of Hallucination^,(as potion imitated),500,25,16,8000
+Potion of Halting^,"yellow orange, viscous as molasses",500,25,6,3000
+Potion of Heir Loss^,blue,1000,25,1,1000
+Potion of Homicidal Homage,pale violet,500,25,6,3000
+Potion of Insect Domination,dark green,1000,25,1,1000
+Potion of Leaping,"orange tint, smell of burning fat",500,25,10,5000
+Potion of Lesser Magical Discernment,"yellow tint, sour",100,25,3,300
+Potion of Levitation,"deep purple, constantly bubbling",1000,25,1,1000
+Potion of Lizard Skin,"green, suspension of lizard scales",750,25,1,750
+Potion of Locate Object,"amber-gold, impossible-to-place scent",1000,25,1,1000
+Potion of Necromantic Potence,"grey tint, smell of myrrh",1000,25,1,1000
+Potion of Night Terrors^,(as potion imitated),1000,25,1,1000
+Potion of Ogre Rage,bright orange,500,25,4,2000
+Potion of Ogre Strength,"bright orange, pungent smell of chives",1000,25,1,1000
+Potion of Passion,"clear, slightly sweet",1000,25,1,1000
+Potion of Peaceful Imperceptibility,"clear, overly sweet",1000,25,1,1000
+Potion of Physical Protection*,"muted red, taste of olive oil",1000,25,3,3000
+Potion of Quiet Footfalls,thick green,500,25,8,4000
+Potion of Shimmer,"yellow tint, glows slightly, tasteless",1000,25,1,1000
+Potion of Simmering Rage,"red, frothy",500,25,7,3500
+Potion of Snakeform,dark green,1000,25,1,1000
+Potion of Speak With Beasts,"opaque red, smell of raw meat",1000,25,1,1000
+Potion of Spider Climbing,clear with small fibers floating throughout,500,25,10,5000
+Potion of Sprinting,gold hue,500,25,9,4500
+Potion of Swarm Control,"grimy, almost bottled sewage",500,25,5,2500
+Potion of Swift Sword,overpowering mocha scent,1000,25,1,1000
+Potion of Swimming,"blue tint, taste of brine",1000,25,1,1000
+Potion of Troubled Stomachs^,strong liquor,1000,25,1,1000

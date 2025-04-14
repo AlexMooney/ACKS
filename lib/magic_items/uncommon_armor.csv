@@ -1,0 +1,8 @@
+Name,Base Cost,Apparent Value,Share,Weighted Share
+"Armor -1, Hallucination",3000,as imitated,2,6000
+"Armor +0, Crushing^",1500,650*,4,6000
+Armor +1,5000,650+,44,220000
+"Shield -1, Hallucination",3000,as imitated,2,6000
+"Shield +0, Cowardly^",1500,660,2,3000
+Shield +1,5000,660,44,220000
+"Shield +1, Cautious",2500,660,2,5000

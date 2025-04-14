@@ -1,0 +1,38 @@
+Name,Base Cost,Apparent Value,Share,Weighted Share
+Armor +2,15000,650+,10,150000
+"Banded Plate Armor +1, Enclosing",17000,700,1,17000
+"Banded Plate Armor +1, Immunizing",17000,700,1,17000
+"Chain Mail Armor +1, Adaptive",20000,690,1,20000
+"Chain Mail Armor +1, Recruiter's",17000,690,1,17000
+"Laminated Linen Armor +1, Abiding",12500,690,3,37500
+"Leather Armor +1, +2 vs Vermin",10000,670,4,40000
+"Leather Armor +1, Eelskin",24000,670,1,24000
+"Leather Armor +1, Immunizing",17000,670,1,17000
+"Leather Armor +1, Larcenist's",24000,670,1,24000
+"Leather Armor +1, Uncanny Movement",24000,670,1,24000
+"Leather Armor +2, Borrowed Time",25000,670,1,25000
+"Leather Armor +2, Second Skin",21000,670,1,21000
+"Light Arena Armor +1, Pitfighter",17000,680,1,17000
+"Plate Armor +1, +3 vs Giants",20000,710,1,20000
+"Plate Armor +1, Campaigner's",17000,750,1,17000
+"Plate Armor +1, Dauntless",24000,710,1,24000
+"Plate Armor +1, Shattering",11000,1000,5,55000
+"Ring Mail +1, Refractive",17000,1500*,1,17000
+"Shield +1, +3 versus Missiles",20000,660,1,20000
+"Shield +1, Brineblast",6500,800,6,39000
+"Shield +1, Burden",17000,660,1,17000
+"Shield +1, Defender",24000,660,1,24000
+"Shield +1, Dragonslayer",11000,660,3,33000
+"Shield +1, Dreadful",9250,660,6,55500
+"Shield +1, Gloating",10000,660,3,30000
+"Shield +1, Kraken",12500,660,3,37500
+"Shield +1, Lunar",16000,660,1,16000
+"Shield +1, Penultimate Blow",6500,660,6,39000
+"Shield +1, Postern",6500,660,6,39000
+"Shield +1, Ram and Star",21500,660,1,21500
+"Shield +1, Shade",15000,850,2,30000
+"Shield +1, Sojourner's",6250,660,5,31250
+"Shield +1, Steady",17000,660,1,17000
+"Shield +1, Stonebreath",6500,660,6,39000
+"Shield +1, Unbroken Line",24000,700,1,24000
+Shield +2,15000,660,10,150000

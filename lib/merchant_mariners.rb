@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "tables"
-require_relative "random_magic_items"
+require_relative "tt_magic_items"
 
 class Cargo
   extend Tables
@@ -24,7 +24,7 @@ class Cargo
   end
 
   def to_s
-    "#{quantity} St of #{name} in #{container} worth #{price} gp"
+    "#{quantity} st of #{name} in #{container} worth #{price} gp"
   end
 
   GEMS_BY_ROLL = {
@@ -66,10 +66,155 @@ class Cargo
   }.freeze
 end
 
+class Gang
+  include Tables
+
+  attr_accessor :group_name, :count_dice, :leader_title, :leader_level, :extra_gang
+
+  def initialize(group_name, count_dice, leader_title, leader_level, &extra_gang)
+    @group_name = group_name
+    @count_dice = count_dice
+    @leader_title = leader_title
+    @leader_level = leader_level
+    @extra_gang = extra_gang
+  end
+
+  def roll_count
+    roll_dice(count_dice)
+  end
+
+  def generate_leader!
+    Character.new(leader_level, leader_title)
+  end
+
+  def attempt_extra_gang!(count, characters_by_count, _leader)
+    return 0 unless extra_gang
+
+    gang = extra_gang.call
+    return 0 unless gang
+
+    group_count = gang.roll_count
+    if group_count + 1 >= count
+      characters_by_count[gang.group_name] += group_count
+      characters_by_count[gang.leader_title] ||= 1
+      leaders << generate_leader!
+      group_count + 1
+    else
+      0
+    end
+  end
+end
+
+class Passengers
+  include Tables
+
+  attr_accessor :characters_by_count
+
+  def initialize(count)
+    @characters_by_count = Hash.new(0)
+    @leaders = []
+    assign_characters!(count)
+    @leaders.sort!
+  end
+
+  def to_s
+    passenger_list = @characters_by_count.map do |type, count|
+      "#{count}× #{type}"
+    end.join(", ")
+    leader_list = @leaders.map(&:to_s).tally.map do |leader_string, count|
+      if count == 1
+        leader_string
+      else
+        "#{count}× #{leader_string}"
+      end
+    end
+
+    ["Passengers: #{passenger_list}"].concat(leader_list).join("\n")
+  end
+
+  def member
+    raise NotImplementedError, "Subclasses must implement a member method"
+  end
+
+  def assign_characters!(count)
+    count = assign_gang!(count, 0) while count.positive?
+  end
+
+  def assign_gang!(count, idx)
+    gang = gangs[idx]
+
+    if gang == gangs.last
+      group_count = [gang.roll_count, count].min
+      count -= group_count
+      @characters_by_count[member] += group_count
+      if count.positive?
+        count -= 1
+        @characters_by_count[gang.leader_title] += 1
+        @leaders << gang.generate_leader!
+      end
+    else
+      sub_gangs = gang.roll_count
+      sub_gangs.times do
+        count = assign_gang!(count, idx + 1)
+        break if count <= 0
+      end
+      if count.positive?
+        @characters_by_count[gang.leader_title] += 1
+        @leaders << gang.generate_leader!
+        count -= 1
+      end
+    end
+    count -= gang.attempt_extra_gang!(count, @characters_by_count, @leaders) if count.positive?
+    count
+  end
+end
+
+class Commoners < Passengers
+  def member
+    "commoner"
+  end
+
+  def gangs
+    @gangs ||= [
+      Gang.new("Hamlet", "1d3", "steward", 3),
+      Gang.new("Band", "1d6", "reeve", 2),
+      Gang.new("Work-gang", "2d6", "yeoman", 1)
+    ]
+  end
+end
+
+class Pilgrims < Passengers
+  def member
+    "pilgrim"
+  end
+
+  def gangs
+    @gangs ||= [
+      Gang.new("Camp", "1d6", "vicar", 5) do
+        if rand <= 0.33
+          Gang.new("Novices", "2d4", "sister", 4) do
+            Gang.new("Novice", "0", "novice", 1)
+          end
+        end
+      end,
+      Gang.new("Band", "1d6", "explorer", 2),
+      Gang.new("Troupe", "1d8", "crusader", 1)
+    ]
+  end
+end
+
+class Marines < Passengers
+  def assign_characters!(count)
+    type = rand < 0.5 ? "heavy infantry" : "archer"
+    @characters_by_count[type] += count
+    @characters_by_count["boarding ramps"] = (count / 8.0).ceil
+  end
+end
+
 class Ship
   include Tables
 
-  attr_accessor :crew_size, :cargo, :artillery_string, :passenger_type, :passenger_count, :captain
+  attr_accessor :crew_size, :cargo, :artillery_pieces, :passenger_type, :passenger_count, :passengers, :captain
 
   def initialize
     assign_artillery!
@@ -77,13 +222,14 @@ class Ship
   end
 
   PASSENGER_TYPE_BY_ROLL = {
-    6 => "Commoners",
-    9 => "Pilgrims",
-    10 => "Marines",
+    6 => Commoners,
+    9 => Pilgrims,
+    10 => Marines,
   }.freeze
   def generate_passengers!(dice_expression, multiplier = 1)
     self.passenger_count = roll_dice(dice_expression) * multiplier
     self.passenger_type = roll_table(PASSENGER_TYPE_BY_ROLL)
+    self.passengers = passenger_type.new(passenger_count)
   end
 
   def generate_cargo!(dice_expression)
@@ -99,16 +245,19 @@ class Ship
   end
 
   def assign_artillery!
-    artillery_pieces = if rand < (cargo_value / 100_000.0) || passenger_type == "Marines"
-                         artillery_capacity
-                       else
-                         0
-                       end
-    if artillery_pieces.positive?
-      pieces_string = artillery_pieces == 1 ? "piece" : "pieces"
-      self.artillery_string = "#{artillery_pieces} #{pieces_string} of #{artillery_weight} artillery"
+    @artillery_pieces = if rand < (cargo_value / 100_000.0) || passenger_type == Marines
+                          artillery_capacity
+                        else
+                          0
+                        end
+  end
+
+  def artillery_string
+    if @artillery_pieces.positive?
+      pieces_string = @artillery_pieces == 1 ? "piece" : "pieces"
+      "#{@artillery_pieces} #{pieces_string} of #{artillery_weight} st artillery"
     else
-      self.artillery_string = "No artillery"
+      "No artillery"
     end
   end
 
@@ -117,15 +266,28 @@ class Ship
   end
 
   def artillery_weight
-    "#{self.class.const_get(:ARTILLERY_WEIGHT)} st"
+    self.class.const_get(:ARTILLERY_WEIGHT)
   end
 
   def cargo_value
     @cargo.values.sum(&:price)
   end
 
+  def cargo_weight
+    @cargo.values.sum(&:quantity)
+  end
+
+  STONES_PER_PASSENGER = 50
+  def total_weight
+    cargo_weight + artillery_weight * artillery_pieces + passenger_count * STONES_PER_PASSENGER
+  end
+
+  def weight_string
+    "Total weight carried: #{total_weight} st"
+  end
+
   def generate_captain!
-    self.captain = Captain.new(self.class::CAPTAIN)
+    self.captain = Character.new(self.class::CAPTAIN)
   end
 
   def stat_line
@@ -135,9 +297,10 @@ class Ship
   def to_s
     cargo_list = @cargo.values.sort_by(&:price).map { |c| "  #{c}" }.join("\n")
     [stat_line,
-     "#{crew_size} crew, #{passenger_count} #{passenger_type}, #{artillery_string}",
+     "#{crew_size}× crew, #{artillery_string}, #{weight_string}",
      captain,
-     "Cargo worth #{cargo_value} gp",
+     passengers,
+     "Cargo worth #{cargo_value} gp weighing #{cargo_weight} st",
      cargo_list,
      ""].join("\n")
   end
@@ -199,7 +362,7 @@ class HugeShip < Ship
   end
 end
 
-class Captain
+class Character
   include Tables
 
   attr_accessor :level, :title, :magic_items_by_rarity
@@ -207,7 +370,6 @@ class Captain
   def initialize(level, title = "Captain")
     @level = level
     @title = title
-    @magic_items_by_rarity = { "common" => [], "uncommon" => [], "rare" => [] }
     generate_magic_items!
   end
 
@@ -217,12 +379,27 @@ class Captain
 
       "  #{rarity.capitalize} magic items: " + items.map(&:to_s).sort.join(", ")
     end
-    ["#{title} level #{level}",
-     magic_item_list].join("\n")
+    magic_item_list = nil if magic_item_list.empty?
+    ["#{title} level #{level}", magic_item_list].compact.join("\n")
+  end
+
+  def <=>(other)
+    lvl_cmp = other.level <=> level
+    if lvl_cmp.zero?
+      title_cmp = title <=> other.title
+      if title_cmp.zero?
+        other.magic_items_by_rarity.values.flatten.count <=> magic_items_by_rarity.values.flatten.count
+      else
+        title_cmp
+      end
+    else
+      lvl_cmp
+    end
   end
 
   COMMON_ITEMS_BY_LEVEL = {
     1 => "30%",
+    2 => "90%",
     3 => 1,
     4 => "1d4-1",
     5 => 2,
@@ -240,13 +417,17 @@ class Captain
     7 => "66%",
   }.freeze
   def generate_magic_items!
-    %w[rare uncommon common].each do |rarity|
+    @magic_items_by_rarity = {}
+    count_by_rarity = %i[rare uncommon common].filter_map do |rarity|
       prefix = rarity.upcase
       quantity = roll_dice(self.class.const_get("#{prefix}_ITEMS_BY_LEVEL")[level])
       next if quantity.nil? || quantity.zero?
 
-      magic_items_by_rarity[rarity] = RandomMagicItems.new.magic_items(rarity, quantity)
-    end
+      [rarity, quantity]
+    end.to_h
+    return if count_by_rarity.empty?
+
+    @magic_items_by_rarity = TTMagicItems.roll_magic_items(**count_by_rarity)
   end
 end
 
@@ -265,7 +446,7 @@ class MerchantMariners
 
     if rand < LAIR_CHANCE
       @number_of_ships = roll_dice(ship_type::FLEET_SIZE)
-      @commodore = Captain.new(ship_type::CAPTAIN + 2, "Commodore")
+      @commodore = Character.new(ship_type::CAPTAIN + 2, "Commodore")
     else
       @number_of_ships = 1
       @commodore = nil

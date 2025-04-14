@@ -1,0 +1,59 @@
+Name,Base Cost,Apparent Value,Share,Weighted Share
+"Dagger +1, Assassin's",24000,653,1,24000
+"Dagger +1, Bloodletter",5750,653,3,17250
+"Dagger +1, Death Double",20000,653,1,20000
+"Dagger +1, Disarming",24000,800,1,24000
+"Dagger +1, Enervating",6500,653,3,19500
+"Dagger +1, Fool's",10000,653,1,10000
+"Dagger +1, Fortune's Friend",8300,653,2,16600
+"Dagger +1, Gutting",17000,653,1,17000
+"Dagger +1, Harvester's",11000,653,1,11000
+"Dagger +1, Mercystroke",24000,653,1,24000
+"Dagger +1, Moontear",17000,653,1,17000
+"Dagger +1, Runecarver",14000,700,1,14000
+"Dagger +1, Sacrificial",24000,653,1,24000
+"Dagger +1, Stinger",6000,653,3,18000
+"Dagger +1, Treacherous",24000,653,1,24000
+"Dagger +1, Venomous",23000,653,1,23000
+"Short Sword +1, Combat Reflexes",24000,657,1,24000
+"Short Sword +1, Errant Forms",9000,657*,2,18000
+"Short Sword +1, Flashing",8000,850,2,16000
+"Short Sword +1, Manes",15000,660,1,15000
+"Short Sword +1, Nimble",11000,657,1,11000
+"Short Sword +1, Riposte",24000,667,1,24000
+"Short Sword +1, Slicing",13000,657,1,13000
+"Short Sword +2, Command",21000,657,1,21000
+"Short Sword +2, Despair",24500,1200,1,24500
+"Short Sword +2, Wolf's Fang",10500,657,1,10500
+"Sword +0, Snaring^",6000,660,3,18000
+"Sword +1, +2 versus X",10000,650+,12,120000
+"Sword +1, +3 versus X",20000,650+,3,60000
+"Sword +1, Adder's Kiss",13000,700,1,13000
+"Sword +1, Alacrity",11000,750,1,11000
+"Sword +1, Bane",10000,657,1,10000
+"Sword +1, Bright",17000,660,1,17000
+"Sword +1, Death Drinker",11000,660,1,11000
+"Sword +1, Deathless",17000,660,1,17000
+"Sword +1, Deeds",19000,660,1,19000
+"Sword +1, Desperate",20000,660,1,20000
+"Sword +1, Fiery Kennels",14000,750,1,14000
+"Sword +1, Hidden Flame",6250,660,3,18750
+"Sword +1, Icespike",25000,660*,1,25000
+"Sword +1, Locating",15000,660,1,15000
+"Sword +1, Lone Hero",20000,800,1,20000
+"Sword +1, Oblivion",6500,660*,3,19500
+"Sword +1, Saintly",11000,660,1,11000
+"Sword +1, Salvation",6250,660*,3,18750
+"Sword +1, Seeking",24000,700,1,24000
+"Sword +1, Wardbane",20000,1200,1,20000
+"Sword +1, Watchful",17000,660,1,17000
+Sword +2,15000,650+,7,105000
+"Sword +2, +3 versus X",25000,650+,1,25000
+"Sword +2, Beguilement",19000,800,1,19000
+"Sword +2, Valor",21000,660,1,21000
+"Two-Handed Sword +1, Barriers",6500,665,3,19500
+"Two-Handed Sword +1, Blazing Sun",6500,750,3,19500
+"Two-Handed Sword +1, Fiendish",23000,665,1,23000
+"Two-Handed Sword +1, Frothing Madness",14500,665,1,14500
+"Two-Handed Sword +1, Herald's",6500,700,3,19500
+"Two-Handed Sword +1, Perseverance",17000,665,1,17000

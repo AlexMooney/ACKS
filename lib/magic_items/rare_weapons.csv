@@ -1,0 +1,39 @@
+Name,Base Cost,Apparent Value,Share,Weighted Share
+"Battle Axe +1, Crippling",8000,657,4,32000
+"Battle Axe +1, Gratitude",25000,657,1,25000
+"Cestus +1, Low Blows",17000,653,2,34000
+"Club +1, Fetching",10000,651,3,30000
+"Club +1, Spite",14000,651,2,28000
+"Composite Bow +1, Bitter",22000,800,2,44000
+"Crossbow +1, Dragon's Breath",10000,680,3,30000
+"Flail +1, Loathsome",17000,655,2,34000
+"Flail +1, Spiteful",13000,655,2,26000
+"Great Axe +1, Phantom Forests",17000,1000,2,34000
+"Great Axe +1, Savage",22000,660,1,22000
+"Hand Axe +2, Spite",24000,654,1,24000
+"Javelin +1, Mass Mutilation",6500,651,3,19500
+"Javelin +1, Python",5750,651,4,23000
+"Javelin +1, Thunderbolt",5750,651,3,17250
+"Long Bow +1, Sundering",13000,657,2,26000
+"Mace +1, Heartbreaking",11000,655,2,22000
+"Mace +1, Holy",10000,655,4,40000
+"Morning Star +1, Mourning",15000,660,3,45000
+"Net +1, Webbing",7000,651,4,28000
+"Polearm +1, Gracious",9000,657,4,36000
+"Polearm +1, Thrassian",22000,657,1,22000
+"Short Bow +1, Adept",17000,653,2,34000
+"Short Bow +1, Hunting",22000,800,1,22000
+"Short Bow +2, Elemental",24375,653,1,24375
+"Sling +1, Aspirant",10000,653,3,30000
+"Sling +1, Decisive",24000,653,1,24000
+"Sling +1, Holy",10000,652,3,30000
+"Sling Bullet +1, Relief (1d20)",6000,650,3,18000
+"Spear +1, Righteous Hand",23000,653,1,23000
+"Spear +1, Vigilant",24000,653,1,24000
+"Spear +2, Summit's Skewer",16250,750*,2,32500
+"Weapon +1, +2 versus X",10000,650+,12,120000
+"Weapon +1, +3 versus X",20000,650+,3,60000
+Weapon +2,15000,650+,7,105000
+"Weapon +2, +3 versus X",25000,650+,1,25000
+"Whip +1, Manticore",10000,655,2,20000
+"Whip +1, Tyrant's",12000,655,2,24000
