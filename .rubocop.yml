@@ -1,5 +1,8 @@
+
+
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 3.2
 
 Style/Documentation:
   Enabled: false
@@ -14,13 +17,13 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: consistent_comma
+  EnforcedStyleForMultiline: comma
 
 Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: consistent_comma
+  EnforcedStyleForMultiline: comma
 
 Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: consistent_comma
+  EnforcedStyleForMultiline: comma
 
 Metrics/ClassLength:
   Enabled: false
