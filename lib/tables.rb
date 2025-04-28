@@ -7,7 +7,7 @@ module Tables
       roll ||= rand(0...table.size)
     when Hash
       roll ||= rand(1..(table.keys.max))
-      roll += 1 while table[roll].nil?
+      roll = table.keys.select { |key| key >= roll }.min if table[roll].nil?
     else
       raise "Invalid table type #{table.class}"
     end
