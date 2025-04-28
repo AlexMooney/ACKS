@@ -27,12 +27,6 @@ class DomainEncounters < Thor
     result
   end
 
-  def roll_table(table)
-    roll = rand(1..(table.keys.max))
-    roll += 1 while table[roll].nil?
-    table[roll]
-  end
-
   def recon_roll
     rand(1..6) + rand(1..6)
   end
