@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module RandomWeighted
   def random_weighted(weight_by_value)
     target = rand(1..100)
-    weight_by_value.detect { |item, weight| weight && target <= weight }.first
+    weight_by_value.detect { |_item, weight| weight && target <= weight }.first
   end
 
   def self.included(base)
