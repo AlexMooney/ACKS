@@ -312,7 +312,7 @@ class SmallShip < Ship
   ARTILLERY_CAPACITY = 1
   ARTILLERY_WEIGHT = 400
   LABEL = "small"
-  STAT_LINE = "Speed: sail 240' / 96 miles, Cargo 10,000 st, AC 2, 75 SHP"
+  STAT_LINE = "Speed: sail 240' / 96 miles, Cargo 10000 st, AC 2, 75 SHP"
 
   def initialize
     self.crew_size = 10 # 20 40
@@ -328,7 +328,7 @@ class LargeShip < Ship
   ARTILLERY_CAPACITY = 4
   ARTILLERY_WEIGHT = 800
   LABEL = "large"
-  STAT_LINE = "Speed: sail 180' / 72 miles, Cargo 30,000 st, AC 2, 200 SHP"
+  STAT_LINE = "Speed: sail 180' / 72 miles, Cargo 30000 st, AC 2, 200 SHP"
 
   def initialize
     self.crew_size = 20
@@ -348,7 +348,7 @@ class HugeShip < Ship
   ARTILLERY_CAPACITY = 8
   ARTILLERY_WEIGHT = 800
   LABEL = "huge"
-  STAT_LINE = "Speed: sail 180' / 60 miles, Cargo 50,000 st, AC 2, 400 SHP"
+  STAT_LINE = "Speed: sail 180' / 60 miles, Cargo 50000 st, AC 2, 400 SHP"
 
   def initialize
     self.crew_size = 40
@@ -367,7 +367,7 @@ class Character
 
   attr_accessor :level, :title, :magic_items_by_rarity
 
-  def initialize(level, title = "Captain")
+  def initialize(level, title = "captain")
     @level = level
     @title = title
     generate_magic_items!
@@ -463,7 +463,7 @@ class MerchantMariners
     if @commodore
       "Fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships}"
     else
-      "A single #{@ship_type::LABEL} ship\n#{ships}"
+      ships
     end
   end
 end
