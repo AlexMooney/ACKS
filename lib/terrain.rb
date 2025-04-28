@@ -136,7 +136,7 @@ class Terrain
       monster
     else
       missing_monsters << monster_name
-      Monster.new(name: monster_name, total_xp: 0, total_spoils_value: 0, treasure_type: "Missing Monster")
+      WildernessMonster.new(name: monster_name, total_xp: 0, total_spoils_value: 0, treasure_type: "Missing Monster")
     end
   end
 end

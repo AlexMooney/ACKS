@@ -5,6 +5,7 @@ require "bundler/inline"
 
 gemfile do
   source "https://rubygems.org"
+  gem "csv"
   gem "pry"
   gem "thor", "~> 1.2.1"
   gem "tty-table"
@@ -12,10 +13,12 @@ end
 
 require_relative "markdown_border"
 require_relative "monsters"
+require_relative "spell_check"
 require_relative "tables"
 require_relative "terrain"
 
 class WildernessEncounters < Thor
+  include SpellCheck
   include Tables
 
   DANGER_LEVELS = [
@@ -130,13 +133,14 @@ class WildernessEncounters < Thor
 
   desc "wilderness_encounters TERRAIN DANGER_LEVEL", "Generate 20 upcoming wilderness encounter checks"
   def wilderness_encounters(terrain, danger_level = 0)
-    danger_level = danger_level.to_i
-    danger_level = danger_level.clamp(0, 4)
+    danger_level = danger_level.to_i.clamp(0, 4)
     terrain_name = terrain
     terrain = Terrain.new(terrain_name, "encounter_tables/#{terrain_name}.csv")
     20.times do |i|
       roll = rand(1..20)
+      danger_label = ""
       while roll == 1 && danger_level < 4
+        danger_label += "+"
         danger_level += 1
         roll = rand(1..20)
       end
@@ -156,6 +160,7 @@ class WildernessEncounters < Thor
                else
                  result
                end
+      result += " (danger #{danger_label})" unless danger_label.empty?
 
       puts "- [ ] #{i + 1}: #{result}"
     end
@@ -167,10 +172,11 @@ class WildernessEncounters < Thor
     3 => 0.03,  # Outlands
     4 => 0.04,  # Unsettled
   }.freeze
-  desc "domain_encounters DANGER_LEVEL TERRAIN HEXES DAYS=28", "Roll a set of domain encounters"
-  def domain_encounters(danger_level, terrain, hexes, days = 28)
-    danger_level = danger_level.to_i
-    terrain_name = terrain.downcase
+  desc "domain_encounters TERRAIN DANGER_LEVEL HEXES DAYS=28", "Roll a set of domain encounters"
+  def domain_encounters(terrain, danger_level, hexes, days = 28)
+    danger_level = danger_level.to_i.clamp(0, 4)
+    terrains = Dir.glob("encounter_tables/*.csv").map { |f| File.basename(f, ".csv") }
+    terrain_name = spell_check(terrain.downcase, terrains)
     terrain = Terrain.new(terrain_name, "encounter_tables/#{terrain_name}.csv")
     hexes = hexes.to_i
 
@@ -183,16 +189,16 @@ class WildernessEncounters < Thor
 
     labels = ["Day", "Creature", "Lingering", "Lair Group", "Domain Recon", "Monster Recon", "Attitude"]
     data = []
-    days.times do |i|
+    days.to_i.times do |i|
       hexes.times do |_h|
         next unless rand >= no_encounter_in_hex
 
         rarity = roll_rarity(danger_level)
-        creature = terrain.random_monster(rarity)
+        creature = monster_encounter(terrain, rarity)
         lingering = rand(1..100)
         lair = rand(1..100)
 
-        data << [i + 1, "#{creature.name} (#{rarity})", lingering, lair, recon_roll, recon_roll, domain_reaction]
+        data << [i + 1, "#{creature} (#{rarity})", lingering, lair, recon_roll, recon_roll, domain_reaction]
       end
     end
     table = TTY::Table.new(labels, data)

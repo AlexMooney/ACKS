@@ -18,7 +18,8 @@ DungeonMonster = Struct.new(
             break if index >= num_gangs - 1
 
             room.type = :monster
-            room.monster = DungeonMonster.new(floor, floor.level, "#{name} gang").tap do |m| # more gangs, not bigger gangs
+            room.monster = DungeonMonster.new(floor, floor.level, "#{name} gang").tap do |m|
+              # more gangs, not bigger gangs
               m.number_appearing = roll_dice(num_no_lair)
               m.lair = false
             end
@@ -90,77 +91,82 @@ DungeonMonster = Struct.new(
   end
 end
 
+MonsterType = Struct.new(:name, :no_lair_count, :lair_count, :lair_chance, :treasure_type) do
+  def to_args
+    [name, no_lair_count, lair_count, lair_chance, treasure_type]
+  end
+end
 DUNGEON_MONSTERS = {
   1 => # [DungeonMonster name,   no lair #,  lair #, lair chance, treasure type]
-  { 1 => ["Goblin",           "2d4",  "2d6*",  0.4,  "E"],
-    2 => ["Kobold",           "4d4",  "1d6*",  0.4,  "E"],
-    3 => ["Morlock",          "1d12", "1d8*",  0.35, "E"],
-    4 => ["Orc",              "2d4",  "2d6*",  0.35, "G"],
-    5 => ["Beetle, Luminous", "1d8",  "2d6",   0.4],
-    6 => ["Centipede, Giant", "2d4",  "2d12",  0.1],
-    7 => ["Ferret, Giant",    "1d8",  "1d12",  0.25, "A"],
-    8 => ["Rat, Giant",       "3d6",  "3d10",  0.1,  "A"],
-    9 => ["Men, Brigand",     "2d4",  "1d10*", 0.2,  "H"],
-    10 => ["Skeleton",        "3d4",  "3d10",  0.35],
-    11 => ["Strix",           "1d10", "3d12",  0.4, "F"],
-    12 => ["NPC Party Lvl 1", "1d4+2", "1*",   0] },
+  { 1 => MonsterType.new("Goblin",           "2d4",  "2d6*",  0.4,  "E"),
+    2 => MonsterType.new("Kobold",           "4d4",  "1d6*",  0.4,  "E"),
+    3 => MonsterType.new("Morlock",          "1d12", "1d8*",  0.35, "E"),
+    4 => MonsterType.new("Orc",              "2d4",  "2d6*",  0.35, "G"),
+    5 => MonsterType.new("Beetle, Luminous", "1d8",  "2d6",   0.4),
+    6 => MonsterType.new("Centipede, Giant", "2d4",  "2d12",  0.1),
+    7 => MonsterType.new("Ferret, Giant",    "1d8",  "1d12",  0.25, "A"),
+    8 => MonsterType.new("Rat, Giant",       "3d6",  "3d10",  0.1,  "A"),
+    9 => MonsterType.new("Men, Brigand",     "2d4",  "1d10*", 0.2,  "H"),
+    10 => MonsterType.new("Skeleton",        "3d4",  "3d10",  0.35),
+    11 => MonsterType.new("Strix",           "1d10", "3d12",  0.4, "F"),
+    12 => MonsterType.new("NPC Party Lvl 1", "1d4+2", "1*",   0) },
   2 =>
-  { 1 => ["Gnoll",                  "1d6", "2d6*", 0.2, "G"],
-    2 => ["Hobgoblin",              "1d6", "1d8*", 0.25, "E"],
-    3 => ["Lizardman",              "2d4", "1d8*", 0.3,  "L"],
-    4 => ["Troglydyte",             "1d8", "1d10*", 0.15, "J"],
-    5 => ["Bat, Giant",             "1d10", "1d10", 0.35],
-    6 => ["Fly, Giant Carnivorous", "1d8", "2d6", 0.35, "C"],
-    7 => ["Locust, Cavern",         "1d10", "2d10", 0.3],
-    8 => ["Snake, Pit Viper",       "1d8"],
-    9 => ["Ghoul, Grave",           "1d6", "2d8", 0.2, "E"],
-    10 => ["Men, Berserker",        "1d6", "1d8*", 0.2, "J"],
-    11 => ["Zombie",                "2d4", "4d6", 0.35],
-    12 => ["NPC Party Lvl 2",       "1d4+2", "1*", 0] },
+  { 1 => MonsterType.new("Gnoll",                  "1d6", "2d6*", 0.2, "G"),
+    2 => MonsterType.new("Hobgoblin",              "1d6", "1d8*", 0.25, "E"),
+    3 => MonsterType.new("Lizardman",              "2d4", "1d8*", 0.3,  "L"),
+    4 => MonsterType.new("Troglydyte",             "1d8", "1d10*", 0.15, "J"),
+    5 => MonsterType.new("Bat, Giant",             "1d10", "1d10", 0.35),
+    6 => MonsterType.new("Fly, Giant Carnivorous", "1d8", "2d6", 0.35, "C"),
+    7 => MonsterType.new("Locust, Cavern",         "1d10", "2d10", 0.3),
+    8 => MonsterType.new("Snake, Pit Viper",       "1d8"),
+    9 => MonsterType.new("Ghoul, Grave",           "1d6", "2d8", 0.2, "E"),
+    10 => MonsterType.new("Men, Berserker",        "1d6", "1d8*", 0.2, "J"),
+    11 => MonsterType.new("Zombie",                "2d4", "4d6", 0.35),
+    12 => MonsterType.new("NPC Party Lvl 2",       "1d4+2", "1*", 0) },
   3 =>
-  { 1 => ["Bugbear",               "2d4", "1d4*", 0.25, "L"],
-    2 => ["Lycanthrope, Werewolf", "1d6", "2d6", 0.25, "J"],
-    3 => ["Ogre",                  "1d6", "1d3*", 0.2, "J and special"],
-    4 => ["Hobgholl",              "1d6", "1d10", 0.35, "G"],
-    5 => ["Ant, Giant",            "2d4", "4d6", 0.1, "I and special"],
-    6 => ["Lizard, Giant Draco",   "1d3", "1d6", 0.25],
-    7 => ["Scorpion, Giant",       "1d6", "1d6", 0.5],
-    8 => ["Wolf, Dire",            "1d4", "2d4", 0.1],
-    9 => ["Carrion Horror",        "1d3", "1d3", 0.25],
-    10 => ["Gargoyle",             "1d6", "2d4", 0.2, "J"],
-    11 => ["Ghoul, Marsh",         "1d10", "2d4*", 0.35, "N"],
-    12 => ["NPC Party Lvl 4",      "1d4+2", "1*", 0] },
+  { 1 => MonsterType.new("Bugbear",               "2d4", "1d4*", 0.25, "L"),
+    2 => MonsterType.new("Lycanthrope, Werewolf", "1d6", "2d6", 0.25, "J"),
+    3 => MonsterType.new("Ogre",                  "1d6", "1d3*", 0.2, "J and special"),
+    4 => MonsterType.new("Hobgholl",              "1d6", "1d10", 0.35, "G"),
+    5 => MonsterType.new("Ant, Giant",            "2d4", "4d6", 0.1, "I and special"),
+    6 => MonsterType.new("Lizard, Giant Draco",   "1d3", "1d6", 0.25),
+    7 => MonsterType.new("Scorpion, Giant",       "1d6", "1d6", 0.5),
+    8 => MonsterType.new("Wolf, Dire",            "1d4", "2d4", 0.1),
+    9 => MonsterType.new("Carrion Horror",        "1d3", "1d3", 0.25),
+    10 => MonsterType.new("Gargoyle",             "1d6", "2d4", 0.2, "J"),
+    11 => MonsterType.new("Ghoul, Marsh",         "1d10", "2d4*", 0.35, "N"),
+    12 => MonsterType.new("NPC Party Lvl 4",      "1d4+2", "1*", 0) },
   4 =>
-  { 1 => ["Lycanthrope, Wereboar",          "1d4", "2d4", 0.2, "J"],
-    2 => ["Lycanthrope, Weretiger",         "1d4", "1d4", 0.15, "J"],
-    3 => ["Minotaur",                       "1d6", "1d8", 0.2, "L,G"],
-    4 => ["Attercop, Monsterous",           "1d3", "1d3", 0.7, "F"],
-    5 => ["Boar, Giant",                    "1d4", "1d4", 0.25],
-    6 => ["Owlbeast",                       "1d4", "1d4", 0.3, "I"],
-    7 => ["Acanthaspis, Giant",             "1d6", "1d8", 0.15, "I"],
-    8 => ["Snake, Giant Python",            "1d4", "1d4", 0.2],
-    9 => ["Lizard, Giant Horned Chameleon", "1d3", "1d6", 0.25],
-    10 => ["Medusa",                        "1d3", "1d4", 0.5, "H"],
-    11 => ["Mass, Gelatinous",              "1", "1", 1.0, "C,A"],
-    12 => ["NPC Party Lvl 5",               "1d4+2", "1*", 0] },
+  { 1 => MonsterType.new("Lycanthrope, Wereboar",          "1d4", "2d4", 0.2, "J"),
+    2 => MonsterType.new("Lycanthrope, Weretiger",         "1d4", "1d4", 0.15, "J"),
+    3 => MonsterType.new("Minotaur",                       "1d6", "1d8", 0.2, "L,G"),
+    4 => MonsterType.new("Attercop, Monsterous",           "1d3", "1d3", 0.7, "F"),
+    5 => MonsterType.new("Boar, Giant",                    "1d4", "1d4", 0.25),
+    6 => MonsterType.new("Owlbeast",                       "1d4", "1d4", 0.3, "I"),
+    7 => MonsterType.new("Acanthaspis, Giant",             "1d6", "1d8", 0.15, "I"),
+    8 => MonsterType.new("Snake, Giant Python",            "1d4", "1d4", 0.2),
+    9 => MonsterType.new("Lizard, Giant Horned Chameleon", "1d3", "1d6", 0.25),
+    10 => MonsterType.new("Medusa",                        "1d3", "1d4", 0.5, "H"),
+    11 => MonsterType.new("Mass, Gelatinous",              "1", "1", 1.0, "C,A"),
+    12 => MonsterType.new("NPC Party Lvl 5",               "1d4+2", "1*", 0) },
   5 =>
-  { 1 => ["Ettin",               "1d2", "1d4", 0.2, "N,H"],
-    2 => ["Giant, Hill",         "1d4", "2d4", 0.25, "N"],
-    3 => ["Giant, Stone",        "1d3", "1d6", 0.25, "N"],
-    4 => ["Troll",               "1d8", "1*", 0.4, "O"],
-    5 => ["Arane",               "1",   "1d3", 0.7, "J"],
-    6 => ["Worm, Great Ice",     "1",   "1d6", 0.25, "P"],
-    7 => ["Basilisk",            "1d6", "1d6", 0.4, "P"],
-    8 => ["Hell Hound, Greater", "2d4", "2d4", 0.3, "P"],
-    9 => ["Salamander, Flame",   "1d4+1", "2d4", 0.25, "Q"],
-    10 => ["Specter",            "1d4", "1d8", 0.2, "N,N"],
-    11 => ["Wyvern",             "1d2", "1d6", 0.3, "M"],
-    12 => ["NPC Party Lvl 8",    "1d4+3", "1*", 0] },
+  { 1 => MonsterType.new("Ettin",               "1d2", "1d4", 0.2, "N,H"),
+    2 => MonsterType.new("Giant, Hill",         "1d4", "2d4", 0.25, "N"),
+    3 => MonsterType.new("Giant, Stone",        "1d3", "1d6", 0.25, "N"),
+    4 => MonsterType.new("Troll",               "1d8", "1*", 0.4, "O"),
+    5 => MonsterType.new("Arane",               "1",   "1d3", 0.7, "J"),
+    6 => MonsterType.new("Worm, Great Ice",     "1",   "1d6", 0.25, "P"),
+    7 => MonsterType.new("Basilisk",            "1d6", "1d6", 0.4, "P"),
+    8 => MonsterType.new("Hell Hound, Greater", "2d4", "2d4", 0.3, "P"),
+    9 => MonsterType.new("Salamander, Flame",   "1d4+1", "2d4", 0.25, "Q"),
+    10 => MonsterType.new("Specter",            "1d4", "1d8", 0.2, "N,N"),
+    11 => MonsterType.new("Wyvern",             "1d2", "1d6", 0.3, "M"),
+    12 => MonsterType.new("NPC Party Lvl 8",    "1d4+3", "1*", 0) },
   6 =>
-  { 1 => ["Level 6 monster", "1", "1d4", 0.2, "R"] },
+  { 1 => MonsterType.new("Level 6 monster", "1", "1d4", 0.2, "R") },
 }.freeze
 
-# rubocop:disable Naming/VariableName
+# rubocop:disable Naming/VariableName,Lint/UnderscorePrefixedVariableName
 _CIVILIZED_BARRENS = [
   "Camel",
   "Camel",
@@ -359,4 +365,4 @@ CIVILIZED_ENCOUNTERS_BY_TERRAIN = {
   "scrubland_sparse" => _CIVILIZED_GRASS,
   "swamp_any" => _CIVILIZED_SWAMP,
 }.freeze
-# rubocop:enable Naming/VariableName
+# rubocop:enable Naming/VariableName,Lint/UnderscorePrefixedVariableName
