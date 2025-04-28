@@ -96,6 +96,15 @@ MonsterType = Struct.new(:name, :no_lair_count, :lair_count, :lair_chance, :trea
     [name, no_lair_count, lair_count, lair_chance, treasure_type]
   end
 end
+# Dungeon  Party  XP Value
+# Level    Level
+# 1        0      1-15
+# 2        2-3    20-47
+# 3        4-5    50-150
+# 4        6-7    175-475
+# 5        8-9    500-1,140
+# 6        10+    1,200+
+
 DUNGEON_MONSTERS = {
   1 => # [DungeonMonster name,   no lair #,  lair #, lair chance, treasure type]
   { 1 => MonsterType.new("Goblin",           "2d4",  "2d6*",  0.4,  "E"),
