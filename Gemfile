@@ -2,5 +2,7 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
+gem "csv"
 gem "rubocop"
+gem "thor"
+gem "zeitwerk"

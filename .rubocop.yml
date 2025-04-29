@@ -1,5 +1,4 @@
-
-
+---
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2
@@ -15,6 +14,9 @@ Layout/IndentationConsistency:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+  SupportedStyles:
+    - double_quotes
+    - single_quotes
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
