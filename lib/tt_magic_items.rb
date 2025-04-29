@@ -11,14 +11,12 @@ class TTMagicItems
     items
   end
 
-  def self.format_items(magic_items_by_rarity)
-    magic_item_list = magic_items_by_rarity.filter_map do |rarity, items|
+  def self.items_to_s(magic_items_by_rarity)
+    magic_items_by_rarity.filter_map do |rarity, items|
       next if items&.empty?
 
       "#{rarity.capitalize} magic items: " + items.map(&:to_s).sort.join(", ")
-    end
-    magic_item_list = nil if magic_item_list&.empty?
-    magic_item_list
+    end.join("\n")
   end
 
   def self.generate_items(quality, quantity)

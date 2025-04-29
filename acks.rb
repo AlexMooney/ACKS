@@ -20,7 +20,7 @@ class Acks < Thor
     uncommon = uncommon.to_i
     rare = rare.to_i
 
-    puts TTMagicItems.format_items(TTMagicItems.roll_magic_items(common:, uncommon:, rare:))
+    puts TTMagicItems.items_to_s(TTMagicItems.roll_magic_items(common:, uncommon:, rare:))
   end
 end
 
