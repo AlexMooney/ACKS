@@ -20,8 +20,13 @@ class Acks < Thor
     uncommon = uncommon.to_i
     rare = rare.to_i
 
-    puts TTMagicItems.items_to_s(TTMagicItems.roll_magic_items(common:, uncommon:, rare:))
+    puts TTMagicItems.new(common:, uncommon:, rare:)
+  end
+
+  desc "merchant_mariners", "Generate a merchant mariner encounter"
+  def merchant_mariners
+    puts MerchantMariners.new
   end
 end
 
-Acks.start(ARGV)
+Acks.start(ARGV) if $PROGRAM_NAME == __FILE__

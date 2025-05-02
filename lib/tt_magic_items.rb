@@ -3,15 +3,35 @@
 require "csv"
 
 class TTMagicItems
-  def self.roll_magic_items(common: 0, uncommon: 0, rare: 0)
-    items = {}
-    items[:common] = generate_items("common", common) if common.positive?
-    items[:uncommon] = generate_items("uncommon", uncommon) if uncommon.positive?
-    items[:rare] = generate_items("rare", rare) if rare.positive?
-    items
+  class << self
+    def type_by_rarity
+      @type_by_rarity ||= CSV.parse(File.read(File.expand_path("magic_items/frequencies.csv", __dir__)), headers: true)
+                             .each_with_object({}) do |line, result|
+                               result[line["rarity"]] = line.to_h.except("rarity").transform_values(&:to_i)
+                             end
+    end
+
+    def item_weights_by_rarity_and_type(rarity, type)
+      @item_weights_by_rarity_and_type ||= Hash.new do |h, k|
+        h[k] = Hash.new do |hh, kk|
+          hh[kk] = CSV.parse(File.read(File.expand_path("magic_items/#{k}_#{kk}.csv", __dir__)), headers: true)
+                      .each_with_object({}) { |line, result| result[line["Name"]] = line["Share"].to_i }
+        end
+      end
+      @item_weights_by_rarity_and_type[rarity][type]
+    end
   end
 
-  def self.items_to_s(magic_items_by_rarity)
+  attr_reader :magic_items_by_rarity
+
+  def initialize(common: 0, uncommon: 0, rare: 0)
+    @magic_items_by_rarity = {}
+    @magic_items_by_rarity[:common] = generate_items("common", common) if common.positive?
+    @magic_items_by_rarity[:uncommon] = generate_items("uncommon", uncommon) if uncommon.positive?
+    @magic_items_by_rarity[:rare] = generate_items("rare", rare) if rare.positive?
+  end
+
+  def to_s
     magic_items_by_rarity.filter_map do |rarity, items|
       next if items&.empty?
 
@@ -19,39 +39,18 @@ class TTMagicItems
     end.join("\n")
   end
 
-  def self.generate_items(quality, quantity)
-    type_by_frequency = type_by_quality[quality]
+  private
+
+  def generate_items(rarity, quantity)
+    type_by_frequency = self.class.type_by_rarity[rarity]
     quantity.times.map do
       type = roll_weighted(type_by_frequency)
-      item_weights = item_weights_by_rarity_and_type(quality, type)
+      item_weights = self.class.item_weights_by_rarity_and_type(rarity, type)
       roll_weighted(item_weights)
     end
   end
 
-  def self.random_item_type(quality)
-    roll_weighted(type_by_quality[quality])
-  end
-
-  def self.type_by_quality
-    @type_by_quality ||= CSV.parse(File.read(File.expand_path("magic_items/frequencies.csv", __dir__)),
-                                   headers: true).each_with_object({}) do |line, result|
-      result[line["rarity"]] = line.to_h.except("rarity").transform_values(&:to_i)
-    end
-  end
-
-  def self.item_weights_by_rarity_and_type(rarity, type)
-    @item_weights_by_rarity_and_type ||= Hash.new do |h, k|
-      h[k] = Hash.new do |hh, kk|
-        hh[kk] = CSV.parse(File.read(File.expand_path("magic_items/#{k}_#{kk}.csv", __dir__)),
-                           headers: true).each_with_object({}) do |line, result|
-          result[line["Name"]] = line["Share"].to_i
-        end
-      end
-    end
-    @item_weights_by_rarity_and_type[rarity][type]
-  end
-
-  def self.roll_weighted(value_by_weight)
+  def roll_weighted(value_by_weight)
     total_weight = value_by_weight.values.sum
     roll = rand(1..total_weight)
     cumulative_weight = 0

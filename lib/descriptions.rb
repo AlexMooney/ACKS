@@ -307,7 +307,7 @@ HUMAN_HAIR_COLOR_BY_ETHNICITY = { # rubocop:disable Style/MutableConstant
     5 => "Black",
     10 => "Ash Brown",
     15 => "Dark Brown",
-    20 => "Dark Blonde"
+    20 => "Dark Blonde",
   },
   "opelenean" => {
     9 => "Black",
@@ -340,7 +340,7 @@ HUMAN_HAIR_COLOR_BY_ETHNICITY = { # rubocop:disable Style/MutableConstant
   "zaharan" => {
     10 => "Black",
     20 => "Blue-Black",
-  }
+  },
 }
 HUMAN_HAIR_COLOR_BY_ETHNICITY["kyrsean"] = HUMAN_HAIR_COLOR_BY_ETHNICITY["celdorean"]
 HUMAN_HAIR_COLOR_BY_ETHNICITY["shebatean"] = HUMAN_HAIR_COLOR_BY_ETHNICITY["kemeshi"]

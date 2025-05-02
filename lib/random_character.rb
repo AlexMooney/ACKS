@@ -58,7 +58,7 @@ class RandomCharacter < Thor
         ethnicity = spell_check.first
         HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.fetch(ethnicity)
       else
-        puts "Didn't find ethnicity `#{missing_key}`.  Valid choices: `#{keys.join'`, `'}`."
+        puts "Didn't find ethnicity `#{missing_key}`.  Valid choices: `#{keys.join '`, `'}`."
         exit
       end
     end
@@ -85,7 +85,7 @@ class RandomCharacter < Thor
 
   desc "names SEX ETHNICITY", "Generate 10 random names"
   def names(sex = "m", ethnicity = "tirenean")
-    method = "#{ethnicity}_name".to_sym
+    method = :"#{ethnicity}_name"
     sex = male?(sex) ? "male" : "female"
 
     puts "#{sex.capitalize} #{ethnicity.capitalize} names:"

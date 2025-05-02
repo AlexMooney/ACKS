@@ -1,69 +1,88 @@
 # frozen_string_literal: true
 
 require_relative "tables"
-require_relative "tt_magic_items"
 
-class Cargo
+class TradeGood
   extend Tables
 
-  attr_accessor :name, :container, :price_per_stone, :quantity
+  attr_reader :name, :container, :price_per_stone
 
   def self.random
-    new(*roll_table(CARGO_BY_ROLL), 1000)
+    roll_table(CARGO_BY_ROLL)
   end
 
-  def initialize(name, container, price_per_stone, quantity)
+  def initialize(name, container, price_per_stone)
     @name = name
     @container = container
     @price_per_stone = price_per_stone
-    @quantity = quantity
   end
 
-  def price
-    (@price_per_stone * quantity).round
+  GEMS_BY_ROLL = {
+    3 => new("Semiprecious stones", "Boxes", 1000),
+    4 => new("Gems", "Boxes", 7500),
+  }.freeze
+  PRECIOUS_CARGO_BY_ROLL = {
+    20 => new("Monster parts", "Amphorae", 60),
+    34 => new("Ivory tusks", "Wrapping", 100),
+    48 => new("Rare furs", "Bundles", 100),
+    62 => new("Spices", "Amphorae", 100),
+    76 => new("Fine porcelain", "Crates", 100),
+    90 => new("Precious metals", "Chests", 100),
+    95 => new("Silk", "Rolls", 333),
+    99 => new("Rare books & art", "Boxes", 333),
+    100 => GEMS_BY_ROLL,
+  }.freeze
+  CARGO_BY_ROLL = {
+    20 => new("Grain & vegetables", "Bags", 0.12),
+    30 => new("Salt", "Bricks", 0.15),
+    40 => new("Beer & ale", "Amphorae", 0.15),
+    50 => new("Pottery", "Crates", 0.15),
+    60 => new("Common wood", "Bundles", 0.17),
+    70 => new("Wine & spirits", "Amphorae", 0.19),
+    75 => new("Oils & sauces", "Amphorae", 0.30),
+    80 => new("Preserved fish", "Amphorae", 0.45),
+    84 => new("Preserved meat", "Amphorae", 1),
+    87 => new("Glassware", "Crates", 1.5),
+    89 => new("Rare wood", "Bundles", 2),
+    91 => new("Common metal", "Chests", 2),
+    92 => new("Common furs", "Bundles", 4.5),
+    93 => new("Textiles", "Rolls", 7.5),
+    94 => new("Dye & pigment", "Jars", 10),
+    95 => new("Botanicals", "Bags", 15),
+    96 => new("Clothing", "Bags", 15),
+    97 => new("Tools", "Crates", 15),
+    98 => new("Armor & weapons", "Crates", 22),
+    100 => PRECIOUS_CARGO_BY_ROLL,
+  }.freeze
+end
+
+class Cargo
+  attr_accessor :trade_good, :quantity
+
+  def initialize(trade_good, quantity)
+    @trade_good = trade_good
+    @quantity = quantity
   end
 
   def to_s
     "#{quantity} st of #{name} in #{container} worth #{price} gp"
   end
 
-  GEMS_BY_ROLL = {
-    3 => ["Semiprecious stones", "Boxes", 1000],
-    4 => ["Gems", "Boxes", 7500],
-  }.freeze
-  PRECIOUS_CARGO_BY_ROLL = {
-    20 => ["Monster parts", "Amphorae", 60],
-    34 => ["Ivory tusks", "Wrapping", 100],
-    48 => ["Rare furs", "Bundles", 100],
-    62 => ["Spices", "Amphorae", 100],
-    76 => ["Fine porcelain", "Crates", 100],
-    90 => ["Precious metals", "Chests", 100],
-    95 => ["Silk", "Rolls", 333],
-    99 => ["Rare books & art", "Boxes", 333],
-    100 => GEMS_BY_ROLL,
-  }.freeze
-  CARGO_BY_ROLL = {
-    20 => ["Grain & vegetables", "Bags", 0.12],
-    30 => ["Salt", "Bricks", 0.15],
-    40 => ["Beer & ale", "Amphorae", 0.15],
-    50 => ["Pottery", "Crates", 0.15],
-    60 => ["Common wood", "Bundles", 0.17],
-    70 => ["Wine & spirits", "Amphorae", 0.19],
-    75 => ["Oils & sauces", "Amphorae", 0.30],
-    80 => ["Preserved fish", "Amphorae", 0.45],
-    84 => ["Preserved meat", "Amphorae", 1],
-    87 => ["Glassware", "Crates", 1.5],
-    89 => ["Rare wood", "Bundles", 2],
-    91 => ["Common metal", "Chests", 2],
-    92 => ["Common furs", "Bundles", 4.5],
-    93 => ["Textiles", "Rolls", 7.5],
-    94 => ["Dye & pigment", "Jars", 10],
-    95 => ["Botanicals", "Bags", 15],
-    96 => ["Clothing", "Bags", 15],
-    97 => ["Tools", "Crates", 15],
-    98 => ["Armor & weapons", "Crates", 22],
-    100 => PRECIOUS_CARGO_BY_ROLL,
-  }.freeze
+  def price
+    (price_per_stone * quantity).round
+  end
+
+  def container
+    trade_good.container
+  end
+
+  def name
+    trade_good.name
+  end
+
+  def price_per_stone
+    trade_good.price_per_stone
+  end
 end
 
 class Gang
@@ -178,7 +197,7 @@ class Commoners < Passengers
     @gangs ||= [
       Gang.new("Hamlet", "1d3", "steward", 3),
       Gang.new("Band", "1d6", "reeve", 2),
-      Gang.new("Work-gang", "2d6", "yeoman", 1)
+      Gang.new("Work-gang", "2d6", "yeoman", 1),
     ]
   end
 end
@@ -198,7 +217,7 @@ class Pilgrims < Passengers
         end
       end,
       Gang.new("Band", "1d6", "explorer", 2),
-      Gang.new("Troupe", "1d8", "crusader", 1)
+      Gang.new("Troupe", "1d8", "crusader", 1),
     ]
   end
 end
@@ -235,7 +254,8 @@ class Ship
   def generate_cargo!(dice_expression)
     @cargo = {}
     roll_dice(dice_expression).times do
-      lot = Cargo.random
+      good = TradeGood.random
+      lot = Cargo.new(good, 1000)
       if @cargo[lot.name]
         @cargo[lot.name].quantity += lot.quantity
       else
@@ -279,7 +299,7 @@ class Ship
 
   STONES_PER_PASSENGER = 50
   def total_weight
-    cargo_weight + artillery_weight * artillery_pieces + passenger_count * STONES_PER_PASSENGER
+    cargo_weight + (artillery_weight * artillery_pieces) + (passenger_count * STONES_PER_PASSENGER)
   end
 
   def weight_string
@@ -427,7 +447,7 @@ class Character
     end.to_h
     return if count_by_rarity.empty?
 
-    @magic_items_by_rarity = TTMagicItems.roll_magic_items(**count_by_rarity)
+    @magic_items_by_rarity = TTMagicItems.new(**count_by_rarity).magic_items_by_rarity
   end
 end
 

@@ -1,17 +1,9 @@
 # frozen_string_literal: true
 
-require "bundler/inline"
-
-gemfile do
-  source "https://rubygems.org"
-  gem "pry"
-  gem "thor", "~> 1.2.1"
-end
-
 require_relative "tables"
 require_relative "magic_items"
 
-class RandomMagicItems < Thor
+class RandomMagicItems
   include Tables
 
   COMMON_ITEM_BY_ROLL = {
@@ -63,8 +55,7 @@ class RandomMagicItems < Thor
     "uncommon" => UNCOMMON_ITEM_BY_ROLL,
     "rare" => RARE_ITEM_BY_ROLL,
   }.freeze
-  desc "magic_items QUALITY QUANTITY=1", "Generate magic items"
-  def magic_items(quality, quantity = 1)
+  def magic_items(quality, quantity)
     table = TABLE_BY_QUALITY[quality]
     magic_items = quantity.to_i.times.map do
       roll_table(table)
@@ -77,9 +68,6 @@ class RandomMagicItems < Thor
         item.roll_details
       end
     end
-    puts magic_items.sort if __FILE__ == $PROGRAM_NAME
-    magic_items
+    magic_items.sort
   end
 end
-
-RandomMagicItems.start(ARGV) if __FILE__ == $PROGRAM_NAME
