@@ -106,7 +106,7 @@ class Gang
     Character.new(leader_level, leader_title)
   end
 
-  def attempt_extra_gang!(count, characters_by_count, _leader)
+  def attempt_extra_gang!(count, characters_by_count, leaders)
     return 0 unless extra_gang
 
     gang = extra_gang.call
@@ -115,7 +115,7 @@ class Gang
     group_count = gang.roll_count
     if group_count + 1 >= count
       characters_by_count[gang.group_name] += group_count
-      characters_by_count[gang.leader_title] ||= 1
+      characters_by_count[gang.leader_title] += 1
       leaders << generate_leader!
       group_count + 1
     else

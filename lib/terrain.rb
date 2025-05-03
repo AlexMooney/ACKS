@@ -24,25 +24,26 @@ TERRAIN_TYPES = %w[
   scrubland_dense
   scrubland_sparse
   swamp_any
+  sea_monster
+  sea_civilized
 ].freeze # TODO: deal with river_jungle which uses same monsters but different civilized
 class Terrain
-  attr_reader :name, :commons, :uncommons, :rares, :very_rares, :missing_monsters
+  include Tables
 
-  def self.load_all
+  attr_reader :name, :table_by_rarity, :missing_monsters
+
+  def self.load_all!
     # each terrain has a CSV in ./encounter_tables
     Dir.glob("encounter_tables/*.csv").map do |csv_file|
       Terrain.new(File.basename(csv_file, ".csv"), csv_file)
     end
   end
 
-  def initialize(name, csv_file)
+  def initialize(name)
     @name = name
-    @commons = []
-    @uncommons = []
-    @rares = []
-    @very_rares = []
+    @table_by_rarity = {}
     @missing_monsters = []
-    read_csv!(csv_file)
+    read_csv!
   end
 
   def average_quantity(rarity, quantity)
@@ -50,20 +51,7 @@ class Terrain
   end
 
   def random_monster(rarity)
-    rarity = rarity.to_s
-    rarity = "#{rarity}s" unless rarity.end_with?("s")
-    find_monster(send(rarity).sample)
-  end
-
-  private
-
-  def read_csv!(csv_file)
-    CSV.foreach(csv_file, headers: true) do |row|
-      commons << row["Common"]
-      uncommons << row["Uncommon"]
-      rares << row["Rare"]
-      very_rares << row["Very Rare"]
-    end
+    roll_table(table_by_rarity.fetch(rarity))
   end
 
   NAME_TWEAKS = {
@@ -116,6 +104,9 @@ class Terrain
     "Varmint, Giant Wolverine" => "Varmint, Giant Weasel",
     "Zebra" => "Equine, Light Horse",
   }.freeze
+
+  private
+
   def find_monster(monster_name)
     monster = WILDERNESS_MONSTER_BY_NAME[monster_name]
     monster ||= WILDERNESS_MONSTER_BY_NAME[monster_name.split(" (").first]
@@ -137,6 +128,18 @@ class Terrain
     else
       missing_monsters << monster_name
       WildernessMonster.new(name: monster_name, total_xp: 0, total_spoils_value: 0, treasure_type: "Missing Monster")
+    end
+  end
+
+  def read_csv!
+    CSV.foreach(File.expand_path("encounter_tables/#{name}.csv", __dir__), headers: true) do |row|
+      roll_header = "Roll (1d100)"
+      roll = row[roll_header].split("-").last.to_i
+      (row.headers - [roll_header]).each do |rarity|
+        rarity_label = rarity.downcase.gsub(" ", "_")
+        table_by_rarity[rarity_label] ||= {}
+        table_by_rarity[rarity_label][roll] = row[rarity]
+      end
     end
   end
 end

@@ -27,6 +27,13 @@ class Acks < Thor
   def merchant_mariners
     puts MerchantMariners.new
   end
+
+  desc "nautical_encounters DANGER_LEVEL (in 0..4) TRADE_ROUTE=false NUM=20", "Roll a set of nautical encounters"
+  def nautical_encounters(danger_level, trade_route = nil, num = 20)
+    num.to_i.times do
+      puts Encounters::NauticalEncounter.new(danger_level, trade_route:)
+    end
+  end
 end
 
-Acks.start(ARGV) if $PROGRAM_NAME == __FILE__
+Acks.start(ARGV) if File.basename($PROGRAM_NAME) == "acks.rb"

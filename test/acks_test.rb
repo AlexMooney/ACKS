@@ -35,4 +35,16 @@ describe Acks do
       assert_match(/Cargo worth \d+ gp weighing \d+ st/, output)
     end
   end
+
+  describe "nautical_encounters" do
+    it "puts a nautical encounter" do
+      output = capture_io do
+        Acks.start(%w[nautical_encounters 1 1])
+      end
+
+      output = output.join
+      assert_match(/Civilized/, output)
+      assert_match(/Sea/, output)
+    end
+  end
 end
