@@ -34,6 +34,16 @@ class Acks < Thor
       puts Encounters::NauticalEncounter.new(danger_level, trade_route:)
     end
   end
+
+  desc "weather T_DAY, T_NIGHT, PRECIPITATION, WIND, PREVAILING_WIND_DIRECTION=Prevailing", "Roll weather for a season"
+  def weather(day_modifier, night_modifier, precipitation, wind, prevailing = nil)
+    day_modifier = day_modifier.to_i
+    night_modifier = night_modifier.to_i
+    precipitation = precipitation.to_i
+    wind = wind.to_i
+
+    puts Weather.new(day_modifier:, night_modifier:, precipitation:, wind:, prevailing:).roll
+  end
 end
 
 Acks.start(ARGV) if File.basename($PROGRAM_NAME) == "acks.rb"

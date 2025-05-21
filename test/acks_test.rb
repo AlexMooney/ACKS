@@ -47,4 +47,24 @@ describe Acks do
       assert_match(/Sea/, output)
     end
   end
+
+  describe "weather" do
+    it "puts weather for a month" do
+      output = capture_io do
+        # TTY::Table uses ioctl for the width of the terminal output but StringIO doesn't have it, so stub it.
+        # See https://github.com/piotrmurach/tty-screen/issues/11#issuecomment-675463240
+        # See https://github.com/piotrmurach/tty-prompt/blob/2c2c44e8b1d4affe9926bc87c3740000dcf7f2f7/lib/tty/prompt/test.rb#L10-L17
+        def $stdout.ioctl(*) = 80
+
+        Acks.start(%w[weather 1 1 1 1])
+      end
+
+      output = output.join
+      assert_match(/Date/, output)
+      assert_match(/Day/, output)
+      assert_match(/Night/, output)
+      assert_match(/Precipitation/, output)
+      assert_match(/Wind/, output)
+    end
+  end
 end

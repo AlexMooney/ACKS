@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require "bundler/inline"
-
-gemfile do
-  source "https://rubygems.org"
-  gem "pry"
-  gem "thor", "~> 1.2.1"
-end
-
 WARM_TEMPERATURE_BY_ROLL = {
   1 => "Cold",
   4 => "Chilly",
@@ -27,7 +19,7 @@ COLD_TEMPERATURE_BY_ROLL = {
   12 => "Balmy",
 }.freeze
 PRECIPITATION_BY_ROLL = {
-  -3 => "_**Sunbaked**_",
+  -2 => "_**Sunbaked**_",
   3 => "Clear",
   4 => "Partly Cloudy",
   5 => "Mostly Cloudy",
@@ -43,43 +35,64 @@ WIND_BY_ROLL = {
   13 => "_**Windy**_",
   19 => "_**Stormy**_",
 }.freeze
+WIND_DIRECTION_BY_ROLL = {
+  1 => "Northerly",
+  2 => "Northeasterly",
+  3 => "Easterly",
+  4 => "Southeasterly",
+  5 => "Southerly",
+  6 => "Southwesterly",
+  7 => "Westerly",
+  8 => "Northwesterly",
+  12 => "Prevailing",
+}.freeze
 
 require_relative "tables"
 
-# Randomly roll weather for 28 days
-class Weather < Thor
+class Weather
   include Tables
 
-  desc "weather T_DAY, T_NIGHT, PRECIPITATION, WIND, DAYS=28", "Roll weather for a month"
-  def weather(day_modifier, night_modifier, precipitation, wind, days = 28)
-    day_modifier = day_modifier.to_i
-    night_modifier = night_modifier.to_i
-    precipitation = precipitation.to_i
-    wind = wind.to_i
-    days = days.to_i
+  attr_reader :day_modifier, :night_modifier, :precipitation, :wind, :prevailing
 
+  def initialize(day_modifier:, night_modifier:, precipitation:, wind:, prevailing: nil)
+    @day_modifier = day_modifier
+    @night_modifier = night_modifier
+    @precipitation = precipitation
+    @wind = wind
+    @prevailing = prevailing
+  end
+
+  def roll
     day_table = day_modifier.positive? ? WARM_TEMPERATURE_BY_ROLL : COLD_TEMPERATURE_BY_ROLL
     night_table = night_modifier.positive? ? WARM_TEMPERATURE_BY_ROLL : COLD_TEMPERATURE_BY_ROLL
 
-    puts "| Date | Day | Night | Precipitation | Wind |"
-    puts "| ---- | --- | ----- | ------------- | ---- |"
-    days.times do |idx|
-      day = idx + 1
-      temperature_roll = rand(1..6) + rand(1..6)
-      day_temperature = roll_table(day_table, temperature_roll + day_modifier)
-      night_temperature = roll_table(night_table, temperature_roll + night_modifier)
-      precipitation_roll = rand(1..6) + rand(1..6)
-      precipitation = roll_table(PRECIPITATION_BY_ROLL, precipitation_roll)
-      wind_roll = rand(1..6) + rand(1..6)
-      wind = roll_table(WIND_BY_ROLL, wind_roll)
-      if drizzling?(precipitation) && freezing?(night_temperature)
-        precipitation = "_**Drizzly**_ (Flurry)"
-      elsif drizzling?(precipitation) && wind == "Still"
-        precipitation = "Misty"
-      end
+    labels = %w[Date Day Night Precipitation Wind]
+    [35, 28, 28].map do |days|
+      data = []
+      days.times do |idx|
+        date = idx + 1
+        temperature_roll = rand(1..6) + rand(1..6)
+        day_temperature = roll_table(day_table, temperature_roll + day_modifier)
+        night_temperature = roll_table(night_table, temperature_roll + night_modifier)
+        precipitation_roll = rand(1..6) + rand(1..6)
+        precipitation = roll_table(PRECIPITATION_BY_ROLL, precipitation_roll)
+        wind_roll = rand(1..6) + rand(1..6)
+        wind = roll_table(WIND_BY_ROLL, wind_roll)
+        wind_direction = roll_table(WIND_DIRECTION_BY_ROLL)
+        wind_direction = prevailing if wind_direction == "Prevailing" && prevailing
+        wind = "#{wind} #{wind_direction}" unless wind == "Still"
 
-      puts "| #{day} | #{day_temperature} | #{night_temperature} | #{precipitation} | #{wind} |"
-    end
+        if drizzling?(precipitation) && freezing?(night_temperature)
+          precipitation = "_**Drizzly**_ (Flurry)"
+        elsif drizzling?(precipitation) && wind == "Still"
+          precipitation = "Misty"
+        end
+
+        data << [date, day_temperature, night_temperature, precipitation, wind]
+      end
+      table = TTY::Table.new(labels, data, width: 100)
+      table.render_with MarkdownBorder
+    end.join("\n\n")
   end
 
   private
@@ -92,5 +105,3 @@ class Weather < Thor
     precipitation.include?("Drizzly")
   end
 end
-
-Weather.start(ARGV)
