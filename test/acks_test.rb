@@ -39,12 +39,12 @@ describe Acks do
   describe "nautical_encounters" do
     it "puts a nautical encounter" do
       output = capture_io do
-        Acks.start(%w[nautical_encounters 1 1])
+        Acks.start(%w[nautical_encounters 1 true 1])
       end
 
       output = output.join
-      assert_match(/Civilized/, output)
-      assert_match(/Sea/, output)
+      assert_match(/\ACivilized with Trade Route$/, output)
+      assert_match(/\n- \[ \] \w/, output)
     end
   end
 

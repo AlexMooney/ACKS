@@ -99,14 +99,14 @@ module Encounters
                     second = roll_table(NAUTICAL_ENCOUNTER_BY_ROLL, type_roll)
                     nautical = nautical.sub("Double", "#{first} & #{second}")
                   end
-                  "nautical encounter: #{nautical}"
+                  "#{encounter_type}: #{nautical}"
                 else
                   encounter_type
                 end
     end
 
     def to_s
-      "#{danger_label} Sea #{result}"
+      "- [ ] #{result}"
     end
 
     private

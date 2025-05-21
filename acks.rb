@@ -28,8 +28,9 @@ class Acks < Thor
     puts MerchantMariners.new
   end
 
-  desc "nautical_encounters DANGER_LEVEL (in 0..4) TRADE_ROUTE=false NUM=20", "Roll a set of nautical encounters"
+  desc "nautical_encounters DANGER_LEVEL (in 1..4) TRADE_ROUTE=false NUM=20", "Roll a set of nautical encounters"
   def nautical_encounters(danger_level, trade_route = nil, num = 20)
+    puts Encounters::NauticalEncounter.new(danger_level, trade_route:).danger_label
     num.to_i.times do
       puts Encounters::NauticalEncounter.new(danger_level, trade_route:)
     end

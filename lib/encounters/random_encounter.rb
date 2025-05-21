@@ -63,9 +63,8 @@ module Encounters
 
     def self.encounter_table_by_column(csv_name)
       @encounter_table_by_column ||= {}
-      @table_by_csv_name[csv_name] ||= begin
-                                         CSV.parse(File.read(File.expand_path("encounters/#{csv_name}.csv", __dir__)), headers: true)
-                                       end
+      @table_by_csv_name[csv_name] ||= CSV.parse(File.read(File.expand_path("encounters/#{csv_name}.csv", __dir__)),
+                                                 headers: true)
     end
   end
 end
