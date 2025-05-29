@@ -36,6 +36,58 @@ describe Acks do
     end
   end
 
+  describe "encounter" do
+    it "puts a wilderness lair" do
+      output = capture_io do
+        Acks.start(%w[encounter ManCommoner true])
+      end
+
+      output = output.join
+      assert_match(/Man, Commoner Lair/, output)
+      assert_match(/commoner/, output)
+      assert_match(/pig/, output)
+      # assert_match(/A/, output) # TODO Treasure
+    end
+
+    it "puts a wilderness non-lair" do
+      output = capture_io do
+        Acks.start(%w[encounter ManCommoner false])
+      end
+
+      output = output.join
+      assert_match(/Man, Commoner/, output)
+      refute_match(/Lair/, output)
+      assert_match(/commoner/, output)
+      refute_match(/pig/, output)
+      # assert_match(/A/, output) # TODO Treasure
+    end
+
+    it "puts a dungeon lair" do
+      output = capture_io do
+        Acks.start(%w[encounter ManCommoner true --dungeon])
+      end
+
+      output = output.join
+      assert_match(/Man, Commoner Lair/, output)
+      assert_match(/commoner/, output)
+      refute_match(/pig/, output)
+      # assert_match(/A/, output) # TODO Treasure
+    end
+
+    it "puts a dungeon non-lair" do
+      output = capture_io do
+        Acks.start(%w[encounter ManCommoner false --dungeon])
+      end
+
+      output = output.join
+      assert_match(/Man, Commoner/, output)
+      refute_match(/Lair/, output)
+      assert_match(/commoner/, output)
+      refute_match(/pig/, output)
+      # refute_match(/Treasure/) # TODO Treasure
+    end
+  end
+
   describe "nautical_encounters" do
     it "puts a nautical encounter" do
       output = capture_io do

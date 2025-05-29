@@ -3,21 +3,21 @@
 module Monster
   class Listing
     # This represents the monster encounter data from the Monsterous Manual, as opposed to a specific encounter.
-    include Tables
+    extend Tables
 
     class << self
       def wilderness_encounter(in_lair: nil)
         in_lair = roll_in_lair(in_lair)
 
         base_gang = in_lair ? wilderness_lair : wilderness
-        Encounter.new(self, base_gang)
+        Encounter.new(self, base_gang, in_lair:)
       end
 
       def dungeon_encounter(in_lair: nil)
         in_lair = roll_in_lair(in_lair)
 
         base_gang = in_lair ? dungeon_lair : dungeon
-        Encounter.new(self, base_gang)
+        Encounter.new(self, base_gang, in_lair:)
       end
 
       private

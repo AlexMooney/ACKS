@@ -4,10 +4,11 @@ module Monster
   class Encounter
     # This represents an instance of a monster encounter.
 
-    attr_reader :listing, :characters_by_count, :leaders, :treasures
+    attr_reader :listing, :in_lair, :characters_by_count, :leaders, :treasures
 
-    def initialize(listing, gang)
+    def initialize(listing, gang, in_lair:)
       @listing = listing
+      @in_lair = in_lair
       @characters_by_count = Hash.new(0)
       @leaders = []
       @treasures = []
@@ -26,7 +27,7 @@ module Monster
         end
       end
 
-      [creature_list].concat(leader_list).join("\n")
+      ["#{listing.name}#{in_lair ? ' Lair' : nil}", creature_list].concat(leader_list).join("\n")
     end
   end
 end

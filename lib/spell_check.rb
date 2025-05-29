@@ -6,10 +6,10 @@ module SpellCheck
 
     spell_check = DidYouMean::SpellChecker.new(dictionary: keys).correct(key)
     if spell_check.any?
-      puts "Assuming you meant `#{spell_check.first}`."
+      puts "Assuming you meant `#{spell_check.first}`.  Valid choices: `#{keys.join '`, `'}`."
       spell_check.first
     else
-      puts "Didn't find `#{missing_key}`.  Valid choices: `#{keys.join '`, `'}`."
+      puts "Didn't find `#{key}`.  Valid choices: `#{keys.join '`, `'}`."
       exit
     end
   end
