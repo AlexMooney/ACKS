@@ -59,6 +59,12 @@ class Acks < Thor
     end
   end
 
+  desc "treasure TREASURE_TYPES", "Generate treasure"
+  def treasure(treasure_types)
+    treasure_types = treasure_types.upcase
+    puts Treasure.new(treasure_types)
+  end
+
   desc "weather T_DAY, T_NIGHT, PRECIPITATION, WIND, PREVAILING_WIND_DIRECTION=Prevailing", "Roll weather for a season"
   def weather(day_modifier, night_modifier, precipitation, wind, prevailing = nil)
     day_modifier = day_modifier.to_i
@@ -67,6 +73,11 @@ class Acks < Thor
     wind = wind.to_i
 
     puts Weather.new(day_modifier:, night_modifier:, precipitation:, wind:, prevailing:).roll
+  end
+
+  desc "console", "Start an interactive console"
+  def console
+    binding.irb # rubocop:disable Lint/Debugger
   end
 end
 
