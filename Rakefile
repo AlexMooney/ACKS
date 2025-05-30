@@ -21,13 +21,14 @@ end
 
 desc "Automatically run something when code is changed"
 task :on_update do
-  require 'find'
+  require "find"
   files = {}
 
   loop do
     changed = false
     Find.find(File.dirname(__FILE__)) do |file|
       next unless file =~ /\.rb$/
+
       ctime = File.ctime(file).to_i
 
       if ctime != files[file]
