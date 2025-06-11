@@ -6,7 +6,7 @@ describe Acks do
   describe "building" do
     it "puts a building description" do
       output = capture_io do
-        Acks.start(["building"])
+        Acks.new.building
       end
 
       assert_match(/\ASize:.*Type.*Occupants \(\d+\)/, output.join)
@@ -16,7 +16,7 @@ describe Acks do
   describe "magic_items" do
     it "puts magic items" do
       output = capture_io do
-        Acks.start(%w[magic_items 1 1 1])
+        Acks.new.magic_items common: 1, uncommon: 2, rare: 3
       end
       assert_match(/Common magic items:.*\nUncommon magic items:.*\nRare magic items:/, output.join)
     end
@@ -25,7 +25,7 @@ describe Acks do
   describe "merchant_mariners" do
     it "puts a merchant mariner encounter" do
       output = capture_io do
-        Acks.start(["merchant_mariners"])
+        Acks.new.merchant_mariners
       end
 
       output = output.join
@@ -39,7 +39,7 @@ describe Acks do
   describe "encounter" do
     it "puts a wilderness lair" do
       output = capture_io do
-        Acks.start(%w[encounter ManCommoner true])
+        Acks.new.encounter("ManCommoner", "wilderness", "true")
       end
 
       output = output.join
@@ -51,7 +51,7 @@ describe Acks do
 
     it "puts a wilderness non-lair" do
       output = capture_io do
-        Acks.start(%w[encounter ManCommoner false])
+        Acks.new.encounter("ManCommoner", "wilderness", "false")
       end
 
       output = output.join
@@ -64,7 +64,7 @@ describe Acks do
 
     it "puts a dungeon lair" do
       output = capture_io do
-        Acks.start(%w[encounter ManCommoner true --dungeon])
+        Acks.new.encounter("ManCommoner", "dungeon", "true")
       end
 
       output = output.join
@@ -76,7 +76,7 @@ describe Acks do
 
     it "puts a dungeon non-lair" do
       output = capture_io do
-        Acks.start(%w[encounter ManCommoner false --dungeon])
+        Acks.new.encounter("ManCommoner", "dungeon", "false")
       end
 
       output = output.join
@@ -91,7 +91,7 @@ describe Acks do
   describe "nautical_encounters" do
     it "puts a nautical encounter" do
       output = capture_io do
-        Acks.start(%w[nautical_encounters 1 true 1])
+        Acks.new.nautical_encounters 1, true, 1
       end
 
       output = output.join
@@ -108,7 +108,7 @@ describe Acks do
         # See https://github.com/piotrmurach/tty-prompt/blob/2c2c44e8b1d4affe9926bc87c3740000dcf7f2f7/lib/tty/prompt/test.rb#L10-L17
         def $stdout.ioctl(*) = 80
 
-        Acks.start(%w[weather 1 1 1 1])
+        Acks.new.weather 1, 1, 1, 1
       end
 
       output = output.join

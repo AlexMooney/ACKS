@@ -3,7 +3,7 @@
 require "bundler/setup"
 
 require "csv"
-require "thor"
+require "tty-prompt"
 require "tty-table"
 require "zeitwerk"
 
