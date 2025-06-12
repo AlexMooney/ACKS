@@ -10,7 +10,7 @@ describe Treasure do
   it "initializes with a string of treasure types" do
     treasure = subject.new("🧪")
     assert_instance_of subject, treasure
-    assert treasure.quantity_by_type.size.positive?
-    # assert treasure.quantity_by_type.keys.first.is_a?(Treasure::Lot)
+    # 99 whatever whatever (99gp each)
+    assert_match(/\d [^(]*\(\d+[csg]p.*each\)/, treasure.to_s)
   end
 end

@@ -5,7 +5,7 @@ require "csv"
 class Treasure
   include Tables
 
-  attr_reader :quantity_by_type
+  attr_reader :treasure_lots
 
   class << self
     def treasure_table
@@ -41,31 +41,24 @@ class Treasure
   end
 
   def initialize(treasure_types)
-    @quantity_by_type = Hash.new(0)
-    %w[cp sp ep gp pp].each do |coin_type|
-      quantity_by_type[coin_type] = 0 # Make sure coins print before special treasure
-    end
-    treasure_types.each_char do |type|
-      roll_for_type(type.upcase)
-    end
-    quantity_by_type.delete_if { |_, quantity| quantity.zero? }
+    @treasure_lots = []
+    treasure_types.each_char(&method(:roll_for_type))
   end
 
   def to_s
-    return "No treasure." if @quantity_by_type.empty?
+    return "No treasure." if @treasure_lots.empty?
 
-    treasure_string = @quantity_by_type.map do |type, quantity|
-      "#{quantity} #{type}"
-    end.join("\n")
+    treasures_by_group = @treasure_lots.group_by(&:group_attributes)
+    treasure_totals = treasures_by_group.values.map { |lots| lots.sum(lots.first.zero) }
+    treasure_string = treasure_totals.sort.map(&:to_s).join("\n")
     ["Treasure:", treasure_string].join("\n")
   end
 
   private
 
   def roll_for_type(type)
-    return nil unless self.class.treasure_table[type]
-
     treasure_data = self.class.treasure_table[type]
+    raise ArgumentError, "Unknown treasure type: #{type}" unless treasure_data
 
     %w[cp sp ep gp pp].each do |component|
       chance = treasure_data[:"#{component}_chance"]
@@ -74,27 +67,49 @@ class Treasure
       dice_string = treasure_data[:"#{component}_amount"]
       amount_rolled = roll_dice(dice_string)
       amount_rolled.times do
-        lot = Lot.new(component)
-        quantity_by_type[lot.type] += lot.amount
+        treasure_lots << roll_for_lot(component)
       end
     end
 
     gems_chance = treasure_data[:gem_chance]
-    if roll_dice("#{gems_chance}%").positive?
+    if false && roll_dice("#{gems_chance}%").positive?
       amount_rolled = roll_dice(treasure_data[:gem_amount])
       amount_rolled.times do
-        lot = Lot.new(treasure_data[:gem_type])
-        quantity_by_type[lot.type] += lot.amount
+        treasure_lots << roll_for_lot(treasure_data[:gem_type])
       end
     end
 
     jewelry_chance = treasure_data[:jewelry_chance]
-    if roll_dice("#{jewelry_chance}%").positive? # rubocop:disable Style/GuardClause
+    if false && roll_dice("#{jewelry_chance}%").positive? # rubocop:disable Style/GuardClause
       amount_rolled = roll_dice(treasure_data[:jewelry_amount])
       amount_rolled.times do
-        lot = Lot.new(treasure_data[:jewelry_type])
-        quantity_by_type[lot.type] += lot.amount
+        treasure_lots << roll_for_lot(treasure_data[:jewelry_type])
       end
     end
+  end
+
+  def roll_for_lot(type)
+    case type.downcase
+    when "cp"
+      SpecialTreasureTables::CP_GOODS_TABLE.sample
+    when "sp"
+      SpecialTreasureTables::SP_GOODS_TABLE.sample
+    when "ep"
+      SpecialTreasureTables::EP_GOODS_TABLE.sample
+    when "gp"
+      SpecialTreasureTables::GP_GOODS_TABLE.sample
+    when "pp"
+      SpecialTreasureTables::PP_GOODS_TABLE.sample
+    when "ornamentals"
+      [roll_table(SpecialTreasureTables::GEMS_TABLE, roll_dice("2d20")), 1]
+    when "gems"
+      [roll_table(SpecialTreasureTables::GEMS_TABLE, roll_dice("1d100")), 1]
+    when "brilliants"
+      [roll_table(SpecialTreasureTables::GEMS_TABLE, roll_dice("1d100 + 80")), 1]
+    when "jewelry"
+      JEWELRY_TABLE.sample
+    else
+      puts "Unknown coin type: #{type.inspect}"
+    end.roll
   end
 end
