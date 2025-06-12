@@ -2,7 +2,7 @@
 
 class Treasure
   class Lot
-    attr_reader :description, :amount, :gold_value, :weight
+    attr_accessor :description, :amount, :gold_value, :weight
 
     def initialize(description, amount, gold_value, coin_weight)
       @description = description
@@ -50,9 +50,9 @@ class Treasure
     private
 
     def gold_label
-      if (gold_value * 100) % 1 != 0
+      if (gold_value * 100).to_i % 10 != 0
         "#{(gold_value * 100).to_i}cp"
-      elsif (gold_value * 10) % 1 != 0
+      elsif (gold_value * 10).to_i % 10 != 0
         "#{(gold_value * 10).to_i}sp"
       else
         "#{gold_value.to_i}gp"

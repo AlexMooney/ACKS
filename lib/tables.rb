@@ -33,6 +33,8 @@ module Tables
                     keep ||= quantity
                     rolled = quantity.to_i.times.map { rand(1..sides.to_i) }.sort
                     rolled.last(keep.to_i).sum
+                  elsif quantity.include?(".")
+                    quantity.to_f
                   else
                     quantity.to_i
                   end

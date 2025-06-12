@@ -5,8 +5,6 @@ require "csv"
 class Treasure
   include Tables
 
-  attr_reader :treasure_lots
-
   class << self
     def treasure_table
       @treasure_table ||= load_treasure_table
@@ -34,24 +32,39 @@ class Treasure
           jewelry_chance: row["JEWELRY_PERCENT"].to_i,
           jewelry_amount: row["JEWELRY_AMOUNT"],
           jewelry_type: row["JEWELRY_TYPE"],
+          average_value: row["AVG_VALUE"].to_i,
+          average_magic_items: row["AVG_MAGIC_VALUE"].to_i,
         }
       end
       table
     end
   end
 
+  attr_reader :treasure_types, :treasure_lots
+
   def initialize(treasure_types)
+    @treasure_types = treasure_types
     @treasure_lots = []
     treasure_types.each_char(&method(:roll_for_type))
   end
 
   def to_s
-    return "No treasure." if @treasure_lots.empty?
+    average_value = @treasure_types.chars.sum { |type| self.class.treasure_table[type][:average_value] }
+    return "Average treasure: #{average_value}gp\nNo treasure." if @treasure_lots.empty?
 
     treasures_by_group = @treasure_lots.group_by(&:group_attributes)
     treasure_totals = treasures_by_group.values.map { |lots| lots.sum(lots.first.zero) }
-    treasure_string = treasure_totals.sort.map(&:to_s).join("\n")
-    ["Treasure:", treasure_string].join("\n")
+    running_weight_total = running_value_total = 0
+    treasure_table_data = treasure_totals.sort.map do |lot|
+      running_value_total += lot.gold_value * lot.amount
+      running_weight_total += lot.weight * lot.amount
+      [lot.to_s, "#{running_value_total.round}gp", "#{(running_weight_total / 1000.0).round(1)} st"]
+    end
+    table = TTY::Table.new(["Treasure", "Value Subtotal", "Weight Subtotal"], treasure_table_data, width: 100)
+
+    ["Average treasure: #{average_value}gp",
+     "Treasure worth #{running_value_total}gp (#{(100 * running_value_total / average_value).round}%)",
+     table.render_with(MarkdownBorder)].join("\n")
   end
 
   private
@@ -72,7 +85,7 @@ class Treasure
     end
 
     gems_chance = treasure_data[:gem_chance]
-    if false && roll_dice("#{gems_chance}%").positive?
+    if roll_dice("#{gems_chance}%").positive?
       amount_rolled = roll_dice(treasure_data[:gem_amount])
       amount_rolled.times do
         treasure_lots << roll_for_lot(treasure_data[:gem_type])
@@ -80,12 +93,13 @@ class Treasure
     end
 
     jewelry_chance = treasure_data[:jewelry_chance]
-    if false && roll_dice("#{jewelry_chance}%").positive? # rubocop:disable Style/GuardClause
+    if roll_dice("#{jewelry_chance}%").positive? # rubocop:disable Style/GuardClause
       amount_rolled = roll_dice(treasure_data[:jewelry_amount])
       amount_rolled.times do
         treasure_lots << roll_for_lot(treasure_data[:jewelry_type])
       end
     end
+    # TODO: Magic items
   end
 
   def roll_for_lot(type)
@@ -101,15 +115,19 @@ class Treasure
     when "pp"
       SpecialTreasureTables::PP_GOODS_TABLE.sample
     when "ornamentals"
-      [roll_table(SpecialTreasureTables::GEMS_TABLE, roll_dice("2d20")), 1]
+      roll_table(SpecialTreasureTables::ORNAMENTAL_GOODS_TABLE)
     when "gems"
-      [roll_table(SpecialTreasureTables::GEMS_TABLE, roll_dice("1d100")), 1]
+      roll_table(SpecialTreasureTables::GEM_GOODS_TABLE)
     when "brilliants"
-      [roll_table(SpecialTreasureTables::GEMS_TABLE, roll_dice("1d100 + 80")), 1]
+      roll_table(SpecialTreasureTables::BRILLIANT_GOODS_TABLE)
+    when "trinkets"
+      roll_table(SpecialTreasureTables::TRINKET_GOODS_TABLE)
     when "jewelry"
-      JEWELRY_TABLE.sample
+      roll_table(SpecialTreasureTables::JEWELRY_GOODS_TABLE)
+    when "regalia"
+      roll_table(SpecialTreasureTables::REGALIA_GOODS_TABLE)
     else
-      puts "Unknown coin type: #{type.inspect}"
+      puts "Unknown lot type: #{type.inspect}"
     end.roll
   end
 end

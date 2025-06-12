@@ -128,7 +128,7 @@ class Acks
         menu.choice("Random Building", "building")
         menu.choice("Merchant Mariners", "merchant_mariners")
         menu.choice("Random Encounter", "encounter_prompt")
-        menu.choice("Random Nautical Encounters", "nautical_encounters_prompt")
+        menu.choice("Random Nautical Encounter List", "nautical_encounters_prompt")
         menu.choice("Random Treasure", "treasure_prompt")
         menu.choice("Random Weather", "weather_prompt")
         menu.choice("Random Magic Items", "magic_item_prompt")
