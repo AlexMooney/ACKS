@@ -31,20 +31,46 @@ class Acks
     puts TTMagicItems.new(common:, uncommon:, rare:)
   end
 
+  def character
+    level = TTY::Prompt.new.ask("Character level:", convert: :int, default: 1, min: 1, max: 14)
+    class_type = TTY::Prompt.new.select("Character class type:", filter: true, per_page: 15) do |menu|
+      menu.choice("Random", nil)
+      Character::CLASS_TYPE.each_value do |class_type|
+        menu.choice(class_type.capitalize, class_type)
+      end
+    end
+    character_class = nil
+    unless class_type.nil?
+      character_class = TTY::Prompt.new.select("Character class:", filter: true, per_page: 15) do |menu|
+        menu.choice("Random", nil)
+        Character::ClassTables::CLASS_BY_TYPE[class_type].values.uniq.each do |klass|
+          menu.choice(klass.capitalize, klass)
+        end
+      end
+    end
+    ethnicity = TTY::Prompt.new.select("Ethnicity:", filter: true, per_page: 20) do |menu|
+      menu.choice("Random", nil)
+      Character::Descriptions::HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.each_key do |ethnicity|
+        menu.choice(ethnicity.capitalize, ethnicity)
+      end
+    end
+    puts Character.new(level, class_type:, character_class:, ethnicity:)
+  end
+
   def merchant_mariners
     puts MerchantMariners.new
   end
 
   def encounter_prompt
     prompt = TTY::Prompt.new
-    listing = prompt.select("Choose a monster listing:", filter: true) do |menu|
+    listing = prompt.select("Choose a monster listing:", filter: true, per_page: 15) do |menu|
       Dir.glob("lib/monster/listing/*.rb").each do |file|
         class_words = File.basename(file, ".rb").split("_").map(&:capitalize)
         menu.choice(class_words.join(" "), class_words.join)
       end
     end
-    location = prompt.select("Dungeon or Wilderness?", %w[dungeon wilderness], filter: true)
-    lair = prompt.select("Is this a lair encounter?", %w[random true false], filter: true)
+    location = prompt.select("Dungeon or Wilderness?", %w[dungeon wilderness], filter: true, per_page: 15)
+    lair = prompt.select("Is this a lair encounter?", %w[random true false], filter: true, per_page: 15)
     lair = nil if lair == "random"
     encounter(listing, location, lair)
   end
@@ -70,7 +96,7 @@ class Acks
   def nautical_encounters_prompt
     prompt = TTY::Prompt.new
     choices = %w[Civilized Borderlands Outlands Unsettled].each_with_index.to_h
-    danger_level = prompt.select("Choose a danger level:", choices, filter: true, convert: :int)
+    danger_level = prompt.select("Choose a danger level:", choices, filter: true, convert: :int, per_page: 15)
     danger_level += 1 # Convert to 1-based index; trade route basically subtract 1
     trade_route = prompt.no?("On a trade route?")
     num = prompt.ask("How many encounters to generate?", convert: :int, default: 20)
@@ -125,13 +151,14 @@ class Acks
       puts
       prompt = TTY::Prompt.new
       command = prompt.select("Choose a command:", filter: true, per_page: 15) do |menu|
-        menu.choice("Random Building", "building")
-        menu.choice("Merchant Mariners", "merchant_mariners")
+        menu.choice("Random Treasure", "treasure_prompt")
+        menu.choice("Random Magic Items", "magic_item_prompt")
+        menu.choice("Random Character", "character")
         menu.choice("Random Encounter", "encounter_prompt")
         menu.choice("Random Nautical Encounter List", "nautical_encounters_prompt")
-        menu.choice("Random Treasure", "treasure_prompt")
         menu.choice("Random Weather", "weather_prompt")
-        menu.choice("Random Magic Items", "magic_item_prompt")
+        menu.choice("Merchant Mariners", "merchant_mariners")
+        menu.choice("Random Building", "building")
         menu.choice("Debug console", "console")
         menu.choice("Quit")
       end

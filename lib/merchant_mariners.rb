@@ -85,16 +85,18 @@ class Cargo
   end
 end
 
+# TODO: switch to Monster::Gang
 class Gang
   include Tables
 
-  attr_accessor :group_name, :count_dice, :leader_title, :leader_level, :extra_gang
+  attr_accessor :group_name, :count_dice, :leader_title, :leader_level, :leader_class, :extra_gang
 
-  def initialize(group_name, count_dice, leader_title, leader_level, &extra_gang)
+  def initialize(group_name, count_dice, leader_title, leader_level, leader_class, &extra_gang)
     @group_name = group_name
     @count_dice = count_dice
     @leader_title = leader_title
     @leader_level = leader_level
+    @leader_class = leader_class
     @extra_gang = extra_gang
   end
 
@@ -102,21 +104,21 @@ class Gang
     roll_dice(count_dice)
   end
 
-  def generate_leader!
-    Character.new(leader_level, leader_title)
+  def generate_leader!(ethnicity:)
+    Character.new(leader_level, leader_title, character_class: leader_class, ethnicity:)
   end
 
-  def attempt_extra_gang!(count, characters_by_count, leaders)
+  def attempt_extra_gang!(characters_by_count, leaders, max_count = nil, ethnicity:)
     return 0 unless extra_gang
 
     gang = extra_gang.call
     return 0 unless gang
 
     group_count = gang.roll_count
-    if group_count + 1 >= count
+    if max_count.nil? || group_count + 1 <= max_count
       characters_by_count[gang.group_name] += group_count
       characters_by_count[gang.leader_title] += 1
-      leaders << generate_leader!
+      leaders << generate_leader!(ethnicity:)
       group_count + 1
     else
       0
@@ -127,10 +129,11 @@ end
 class Passengers
   include Tables
 
-  attr_accessor :characters_by_count
+  attr_accessor :characters_by_count, :ethnicity
 
-  def initialize(count)
+  def initialize(count, ethnicity:)
     @characters_by_count = Hash.new(0)
+    @ethnicity = ethnicity
     @leaders = []
     assign_characters!(count)
     @leaders.sort!
@@ -169,7 +172,7 @@ class Passengers
       if count.positive?
         count -= 1
         @characters_by_count[gang.leader_title] += 1
-        @leaders << gang.generate_leader!
+        @leaders << gang.generate_leader!(ethnicity:)
       end
     else
       sub_gangs = gang.roll_count
@@ -179,11 +182,11 @@ class Passengers
       end
       if count.positive?
         @characters_by_count[gang.leader_title] += 1
-        @leaders << gang.generate_leader!
+        @leaders << gang.generate_leader!(ethnicity:)
         count -= 1
       end
     end
-    count -= gang.attempt_extra_gang!(count, @characters_by_count, @leaders) if count.positive?
+    count -= gang.attempt_extra_gang!(@characters_by_count, @leaders, count, ethnicity:) if count.positive?
     count
   end
 end
@@ -195,9 +198,9 @@ class Commoners < Passengers
 
   def gangs
     @gangs ||= [
-      Gang.new("Hamlet", "1d3", "steward", 3),
-      Gang.new("Band", "1d6", "reeve", 2),
-      Gang.new("Work-gang", "2d6", "yeoman", 1),
+      Gang.new("Hamlet", "1d3", "Steward", 3, "Fighter"),
+      Gang.new("Band", "1d6", "Reeve", 2, "Fighter"),
+      Gang.new("Work-gang", "2d6", "Yeoman", 1, "Fighter"),
     ]
   end
 end
@@ -209,15 +212,15 @@ class Pilgrims < Passengers
 
   def gangs
     @gangs ||= [
-      Gang.new("Camp", "1d6", "vicar", 5) do
+      Gang.new("Camp", "1d6", "Vicar", 5, "Crusader") do
         if rand <= 0.33
-          Gang.new("Novices", "2d4", "sister", 4) do
-            Gang.new("Novice", "0", "novice", 1)
+          Gang.new("Novices", "2d4", "Sister", 4, "Priestess") do
+            Gang.new("Novice", "0", "Novice", 1, "Priestess")
           end
         end
       end,
-      Gang.new("Band", "1d6", "explorer", 2),
-      Gang.new("Troupe", "1d8", "crusader", 1),
+      Gang.new("Band", "1d6", nil, 2, "Explorer"),
+      Gang.new("Troupe", "1d8", nil, 1, "Crusader"),
     ]
   end
 end
@@ -230,12 +233,22 @@ class Marines < Passengers
   end
 end
 
+CAPTAIN_CLASS_TABLE = {
+  10 => "Venturer",
+  12 => "Explorers",
+  14 => "Fighter",
+  16 => "Thief",
+  18 => "Bard",
+  19 => "Barbarian",
+  20 => nil,
+}.freeze
 class Ship
   include Tables
 
-  attr_accessor :crew_size, :cargo, :artillery_pieces, :passenger_type, :passenger_count, :passengers, :captain
+  attr_accessor :flag, :crew_size, :cargo, :artillery_pieces, :passenger_type, :passenger_count, :passengers, :captain
 
-  def initialize
+  def initialize(flag:)
+    @flag = flag
     assign_artillery!
     generate_captain!
   end
@@ -245,10 +258,10 @@ class Ship
     9 => Pilgrims,
     10 => Marines,
   }.freeze
-  def generate_passengers!(dice_expression, multiplier = 1)
+  def generate_passengers!(dice_expression, multiplier = 1, ethnicity:)
     self.passenger_count = roll_dice(dice_expression) * multiplier
     self.passenger_type = roll_table(PASSENGER_TYPE_BY_ROLL)
-    self.passengers = passenger_type.new(passenger_count)
+    self.passengers = passenger_type.new(passenger_count, ethnicity:)
   end
 
   def generate_cargo!(dice_expression)
@@ -293,6 +306,10 @@ class Ship
     @cargo.values.sum(&:price)
   end
 
+  def <=>(other)
+    cargo_value <=> other.cargo_value
+  end
+
   def cargo_weight
     @cargo.values.sum(&:quantity)
   end
@@ -307,7 +324,11 @@ class Ship
   end
 
   def generate_captain!
-    self.captain = Character.new(self.class::CAPTAIN)
+    self.captain = Character.new(self.class::CAPTAIN,
+                                 "Captain",
+                                 character_class: roll_table(CAPTAIN_CLASS_TABLE),
+                                 ethnicity: flag.downcase
+                                )
   end
 
   def stat_line
@@ -334,9 +355,9 @@ class SmallShip < Ship
   LABEL = "small"
   STAT_LINE = "Speed: sail 240' / 96 miles, Cargo 10000 st, AC 2, 75 SHP"
 
-  def initialize
+  def initialize(flag:)
     self.crew_size = 10 # 20 40
-    generate_passengers!("6d10") # 2d8*10 4d6*10
+    generate_passengers!("6d10", ethnicity: flag.downcase) # 2d8*10 4d6*10
     generate_cargo!("3d4") # 6d6 7d10
     super
   end
@@ -350,9 +371,9 @@ class LargeShip < Ship
   LABEL = "large"
   STAT_LINE = "Speed: sail 180' / 72 miles, Cargo 30000 st, AC 2, 200 SHP"
 
-  def initialize
+  def initialize(flag:)
     self.crew_size = 20
-    generate_passengers!("2d8", 10)
+    generate_passengers!("2d8", 10, ethnicity: flag.downcase)
     generate_cargo!("6d6")
     super
   end
@@ -370,9 +391,9 @@ class HugeShip < Ship
   LABEL = "huge"
   STAT_LINE = "Speed: sail 180' / 60 miles, Cargo 50000 st, AC 2, 400 SHP"
 
-  def initialize
+  def initialize(flag:)
     self.crew_size = 40
-    generate_passengers!("4d6", 10)
+    generate_passengers!("4d6", 10, ethnicity: flag.downcase)
     generate_cargo!("7d10")
     super
   end
@@ -382,78 +403,23 @@ class HugeShip < Ship
   end
 end
 
-class Character
-  include Tables
-
-  attr_accessor :level, :title, :magic_items_by_rarity
-
-  def initialize(level, title = "captain")
-    @level = level
-    @title = title
-    generate_magic_items!
-  end
-
-  def to_s
-    magic_item_list = magic_items_by_rarity.filter_map do |rarity, items|
-      next if items.empty?
-
-      "  #{rarity.capitalize} magic items: " + items.map(&:to_s).sort.join(", ")
-    end
-    magic_item_list = nil if magic_item_list.empty?
-    ["#{title} level #{level}", magic_item_list].compact.join("\n")
-  end
-
-  def <=>(other)
-    lvl_cmp = other.level <=> level
-    if lvl_cmp.zero?
-      title_cmp = title <=> other.title
-      if title_cmp.zero?
-        other.magic_items_by_rarity.values.flatten.count <=> magic_items_by_rarity.values.flatten.count
-      else
-        title_cmp
-      end
-    else
-      lvl_cmp
-    end
-  end
-
-  COMMON_ITEMS_BY_LEVEL = {
-    1 => "30%",
-    2 => "90%",
-    3 => 1,
-    4 => "1d4-1",
-    5 => 2,
-    6 => 4,
-    7 => 4,
-  }.freeze
-  UNCOMMON_ITEMS_BY_LEVEL = {
-    3 => "15%",
-    4 => "40%",
-    5 => 1,
-    6 => 2,
-    7 => 2,
-  }.freeze
-  RARE_ITEMS_BY_LEVEL = {
-    7 => "66%",
-  }.freeze
-  def generate_magic_items!
-    @magic_items_by_rarity = {}
-    count_by_rarity = %i[rare uncommon common].filter_map do |rarity|
-      prefix = rarity.upcase
-      quantity = roll_dice(self.class.const_get("#{prefix}_ITEMS_BY_LEVEL")[level])
-      next if quantity.nil? || quantity.zero?
-
-      [rarity, quantity]
-    end.to_h
-    return if count_by_rarity.empty?
-
-    @magic_items_by_rarity = TTMagicItems.new(**count_by_rarity).magic_items_by_rarity
-  end
-end
-
 class MerchantMariners
   include Tables
-  attr_accessor :number_of_ships, :ship_type, :ships, :commodore
+  attr_accessor :number_of_ships, :ship_type, :ships, :commodore, :flag
+
+  RANDOM_FLAG_SYRNASOS = { # TODO: name generation
+    2 => "Northern Argollëan",
+    3 => "Rornish",
+    4 => "Corcanoan",
+    5 => "Jutlandic",
+    6 => "Celdorean",
+    7 => "Syrnasan",
+    8 => "Opelenean",
+    9 => "Nicean",
+    10 => "Kemeshi",
+    11 => "Somirean",
+    12 => "Tirenean",
+  }.freeze
 
   SHIP_TYPES_BY_ROLL = {
     5 => SmallShip,
@@ -461,12 +427,16 @@ class MerchantMariners
     10 => HugeShip,
   }.freeze
   LAIR_CHANCE = 0.25
-  def initialize
+  def initialize(flag: nil)
+    @flag = flag || roll_table(RANDOM_FLAG_SYRNASOS)
     @ship_type = roll_table(SHIP_TYPES_BY_ROLL)
 
     if rand < LAIR_CHANCE
       @number_of_ships = roll_dice(ship_type::FLEET_SIZE)
-      @commodore = Character.new(ship_type::CAPTAIN + 2, "Commodore")
+      @commodore = Character.new(ship_type::CAPTAIN + 2,
+                                 "Commodore",
+                                 character_class: roll_table(CAPTAIN_CLASS_TABLE),
+                                 ethnicity: @flag.downcase)
     else
       @number_of_ships = 1
       @commodore = nil
@@ -474,16 +444,16 @@ class MerchantMariners
 
     @ships = []
     @number_of_ships.times do
-      @ships << @ship_type.new
+      @ships << @ship_type.new(flag: @flag)
     end
   end
 
   def to_s
     ships = @ships.map(&:to_s).join("\n")
     if @commodore
-      "Fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships}"
+      "#{flag} fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships}"
     else
-      ships
+      "#{flag} #{ships}"
     end
   end
 end

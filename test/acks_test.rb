@@ -31,7 +31,7 @@ describe Acks do
       output = output.join
       assert_match(/ship/, output)
       assert_match(/crew/, output)
-      assert_match(/captain/, output)
+      assert_match(/Captain/, output)
       assert_match(/Cargo worth \d+ gp weighing \d+ st/, output)
     end
   end
