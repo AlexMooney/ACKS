@@ -33,6 +33,7 @@ class Treasure
           jewelry_amount: row["JEWELRY_AMOUNT"],
           jewelry_type: row["JEWELRY_TYPE"],
           average_value: row["AVG_VALUE"].to_i,
+          magic_items: row["MAGIC_ITEMS"],
           average_magic_items: row["AVG_MAGIC_VALUE"].to_i,
         }
       end
@@ -40,12 +41,16 @@ class Treasure
     end
   end
 
-  attr_reader :treasure_types, :treasure_lots
+  attr_reader :treasure_types, :treasure_lots, :magic_items
 
   def initialize(treasure_types)
     @treasure_types = treasure_types
     @treasure_lots = []
     treasure_types.each_char(&method(:roll_for_type))
+
+    magic_items_by_rarity = { common: 0, uncommon: 0, rare: 0, very_rare: 0, legendary: 0 }
+    treasure_types.each_char { |type| roll_for_magic_items!(magic_items_by_rarity, type) }
+    @magic_items = TTMagicItems.new(**magic_items_by_rarity)
   end
 
   def to_s
@@ -64,7 +69,10 @@ class Treasure
 
     ["Average treasure: #{average_value}gp",
      "Treasure worth #{running_value_total}gp (#{(100 * running_value_total / average_value).round}%)",
-     table.render_with(MarkdownBorder)].join("\n")
+     table.render_with(MarkdownBorder),
+     "",
+     magic_items.to_s,
+    ].join("\n")
   end
 
   private
@@ -99,7 +107,20 @@ class Treasure
         treasure_lots << roll_for_lot(treasure_data[:jewelry_type])
       end
     end
-    # TODO: Magic items
+  end
+
+  def roll_for_magic_items!(magic_items_by_rarity, type)
+    # "100% 5d6 common, 100% 4d6 uncommon, 90% 3d6 rare, 80% 2d4 very_rare, 60% 1d3 legendary"
+    magic_item_string = self.class.treasure_table.dig(type, :magic_items)
+    return unless magic_item_string
+
+    magic_item_string.split(",").map(&:strip).each do |sub_string|
+      chance, dice_string, rarity = sub_string.split(" ", 3)
+      next if roll_dice(chance).zero?
+
+      quantity = roll_dice(dice_string)
+      magic_items_by_rarity[rarity.to_sym] += quantity
+    end
   end
 
   def roll_for_lot(type)

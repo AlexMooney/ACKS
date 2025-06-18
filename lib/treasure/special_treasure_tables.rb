@@ -209,7 +209,7 @@ class Treasure
     MULTIPLE_ORNAMENTALS_TABLE = ORNAMENTAL_TABLE.transform_values do |lot|
       TreasureObjectType.new(lot.description, "2d6", lot.value_dice, lot.coin_weight).freeze
     end.freeze
-    GEMS_GOODS_TABLE = [
+    GEM_GOODS_TABLE = [
       TreasureObjectType.new("set of superior thieves’ tools", 1, 200, 167),
       TreasureObjectType.new("engraved teeth", "1d4", "2d6*10", 167),
       TreasureObjectType.new("vials of rare perfume", "1d3", "1d6*25", 167),
@@ -273,7 +273,7 @@ class Treasure
       7 => TreasureObjectType.new("{JEWELRY_25}", 1, "2d10*10", 167).freeze,
       10 => TreasureObjectType.new("{JEWELRY_40}", 1, "2d4*100", 167).freeze,
     }.freeze
-    TRINKETS_GOODS_TABLE = [
+    TRINKET_GOODS_TABLE = [
       TreasureObjectType.new("bone fetishes and figurines", "3d6", "1d20", 167),
       TreasureObjectType.new("glass eyes, lenses, or prisms", "2d6", "1d6*10", 167),
       TreasureObjectType.new("items of masterwork quality", "1d4", "70+5d6", 167),

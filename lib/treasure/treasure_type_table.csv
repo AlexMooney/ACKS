@@ -6,16 +6,15 @@ D,Hoarder,1000,80,4d4,80,1d4,20,1d4,0,0,0,0,80,1d6,ornamentals,70,1d4,trinkets,"
 E,Raider,1250,70,2d10,60,2d6,20,1d4,10,1d3,0,0,60,1d4,ornamentals,40,1d4,trinkets,"50% 2d4 common, 25% 1d3 uncommon",2500
 F,Incidental,1500,35,2d4,35,1d4,15,1d3,10,1d3,0,0,40,1d6,gems,30,1d4,jewelry,"30% 1 common, 20% 1 uncommon, 3% rare",1000
 G,Raider,2000,70,2d20,60,3d6,30,1d4,20,1d3,0,0,50,1d6,ornamentals,50,1d6,trinkets,"60% 2d6 common, 35% 1d4 uncommon, 10% 1 rare",5500
-H,Hoarder,2500,80,4d4,80,1d8,50,1d4,0,0,0,0,80,1d6,gems,80,1d6,trinkets,"25% 1d2 rare, 15% 1 very rare, 1% 1 legendary",19000
-I,Incidental,3250,35,2d4,35,1d6,15,1d6,15,1d6,0,0,50,2d4,gems,40,1d8,jewelry,"35% 2d2 common, 30% 1 uncommon, 4% 1 rare, 2% 1 very rare",3000
-J,Raider,4000,80,2d20,60,3d6,50,1d8,35,1d6,0,0,50,1d6,gems,50,1d8,trinkets,"70% 2d8 common, 50% 1d4 uncommon, 15% 1 rare, 5% 1 very rare",11000
-K,Incidental,5000,35,3d6,35,1d8,20,1d6,20,1d6,0,0,25,1d4,brilliants,50,1d4,jewelry,"45% 2d4 common, 35% 1 uncommon, 15% 1 rare, 3% 1 very rare",6000
-L,Raider,6000,80,3d20,60,4d6,60,1d8,50,1d6,0,0,60,1d6,gems,40,1d4,jewelry,"80% 2d8 common, 60% 1d4 uncommon, 25% 1 rare, 10% 1 very rare, 1% 1 legendary",16500
-M,Incidental,8000,35,7d6,35,1d8,20,1d6,20,1d6,10,1d2,30,1d6,brilliants,50,1d6,jewelry,"50% 2d6 common, 40% 1 uncommon, 20% 1 rare, 5% 1 very rare, 2% 1 legendary",9000
-N,Hoarder,9000,80,5d6,80,2d6,75,2d4,60,1d6,0,0,80,1d8,gems,80,1d8,jewelry,"65% 2d8 common, 50% 1d10 uncommon, 35% 1d4 rare, 25% 1 very rare, 5% 1 legendary",38000
-O,Raider,12000,80,3d20,75,5d6,70,2d6,50,2d6,0,0,30,1d4,brilliants,60,1d4,jewelry,"90% 3d6 common, 70% 1d6 uncommon, 30% 1d2 rare, 15% 1 very rare, 5% 1 legendary",27000
-P,Incidental,17000,35,7d6,35,1d8,30,1d6,25,1d6,25,1d4,40,1d4,brilliants,30,1d4,regalia,"50% 1d3 uncommon, 50% 1 rare, 10% 1 very rare, 5% 1 legendary",18000
-Q,Hoarder,22000,80,6d6,80,4d6,80,2d6,75,2d4,30,1d4,60,1d6,brilliants,80,1d4,jewelry,"75% 3d6 common, 75% 2d6 uncommon, 50% 1d6 rare, 25% 1d2 very rare, 10% 1 legendary",65000
-R,Hoarder,45000,80,7d6,80,5d6,80,2d6,80,2d4,75,1d6,70,1d4,brilliants,60,1d4,regalia,"95% 4d6 common, 95% 3d6 uncommon, 80% 2d6 rare, 75% 1d4 very rare, 50% 1d2 legendary",250000
-S,Raider,60000,80,8d6,80,6d6,80,3d6,80,3d4,80,1d6,80,1d6,brilliants,70,1d6,regalia,"100% 5d6 common, 100% 4d6 uncommon, 90% 3d6 rare, 80% 2d4 very rare, 60% 1d3 legendary",350000
-🧪,Test,0,0,0,0,0,0,0,100,1d6,0,0,0,0,0,0,0,0,0,0,0,0,0
+H,Hoarder,2500,80,4d4,80,1d8,50,1d4,0,0,0,0,80,1d6,gems,80,1d6,trinkets,"25% 1d2 rare, 15% 1 very_rare, 1% 1 legendary",19000
+I,Incidental,3250,35,2d4,35,1d6,15,1d6,15,1d6,0,0,50,2d4,gems,40,1d8,jewelry,"35% 2d2 common, 30% 1 uncommon, 4% 1 rare, 2% 1 very_rare",3000
+J,Raider,4000,80,2d20,60,3d6,50,1d8,35,1d6,0,0,50,1d6,gems,50,1d8,trinkets,"70% 2d8 common, 50% 1d4 uncommon, 15% 1 rare, 5% 1 very_rare",11000
+K,Incidental,5000,35,3d6,35,1d8,20,1d6,20,1d6,0,0,25,1d4,brilliants,50,1d4,jewelry,"45% 2d4 common, 35% 1 uncommon, 15% 1 rare, 3% 1 very_rare",6000
+L,Raider,6000,80,3d20,60,4d6,60,1d8,50,1d6,0,0,60,1d6,gems,40,1d4,jewelry,"80% 2d8 common, 60% 1d4 uncommon, 25% 1 rare, 10% 1 very_rare, 1% 1 legendary",16500
+M,Incidental,8000,35,7d6,35,1d8,20,1d6,20,1d6,10,1d2,30,1d6,brilliants,50,1d6,jewelry,"50% 2d6 common, 40% 1 uncommon, 20% 1 rare, 5% 1 very_rare, 2% 1 legendary",9000
+N,Hoarder,9000,80,5d6,80,2d6,75,2d4,60,1d6,0,0,80,1d8,gems,80,1d8,jewelry,"65% 2d8 common, 50% 1d10 uncommon, 35% 1d4 rare, 25% 1 very_rare, 5% 1 legendary",38000
+O,Raider,12000,80,3d20,75,5d6,70,2d6,50,2d6,0,0,30,1d4,brilliants,60,1d4,jewelry,"90% 3d6 common, 70% 1d6 uncommon, 30% 1d2 rare, 15% 1 very_rare, 5% 1 legendary",27000
+P,Incidental,17000,35,7d6,35,1d8,30,1d6,25,1d6,25,1d4,40,1d4,brilliants,30,1d4,regalia,"50% 1d3 uncommon, 50% 1 rare, 10% 1 very_rare, 5% 1 legendary",18000
+Q,Hoarder,22000,80,6d6,80,4d6,80,2d6,75,2d4,30,1d4,60,1d6,brilliants,80,1d4,jewelry,"75% 3d6 common, 75% 2d6 uncommon, 50% 1d6 rare, 25% 1d2 very_rare, 10% 1 legendary",65000
+R,Hoarder,45000,80,7d6,80,5d6,80,2d6,80,2d4,75,1d6,70,1d4,brilliants,60,1d4,regalia,"95% 4d6 common, 95% 3d6 uncommon, 80% 2d6 rare, 75% 1d4 very_rare, 50% 1d2 legendary",250000
+🧪,Test,1000,0,0,0,0,0,0,100,1d6,0,0,0,0,0,0,0,0,"100% 1 common, 100% 1 uncommon, 100% 1 rare, 100% 1 very_rare, 100% 1 legendary",0

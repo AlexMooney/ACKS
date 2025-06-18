@@ -2,5 +2,5 @@ rarity,potions,rings,scrolls,implements,misc,swords,weapons,armor
 common,45,0,45,0,10,0,0,0
 uncommon,48,3,25,0,6,6,6,6
 rare,0,6,19,8,25,14,14,14
-very rare,1,13,10,15,40,7,7,7
+very_rare,1,13,10,15,40,7,7,7
 legendary,0,7,26,18,34,5,5,5

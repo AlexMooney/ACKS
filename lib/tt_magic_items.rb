@@ -24,11 +24,13 @@ class TTMagicItems
 
   attr_reader :magic_items_by_rarity
 
-  def initialize(common: 0, uncommon: 0, rare: 0)
+  def initialize(common: 0, uncommon: 0, rare: 0, very_rare: 0, legendary: 0)
     @magic_items_by_rarity = {}
     @magic_items_by_rarity[:common] = generate_items("common", common) if common.positive?
     @magic_items_by_rarity[:uncommon] = generate_items("uncommon", uncommon) if uncommon.positive?
     @magic_items_by_rarity[:rare] = generate_items("rare", rare) if rare.positive?
+    @magic_items_by_rarity[:very_rare] = generate_items("very_rare", rare) if very_rare.positive?
+    @magic_items_by_rarity[:legendary] = generate_items("legendary", legendary) if legendary.positive?
   end
 
   def to_s
@@ -47,7 +49,7 @@ class TTMagicItems
       type = roll_weighted(type_by_frequency)
       item_weights = self.class.item_weights_by_rarity_and_type(rarity, type)
       roll_weighted(item_weights)
-    end
+    end.sort
   end
 
   def roll_weighted(value_by_weight)
