@@ -27,7 +27,7 @@ task :on_update do
   loop do
     changed = false
     Find.find(File.dirname(__FILE__)) do |file|
-      next unless file =~ /\.rb$/
+      next unless file.match?(/\.rb$/)
 
       ctime = File.ctime(file).to_i
 
@@ -39,7 +39,8 @@ task :on_update do
 
     if changed
       system ARGV[1]
-      puts "\nWaiting for a *.rb change"
+      puts "=" * 80
+      puts "Waiting for a *.rb change"
     end
 
     sleep 1
