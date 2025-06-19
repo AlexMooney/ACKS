@@ -56,7 +56,6 @@ module RandomDescription
     end.join(", "))
   end
 
-
   private
 
   def random_ethnicity

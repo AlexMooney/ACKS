@@ -13,13 +13,17 @@ class Character
     @title = title # TODO: default class level titles
     class_type ||= roll_table(CLASS_TYPE)
     @character_class = character_class || roll_table(CLASS_BY_TYPE[class_type])
-    @alignment = roll_table(ALIGNMENT)
+    @alignment = roll_table(RANDOM_ALIGNMENT)
     @sex = roll_table(SEX_BY_CLASS[character_class])
     ethnicity ||= HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys.sample
     @name = random_name(ethnicity, sex)
     @stats = Stats.new(STAT_PREFERENCE_BY_CLASS_TYPE[class_type])
     @description = if HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.key?(ethnicity)
-                     human(ethnicity, stats.str_bonus, sex)
+                     if level > 1
+                       human(ethnicity, stats, sex, alignment)
+                     else
+                       basic_human(stats, alignment)
+                     end
                    else
                      "Demihumans not implemented yet. "
                    end

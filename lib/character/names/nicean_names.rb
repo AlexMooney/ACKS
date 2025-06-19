@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Character
   module Names
     module NiceanNames
-      NICEAN_SURNAME_TYPES = %w[patronym patronym patronym origin origin sobriquet]
+      NICEAN_SURNAME_TYPES = %w[patronym patronym patronym origin origin sobriquet].freeze
 
-      PATRONYM_CONSONANT_SUFFIXES = %w[adis akis atos ides]
+      PATRONYM_CONSONANT_SUFFIXES = %w[adis akis atos ides].freeze
 
       NICEAN_MALE = {
         3 => "Apollonis",

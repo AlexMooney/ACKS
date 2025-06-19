@@ -327,8 +327,7 @@ class Ship
     self.captain = Character.new(self.class::CAPTAIN,
                                  "Captain",
                                  character_class: roll_table(CAPTAIN_CLASS_TABLE),
-                                 ethnicity: flag.downcase
-                                )
+                                 ethnicity: flag.downcase)
   end
 
   def stat_line

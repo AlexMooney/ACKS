@@ -5,7 +5,7 @@ class Character
     module RornishNames
       def rornish_name(sex)
         aurnaized = rand < 0.4
-        table = self.class.const_get("RORN_#{sex.upcase}#{"_AURANIZED" if aurnaized}")
+        table = self.class.const_get("RORN_#{sex.upcase}#{'_AURANIZED' if aurnaized}")
         given_name = roll_table(table)
         surname = roll_table(table)
         "#{given_name} #{surname}"

@@ -71,8 +71,7 @@ class Treasure
      "Treasure worth #{running_value_total}gp (#{(100 * running_value_total / average_value).round}%)",
      table.render_with(MarkdownBorder),
      "",
-     magic_items.to_s,
-    ].join("\n")
+     magic_items.to_s].join("\n")
   end
 
   private
