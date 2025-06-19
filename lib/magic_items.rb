@@ -180,37 +180,3 @@ class PotionOfPhysicalProtection
     "Potion of #{roll_table(DAMAGE_TYPE_BY_ROLL)} protection"
   end
 end
-
-class SpellScroll
-  include Tables
-
-  attr_reader :levels
-
-  def initialize(levels)
-    @levels = levels
-  end
-
-  LANGUAGE_BY_ROLL = {
-    20 => "Classical Auran",
-    30 => "Common",
-    50 => "Draconic",
-    70 => "Dwarven",
-    90 => "Elven",
-    100 => "Zaharan",
-  }.freeze
-  def roll_details
-    flavor = roll_table(%w[Arcane Divine])
-    language = roll_table(LANGUAGE_BY_ROLL)
-    flavor = roll_table(%w[Eldritch Divine]) if language == "Dwarven" && flavor == "Arcane"
-
-    remaining_levels = levels
-    spells = []
-    while remaining_levels.positive?
-      level = rand(1..[remaining_levels, 6].min)
-      remaining_levels -= level
-      spells << level
-    end
-    spells_label = spells.tally.map { |l, c| "#{c} level #{l}" }.join(", ")
-    "#{flavor} Scroll in #{language} with #{spells_label} spell#{spells.size > 1 ? 's' : ''}"
-  end
-end

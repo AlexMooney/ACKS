@@ -114,6 +114,8 @@ class Acks
   def treasure_prompt
     prompt = TTY::Prompt.new
     treasure_types = prompt.ask("Enter treasure types (e.g., 'R' or 'AAAC'):")
+    return if treasure_types.nil? || treasure_types.strip.empty?
+
     treasure(treasure_types.gsub(/\s+/, "").upcase)
   end
 
@@ -142,6 +144,19 @@ class Acks
     puts Weather.new(day_modifier:, night_modifier:, precipitation:, wind:, prevailing:).roll
   end
 
+  def spell_scrolls
+    prompt = TTY::Prompt.new
+    number = prompt.ask("Enter number of scrolls", convert: :int, default: 1, min: 1)
+    return if number.nil?
+
+    levels = prompt.ask("How many spell levels per scroll?", convert: :int, default: 1, min: 1)
+    return if levels.nil?
+
+    number.times do
+      puts SpellScroll.new(levels).roll_details
+    end
+  end
+
   def console
     binding.irb # rubocop:disable Lint/Debugger
   end
@@ -158,6 +173,7 @@ class Acks
         menu.choice("Random Nautical Encounter List", "nautical_encounters_prompt")
         menu.choice("Random Weather", "weather_prompt")
         menu.choice("Merchant Mariners", "merchant_mariners")
+        menu.choice("Spell Scrolls", "spell_scrolls")
         menu.choice("Random Building", "building")
         menu.choice("Debug console", "console")
         menu.choice("Quit")
