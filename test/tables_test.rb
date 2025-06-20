@@ -50,6 +50,15 @@ describe Tables do
       assert_equal 4, dummy.roll_dice("2d1+2d1")
       assert_includes 13..28, dummy.roll_dice("3d6+10")
     end
+
+    it "supports exploding dice" do
+      result = nil
+      100.times do
+        result = dummy.roll_dice("1d6!")
+        break if result > 6
+      end
+      assert_includes 7.., result
+    end
   end
 
   describe "roll_table" do

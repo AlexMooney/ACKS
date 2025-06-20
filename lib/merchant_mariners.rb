@@ -233,208 +233,25 @@ class Marines < Passengers
   end
 end
 
-CAPTAIN_CLASS_TABLE = {
-  10 => "Venturer",
-  12 => "Explorers",
-  14 => "Fighter",
-  16 => "Thief",
-  18 => "Bard",
-  19 => "Barbarian",
-  20 => nil,
-}.freeze
-class Ship
-  include Tables
-
-  attr_accessor :flag, :crew_size, :cargo, :artillery_pieces, :passenger_type, :passenger_count, :passengers, :captain
-
-  def initialize(flag:)
-    @flag = flag
-    assign_artillery!
-    generate_captain!
-  end
-
-  PASSENGER_TYPE_BY_ROLL = {
-    6 => Commoners,
-    9 => Pilgrims,
-    10 => Marines,
-  }.freeze
-  def generate_passengers!(dice_expression, multiplier = 1, ethnicity:)
-    self.passenger_count = roll_dice(dice_expression) * multiplier
-    self.passenger_type = roll_table(PASSENGER_TYPE_BY_ROLL)
-    self.passengers = passenger_type.new(passenger_count, ethnicity:)
-  end
-
-  def generate_cargo!(dice_expression)
-    @cargo = {}
-    roll_dice(dice_expression).times do
-      good = TradeGood.random
-      lot = Cargo.new(good, 1000)
-      if @cargo[lot.name]
-        @cargo[lot.name].quantity += lot.quantity
-      else
-        @cargo[lot.name] = lot
-      end
-    end
-  end
-
-  def assign_artillery!
-    @artillery_pieces = if rand < (cargo_value / 100_000.0) || passenger_type == Marines
-                          artillery_capacity
-                        else
-                          0
-                        end
-  end
-
-  def artillery_string
-    if @artillery_pieces.positive?
-      pieces_string = @artillery_pieces == 1 ? "piece" : "pieces"
-      "#{@artillery_pieces} #{pieces_string} of #{artillery_weight} st artillery"
-    else
-      "No artillery"
-    end
-  end
-
-  def artillery_capacity
-    self.class.const_get(:ARTILLERY_CAPACITY)
-  end
-
-  def artillery_weight
-    self.class.const_get(:ARTILLERY_WEIGHT)
-  end
-
-  def cargo_value
-    @cargo.values.sum(&:price)
-  end
-
-  def <=>(other)
-    cargo_value <=> other.cargo_value
-  end
-
-  def cargo_weight
-    @cargo.values.sum(&:quantity)
-  end
-
-  STONES_PER_PASSENGER = 50
-  def total_weight
-    cargo_weight + (artillery_weight * artillery_pieces) + (passenger_count * STONES_PER_PASSENGER)
-  end
-
-  def weight_string
-    "Total weight carried: #{total_weight} st"
-  end
-
-  def generate_captain!
-    self.captain = Character.new(self.class::CAPTAIN,
-                                 "Captain",
-                                 character_class: roll_table(CAPTAIN_CLASS_TABLE),
-                                 ethnicity: flag.downcase)
-  end
-
-  def stat_line
-    "#{self.class::LABEL.capitalize} ship. #{self.class::STAT_LINE}"
-  end
-
-  def to_s
-    cargo_list = @cargo.values.sort_by(&:price).map { |c| "  #{c}" }.join("\n")
-    [stat_line,
-     "#{crew_size}× crew, #{artillery_string}, #{weight_string}",
-     captain,
-     passengers,
-     "Cargo worth #{cargo_value} gp weighing #{cargo_weight} st",
-     cargo_list,
-     ""].join("\n")
-  end
-end
-
-class SmallShip < Ship
-  FLEET_SIZE = "1d12"
-  CAPTAIN = 1
-  ARTILLERY_CAPACITY = 1
-  ARTILLERY_WEIGHT = 400
-  LABEL = "small"
-  STAT_LINE = "Speed: sail 240' / 96 miles, Cargo 10000 st, AC 2, 75 SHP"
-
-  def initialize(flag:)
-    self.crew_size = 10 # 20 40
-    generate_passengers!("6d10", ethnicity: flag.downcase) # 2d8*10 4d6*10
-    generate_cargo!("3d4") # 6d6 7d10
-    super
-  end
-end
-
-class LargeShip < Ship
-  FLEET_SIZE = "1d6"
-  CAPTAIN = 4
-  ARTILLERY_CAPACITY = 4
-  ARTILLERY_WEIGHT = 800
-  LABEL = "large"
-  STAT_LINE = "Speed: sail 180' / 72 miles, Cargo 30000 st, AC 2, 200 SHP"
-
-  def initialize(flag:)
-    self.crew_size = 20
-    generate_passengers!("2d8", 10, ethnicity: flag.downcase)
-    generate_cargo!("6d6")
-    super
-  end
-
-  def artillery_capacity
-    ARTILLERY_CAPACITY
-  end
-end
-
-class HugeShip < Ship
-  FLEET_SIZE = "1d3"
-  CAPTAIN = 5
-  ARTILLERY_CAPACITY = 8
-  ARTILLERY_WEIGHT = 800
-  LABEL = "huge"
-  STAT_LINE = "Speed: sail 180' / 60 miles, Cargo 50000 st, AC 2, 400 SHP"
-
-  def initialize(flag:)
-    self.crew_size = 40
-    generate_passengers!("4d6", 10, ethnicity: flag.downcase)
-    generate_cargo!("7d10")
-    super
-  end
-
-  def artillery_capacity
-    ARTILLERY_CAPACITY
-  end
-end
-
 class MerchantMariners
   include Tables
   attr_accessor :number_of_ships, :ship_type, :ships, :commodore, :flag
 
-  RANDOM_FLAG_SYRNASOS = { # TODO: name generation
-    2 => "Northern Argollëan",
-    3 => "Rornish",
-    4 => "Corcanoan",
-    5 => "Jutlandic",
-    6 => "Celdorean",
-    7 => "Syrnasan",
-    8 => "Opelenean",
-    9 => "Nicean",
-    10 => "Kemeshi",
-    11 => "Somirean",
-    12 => "Tirenean",
-  }.freeze
-
   SHIP_TYPES_BY_ROLL = {
-    5 => SmallShip,
-    8 => LargeShip,
-    10 => HugeShip,
+    5 => Ship::SmallShip,
+    8 => Ship::LargeShip,
+    10 => Ship::HugeShip,
   }.freeze
   LAIR_CHANCE = 0.25
   def initialize(flag: nil)
-    @flag = flag || roll_table(RANDOM_FLAG_SYRNASOS)
+    @flag = flag || roll_table(Ship::RANDOM_FLAG_SYRNASOS)
     @ship_type = roll_table(SHIP_TYPES_BY_ROLL)
 
     if rand < LAIR_CHANCE
       @number_of_ships = roll_dice(ship_type::FLEET_SIZE)
       @commodore = Character.new(ship_type::CAPTAIN + 2,
                                  "Commodore",
-                                 character_class: roll_table(CAPTAIN_CLASS_TABLE),
+                                 character_class: roll_table(captain_class_table),
                                  ethnicity: @flag.downcase)
     else
       @number_of_ships = 1
@@ -447,12 +264,15 @@ class MerchantMariners
     end
   end
 
+  def captain_class_table
+    Ship::ShipTables::MERCHANT_CAPTAIN_CLASS_TABLE
+  end
+
   def to_s
-    ships = @ships.map(&:to_s).join("\n")
     if @commodore
-      "#{flag} fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships}"
+      "#{flag} fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships.map(&:to_s).join("\n")}"
     else
-      "#{flag} #{ships}"
+      "#{flag} #{ships.first.ship_class}\n#{ships.first}"
     end
   end
 end

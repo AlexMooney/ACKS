@@ -61,6 +61,10 @@ class Acks
     puts MerchantMariners.new
   end
 
+  def naval_mariners
+    puts NavalMariners.new
+  end
+
   def encounter_prompt
     prompt = TTY::Prompt.new
     listing = prompt.select("Choose a monster listing:", filter: true, per_page: 15) do |menu|
@@ -173,6 +177,7 @@ class Acks
         menu.choice("Random Nautical Encounter List", "nautical_encounters_prompt")
         menu.choice("Random Weather", "weather_prompt")
         menu.choice("Merchant Mariners", "merchant_mariners")
+        menu.choice("Naval Mariners", "naval_mariners")
         menu.choice("Spell Scrolls", "spell_scrolls")
         menu.choice("Random Building", "building")
         menu.choice("Debug console", "console")

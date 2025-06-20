@@ -30,8 +30,16 @@ module Tables
         quantity, sides = dice_subsubstring.split("d")
         product * if sides
                     sides, keep = sides.split("k")
+                    explodes = sides.end_with?("!")
                     keep ||= quantity
-                    rolled = quantity.to_i.times.map { rand(1..sides.to_i) }.sort
+                    rolled = quantity.to_i.times.map do
+                      result = die = rand(1..sides.to_i)
+                      while explodes && die == sides.to_i
+                        die = rand(1..sides.to_i)
+                        result += die
+                      end
+                      result
+                    end.sort
                     rolled.last(keep.to_i).sum
                   elsif quantity.include?(".")
                     quantity.to_f
