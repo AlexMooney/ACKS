@@ -161,6 +161,15 @@ class Acks
     end
   end
 
+  def henchmen
+    prompt = TTY::Prompt.new
+    num = prompt.ask("What market class are you in? (1-6)", convert: :int, default: 1, min: 1, max: 6)
+    return if num.nil?
+
+    henchmen = Henchmen.new(market_class: num)
+    puts henchmen
+  end
+
   def console
     binding.irb # rubocop:disable Lint/Debugger
   end
@@ -173,6 +182,7 @@ class Acks
         menu.choice("Random Treasure", "treasure_prompt")
         menu.choice("Random Magic Items", "magic_item_prompt")
         menu.choice("Random Character", "character")
+        menu.choice("Henchmen at Market", "henchmen")
         menu.choice("Random Encounter", "encounter_prompt")
         menu.choice("Random Nautical Encounter List", "nautical_encounters_prompt")
         menu.choice("Random Weather", "weather_prompt")

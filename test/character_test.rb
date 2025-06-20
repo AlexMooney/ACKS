@@ -22,4 +22,9 @@ describe Character do
       refute_match(/\ANot Implemented/, character.name) unless not_implemented_names.include?(ethnicity)
     end
   end
+
+  it "gives 0th level characters the Normal Man class" do
+    character = Character.new(0)
+    assert_match(/Normal Man/, character.to_s)
+  end
 end

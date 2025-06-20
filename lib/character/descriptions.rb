@@ -70,7 +70,7 @@ class Character
       7 => "belongings",
       20 => "appearance",
     }.freeze
-    def basic_human(stats, alignment)
+    def basic_human(ethnicity, stats, alignment)
       alignment ||= roll_table(RANDOM_ALIGNMENT)
       category = roll_table(BASIC_HUMAN_CATEGORY)
       feature = if category == "belongings"
@@ -80,7 +80,7 @@ class Character
                 else
                   raise "Unknown basic human category: #{category}"
                 end
-      "Alignment: #{alignment}, #{category.capitalize}: #{feature}"
+      "Alignment: #{alignment}, #{category.capitalize}: #{feature}, Ethnicity: #{ethnicity.capitalize}"
     end
 
     def roll_features(stats)
@@ -101,7 +101,7 @@ class Character
 
     def roll_belongings(alignment)
       belonging_type = roll_table(BELONGING_TYPE)
-      belongings_table = if self.class.const_defined?("#{alignment.upcase}_BELONGINGS") && rand < 0.666
+      belongings_table = if self.class.const_defined?("#{alignment.upcase}_#{belonging_type.upcase}") && rand < 0.666
                            self.class.const_get("#{alignment.upcase}_#{belonging_type.upcase}")
                          else
                            self.class.const_get("ANY_#{belonging_type.upcase}")

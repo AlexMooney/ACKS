@@ -89,6 +89,7 @@ class Character
       "fighter" => StatPreference.new(best: "STR", always_good: %w[CON DEX]),
       "explorer" => StatPreference.new(best: "CON", always_good: %w[DEX]),
       "venturer" => StatPreference.new(best: "CHA", always_good: %w[INT WIL]),
+      "normal_man" => StatPreference.new(best: nil, never_good: %w[STR INT WIL DEX CON CHA]),
     }.freeze
   end
 end

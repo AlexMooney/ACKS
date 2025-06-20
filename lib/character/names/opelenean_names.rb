@@ -10,7 +10,7 @@ class Character
         patronym = roll_table(self.class.const_get("OPELENEAN_MALE#{'_AURANIZED' if aurnaized}"))
         patronym = patronym.downcase if aurnaized
         attachment = male?(sex) ? "Bar" : "Bat"
-        "#{given_name} #{attachment}#{' ' if aurnaized}#{patronym}"
+        "#{given_name} #{attachment}#{' ' unless aurnaized}#{patronym}"
       end
 
       OPELENEAN_MALE = {

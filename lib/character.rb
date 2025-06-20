@@ -8,27 +8,41 @@ class Character
 
   attr_accessor :level, :title, :character_class, :alignment, :sex, :name, :stats, :description, :magic_items_by_rarity
 
-  def initialize(level, title = nil, class_type: nil, character_class: nil, ethnicity: nil)
+  def initialize(level, title = nil, class_type: nil, character_class: nil, ethnicity: nil, magic_items: true)
     @level = level
     @title = title # TODO: default class level titles
-    class_type ||= roll_table(CLASS_TYPE)
-    @character_class = character_class || roll_table(CLASS_BY_TYPE[class_type])
+    if level.positive?
+      class_type ||= roll_table(CLASS_TYPE)
+      @character_class = character_class || roll_table(CLASS_BY_TYPE[class_type])
+    else
+      class_type = "normal_man"
+      @character_class = "Normal Man"
+    end
     @alignment = roll_table(RANDOM_ALIGNMENT)
     @sex = roll_table(SEX_BY_CLASS[character_class])
     ethnicity ||= HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys.sample
+    if ["northern argollëan", "dwarven"].include?(ethnicity.downcase)
+      ethnicity = HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys.sample
+    end
+    if @character_class.start_with? "Dwarven"
+      ethnicity = "dwarven"
+    elsif @character_class.start_with? "Elven"
+      ethnicity = "elven"
+    end
     @name = random_name(ethnicity, sex)
     @stats = Stats.new(STAT_PREFERENCE_BY_CLASS_TYPE[class_type])
     @description = if HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.key?(ethnicity)
                      if level > 1
                        human(ethnicity, stats, sex, alignment)
                      else
-                       basic_human(stats, alignment)
+                       basic_human(ethnicity, stats, alignment)
                      end
                    else
-                     "Demihumans not implemented yet. "
+                     "Not implemented yet: '#{ethnicity}'"
                    end
 
-    generate_magic_items!
+    @magic_items_by_rarity = {}
+    generate_magic_items! if magic_items
   end
 
   def to_s
@@ -79,7 +93,6 @@ class Character
     7 => "66%",
   }.freeze
   def generate_magic_items!
-    @magic_items_by_rarity = {}
     count_by_rarity = %i[rare uncommon common].filter_map do |rarity|
       prefix = rarity.upcase
       quantity = roll_dice(self.class.const_get("#{prefix}_ITEMS_BY_LEVEL")[level])
