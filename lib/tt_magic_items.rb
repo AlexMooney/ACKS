@@ -31,6 +31,13 @@ class TTMagicItems
     @magic_items_by_rarity[:rare] = generate_items("rare", rare) if rare.positive?
     @magic_items_by_rarity[:very_rare] = generate_items("very_rare", rare) if very_rare.positive?
     @magic_items_by_rarity[:legendary] = generate_items("legendary", legendary) if legendary.positive?
+    @magic_items_by_rarity.each_value do |items|
+      items.map! do |item|
+        item.gsub(/Spell Scroll \((\d+) levels?\)/) do
+          SpellScroll.new(::Regexp.last_match(1).to_i).roll_details
+        end
+      end
+    end
   end
 
   def to_s

@@ -21,7 +21,7 @@ class SpellScroll
   def roll_details
     flavor = roll_table(%w[Arcane Divine])
     language = roll_table(LANGUAGE_BY_ROLL)
-    flavor = roll_table(%w[Gnostic Divine]) if language == "Dwarven" && flavor == "Arcane"
+    language = roll_table(LANGUAGE_BY_ROLL) while language == "Dwarven" && flavor == "Arcane" # NOTE: no Gnostic scrolls
 
     remaining_levels = levels
     spell_levels = []

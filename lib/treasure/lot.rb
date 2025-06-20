@@ -39,6 +39,16 @@ class Treasure
       Lot.new(description, amount + other.amount, gold_value, @coin_weight)
     end
 
+    def /(other)
+      raise ArgumentError, "Can only divide by an integer" unless other.is_a?(Integer)
+      return self if other == 1
+
+      remainder = amount % other
+      extra = rand(other) < remainder ? 1 : 0
+
+      Lot.new(description, (amount / other).to_i + extra, gold_value, @coin_weight)
+    end
+
     def zero
       self.class.new(description, 0, gold_value, @coin_weight)
     end

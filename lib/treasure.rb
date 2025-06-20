@@ -41,20 +41,24 @@ class Treasure
     end
   end
 
-  attr_reader :treasure_types, :treasure_lots, :magic_items
+  attr_reader :treasure_types, :only_coins, :divisor, :treasure_lots, :magic_items
 
-  def initialize(treasure_types)
-    @treasure_types = treasure_types
+  def initialize(treasure_types, only_coins: false)
+    @treasure_types, @divisor = treasure_types.split("/", 2)
+    @divisor ||= 1
+    @divisor = @divisor.to_i
+    @only_coins = only_coins
     @treasure_lots = []
-    treasure_types.each_char(&method(:roll_for_type))
+    @treasure_types.each_char(&method(:roll_for_type))
+    treasure_lots.delete_if { |lot| lot.amount.zero? }
 
     magic_items_by_rarity = { common: 0, uncommon: 0, rare: 0, very_rare: 0, legendary: 0 }
-    treasure_types.each_char { |type| roll_for_magic_items!(magic_items_by_rarity, type) }
+    @treasure_types.each_char { |type| roll_for_magic_items!(magic_items_by_rarity, type) }
     @magic_items = TTMagicItems.new(**magic_items_by_rarity)
   end
 
   def to_s
-    average_value = @treasure_types.chars.sum { |type| self.class.treasure_table[type][:average_value] }
+    average_value = @treasure_types.chars.sum { |type| self.class.treasure_table[type][:average_value] } / divisor
     return "Average treasure: #{average_value}gp\nNo treasure." if @treasure_lots.empty?
 
     treasures_by_group = @treasure_lots.group_by(&:group_attributes)
@@ -87,7 +91,9 @@ class Treasure
       dice_string = treasure_data[:"#{component}_amount"]
       amount_rolled = roll_dice(dice_string)
       amount_rolled.times do
-        treasure_lots << roll_for_lot(component)
+        lot = roll_for_lot(component)
+        lot = roll_for_lot(component) while only_coins && lot.weight > 1
+        treasure_lots << (lot / divisor)
       end
     end
 
@@ -95,7 +101,9 @@ class Treasure
     if roll_dice("#{gems_chance}%").positive?
       amount_rolled = roll_dice(treasure_data[:gem_amount])
       amount_rolled.times do
-        treasure_lots << roll_for_lot(treasure_data[:gem_type])
+        lot = roll_for_lot(treasure_data[:gem_type])
+        lot = roll_for_lot(treasure_data[:gem_type]) while only_coins && lot.weight > 1
+        treasure_lots << (lot / divisor)
       end
     end
 
@@ -103,7 +111,7 @@ class Treasure
     if roll_dice("#{jewelry_chance}%").positive? # rubocop:disable Style/GuardClause
       amount_rolled = roll_dice(treasure_data[:jewelry_amount])
       amount_rolled.times do
-        treasure_lots << roll_for_lot(treasure_data[:jewelry_type])
+        treasure_lots << (roll_for_lot(treasure_data[:jewelry_type]) / divisor)
       end
     end
   end
@@ -118,6 +126,10 @@ class Treasure
       next if roll_dice(chance).zero?
 
       quantity = roll_dice(dice_string)
+      remainder = quantity % divisor
+      extra = rand(divisor) < remainder ? 1 : 0
+      quantity = (quantity / divisor).to_i + extra
+
       magic_items_by_rarity[rarity.to_sym] += quantity
     end
   end
@@ -147,7 +159,7 @@ class Treasure
     when "regalia"
       roll_table(SpecialTreasureTables::REGALIA_GOODS_TABLE)
     else
-      puts "Unknown lot type: #{type.inspect}"
+      raise "Unknown lot type: #{type.inspect}"
     end.roll
   end
 end
