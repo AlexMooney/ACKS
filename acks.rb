@@ -163,10 +163,13 @@ class Acks
 
   def henchmen
     prompt = TTY::Prompt.new
-    num = prompt.ask("What market class are you in? (1-6)", convert: :int, default: 1, min: 1, max: 6)
-    return if num.nil?
+    market_class = prompt.ask("What market class are you in? (1-6)", convert: :int, default: 1, min: 1, max: 6)
+    return if market_class.nil?
 
-    henchmen = Henchmen.new(market_class: num)
+    minimum_level = prompt.ask("Minimum level to show? (0)", convert: :int, default: 0, min: 0, max: 4)
+    return if minimum_level.nil?
+
+    henchmen = Henchmen.new(market_class:, minimum_level:)
     puts henchmen
   end
 
