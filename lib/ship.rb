@@ -8,7 +8,7 @@ class Ship
 
   def initialize(flag:)
     @flag = flag
-    @cargo = {}
+    @cargo ||= {}
     assign_artillery!
     generate_captain!
   end

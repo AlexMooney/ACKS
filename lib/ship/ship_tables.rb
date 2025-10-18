@@ -2,7 +2,8 @@
 
 class Ship
   module ShipTables
-    RANDOM_FLAG_SYRNASOS = { # TODO: name generation
+    # TODO: ship name generation
+    RANDOM_FLAG_SYRNASOS = {
       2 => "Northern Argollëan",
       3 => "Rornish",
       4 => "Corcanoan",
@@ -16,6 +17,18 @@ class Ship
       12 => "Tirenean",
     }.freeze
 
+    RANDOM_FLAG_CELDOREA = {
+      2 => "Northern Argollëan",
+      3 => "Rornish",
+      4 => "Jutlandic",
+      5 => "Somirean",
+      8 => "Celdorean",
+      9 => "Syrnasan",
+      10 => "Opelenean",
+      11 => "Kemeshi",
+      12 => "Nicean",
+    }.freeze
+
     require_relative "../merchant_mariners"
     PASSENGER_TYPE_BY_ROLL = {
       6 => Commoners,
@@ -25,7 +38,7 @@ class Ship
 
     MERCHANT_CAPTAIN_CLASS_TABLE = {
       10 => "Venturer",
-      12 => "Explorers",
+      12 => "Explorer",
       14 => "Fighter",
       16 => "Thief",
       18 => "Bard",
@@ -35,11 +48,20 @@ class Ship
 
     NAVAL_CAPTAIN_CLASS_TABLE = {
       11 => "Fighter",
-      15 => "Explorers",
+      15 => "Explorer",
       16 => "Venturer",
       17 => "Thief",
       18 => "Bard",
       19 => "Barbarian",
+      20 => nil,
+    }.freeze
+
+    PIRATE_CAPTAIN_CLASS_TABLE = {
+      8 => "Fighter",
+      11 => "Barbarian",
+      14 => "Explorer",
+      15 => "Ruingaurd",
+      16 => "Venturer",
       20 => nil,
     }.freeze
   end
