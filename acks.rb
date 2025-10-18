@@ -54,7 +54,13 @@ class Acks
         menu.choice(ethnicity.capitalize, ethnicity)
       end
     end
-    puts Character.new(level, class_type:, character_class:, ethnicity:)
+    sex = TTY::Prompt.new.select("Sex", filter: true) do |menu|
+      menu.choice("Random based on class", nil)
+      menu.choice("Male", "male")
+      menu.choice("Female", "female")
+    end
+
+    puts Character.new(level, class_type:, character_class:, ethnicity:, sex:)
   end
 
   def merchant_mariners

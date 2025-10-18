@@ -22,7 +22,7 @@ class Character
       bonuses = STATS.filter_map do |stat|
         stat = stat.downcase
         bonus = send("#{stat}_bonus")
-        "#{stat.upcase} #{bonus >= 0 ? '+' : ''}#{bonus}" if bonus != 0
+        "#{stat} #{send(stat.downcase)}#{bonus >= 0 ? " (+#{bonus})" : "(#{bonus})" if bonus != 0}"
       end
       bonuses.join(", ")
     end

@@ -11,14 +11,14 @@ describe Character do
     assert_instance_of Character::Stats, result.stats
     assert_instance_of String, result.name
     assert_instance_of String, result.alignment
-    assert_instance_of String, result.description
+    assert_instance_of Array, result.descriptions
   end
 
   it "handles every ethnicity" do
     not_implemented_names = %w[krysean kushtu shebatean skysos]
     Character::HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.each_key do |ethnicity|
       character = Character.new(2, ethnicity:)
-      assert_match(/#{ethnicity}/i, character.description)
+      assert_match(/#{ethnicity}/i, character.descriptions.join(" "))
       refute_match(/\ANot Implemented/, character.name) unless not_implemented_names.include?(ethnicity)
     end
   end

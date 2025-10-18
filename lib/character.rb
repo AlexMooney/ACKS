@@ -6,20 +6,30 @@ class Character
   include ClassTables
   include Names
 
-  attr_accessor :level, :title, :character_class, :alignment, :sex, :name, :stats, :description, :magic_items_by_rarity
+  attr_accessor :level, :title, :character_class, :stats, :template, :ethnicity
+  attr_accessor :alignment, :sex, :name, :descriptions, :magic_items_by_rarity
 
-  def initialize(level, title = nil, class_type: nil, character_class: nil, ethnicity: nil, magic_items: true)
+  def initialize(level, title = nil, class_type: nil, character_class: nil, ethnicity: nil, sex: nil, magic_items: true)
     @level = level
     @title = title # TODO: default class level titles
     if level.positive?
-      class_type ||= roll_table(CLASS_TYPE)
+      if class_type.nil? && character_class.nil?
+        class_type = roll_table(CLASS_TYPE)
+      elsif class_type.nil?
+        class_type = CLASS_BY_TYPE.detect do |type, class_table|
+          type if class_table.value?(character_class)
+        end&.first
+        raise "Didn't find a class type for class #{character_class}." unless class_type
+      end
       @character_class = character_class || roll_table(CLASS_BY_TYPE[class_type])
+      @template = roll_dice("3d6")
     else
       class_type = "normal_man"
       @character_class = "Normal Man"
     end
     @alignment = roll_table(RANDOM_ALIGNMENT)
-    @sex = roll_table(SEX_BY_CLASS[character_class])
+    sex ||= roll_table(SEX_BY_CLASS[@character_class])
+    @sex = sex
     ethnicity ||= HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys.sample
     if ["northern argollëan", "dwarven"].include?(ethnicity.downcase)
       ethnicity = HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys.sample
@@ -29,17 +39,11 @@ class Character
     elsif @character_class.start_with? "Elven"
       ethnicity = "elven"
     end
+    @ethnicity = ethnicity
     @name = random_name(ethnicity, sex)
-    @stats = Stats.new(STAT_PREFERENCE_BY_CLASS_TYPE[class_type])
-    @description = if HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.key?(ethnicity)
-                     if level > 1
-                       human(ethnicity, stats, sex, alignment)
-                     else
-                       basic_human(ethnicity, stats, alignment)
-                     end
-                   else
-                     "Not implemented yet: '#{ethnicity}'"
-                   end
+    stat_preference = STAT_PREFERENCE_BY_CLASS[@character_class] || STAT_PREFERENCE_BY_CLASS_TYPE[class_type]
+    @stats = Stats.new(stat_preference)
+    @descriptions = generate_descriptions
 
     @magic_items_by_rarity = {}
     generate_magic_items! if magic_items
@@ -53,10 +57,10 @@ class Character
     end
     magic_item_list = nil if magic_item_list.empty?
     [
-      "#{[title, name].compact.join(' ')}, #{character_class} level #{level}#{stat_summary}",
-      "  #{description}",
+      "#{[title, name].compact.join(' ')}, #{character_class} level #{level}#{stat_summary} template: #{template}",
+      descriptions,
       magic_item_list,
-    ].compact.join("\n")
+    ].flatten.compact.join("\n")
   end
 
   def <=>(other)
@@ -103,6 +107,14 @@ class Character
     return if count_by_rarity.empty?
 
     @magic_items_by_rarity = TTMagicItems.new(**count_by_rarity).magic_items_by_rarity
+  end
+
+  def generate_descriptions
+    if HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.key?(ethnicity)
+      human_descriptions(ethnicity, stats, sex, alignment)
+    else
+      ["Not implemented yet: '#{ethnicity}'"]
+    end
   end
 
   def stat_summary

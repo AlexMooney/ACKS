@@ -3,10 +3,11 @@
 class Henchmen
   include Tables
 
-  attr_reader :market_class, :henchmen, :henchmen_by_day
+  attr_reader :market_class, :minimum_level, :henchmen, :henchmen_by_day
 
-  def initialize(market_class:)
+  def initialize(market_class:, minimum_level: 0)
     @market_class = market_class
+    @minimum_level = minimum_level
     @henchmen = []
     @henchmen_by_day = Hash.new { |hash, key| hash[key] = [] }
     roll_henchmen!
@@ -15,7 +16,7 @@ class Henchmen
 
   def to_s
     henchmen_by_day.keys.sort.flat_map do |day|
-      ["Day #{day}", henchmen_by_day[day].map(&:to_s)]
+      ["#### Day #{day}", henchmen_by_day[day].map(&:to_s)]
     end.join("\n")
   end
 
@@ -30,15 +31,16 @@ class Henchmen
   def roll_henchmen!
     henchmen_by_level = {}
     5.times do |level|
+      next if level < minimum_level
+
       henchmen_by_level[level] = roll_dice(HENCHMEN_DICE_BY_MARKET_CLASS_AND_LEVEL[@market_class][level])
     end
     henchmen_by_level.each do |level, count|
       next if count.zero?
 
       count.times do
-        @henchmen << Character.new(level,
-                                   ethnicity: roll_table(Ship::ShipTables::RANDOM_FLAG_SYRNASOS).downcase,
-                                   magic_items: false)
+        ethnicity = roll_table(Ship::ShipTables::RANDOM_FLAG_CELDOREA, roll_dice("2d6")).downcase
+        @henchmen << Character.new(level, ethnicity:, magic_items: false)
       end
     end
   end

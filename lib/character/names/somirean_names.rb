@@ -3,15 +3,6 @@
 class Character
   module Names
     module SomireanNames
-      # Somireans are given names in Classical Somirean based on the configuration of the planets at their time of
-      # birth. The selection process seems random to those ignorant of these ancient astrological traditions.
-      # Noble-caste Somireans also carry hereditary surnames, usually ending in -ja (“descendant of ”) or -yata (“heir
-      # of ”) and derived from the names of the heroes and conquerors of Somirean mythology (e.g. “Artashumara Ramaja”
-      # means Artashumara, descendant of Rama”). Lower-caste Somireans do not carry hereditary family names. They will
-      # simply append their profession, their village, or their fathers’ name after their given name (e.g. “Kumara Puru”
-      # would be “Kumara, son of Puru”).
-      # Male Names: Artashumara, Bindusara, Kumara, Mahinda, Narasimha, Puru, Rama, Vardhana, Xandrama, Yashodharman
-      # Female Names: Asmali, Devita, Havati, Kavasha, Nitama, Preena, Skandara, Tadukhepa, Vashi, Yavi
       SOMIREAN_SURNAME_TYPE = %w[
         noble profession profession profession profession profession villiage villiage patronym patronym patronym
       ].freeze

@@ -23,7 +23,12 @@ class Character
 
     RANDOM_ALIGNMENT = { 2 => "Lawful", 5 => "Neutral", 6 => "Chaotic" }.freeze
 
-    def human(ethnicity, stats, sex, alignment)
+    BASIC_HUMAN_CATEGORY = {
+      7 => "belongings",
+      20 => "appearance",
+    }.freeze
+
+    def human_descriptions(ethnicity, stats, sex, alignment)
       alignment ||= roll_table(RANDOM_ALIGNMENT)
 
       build_roll = roll_dice("2d6 + #{2 * stats.str_bonus}")
@@ -57,33 +62,22 @@ class Character
       hair_color = roll_table(HUMAN_HAIR_COLOR_BY_ETHNICITY[ethnicity])
       hair_texture = roll_table(HUMAN_HAIR_TEXTURE_BY_ETHNICITY[ethnicity])
 
-      features = roll_features(stats)
+      features = roll_features(stats, sex)
+      category = roll_table(BASIC_HUMAN_CATEGORY)
+      if category == "belongings"
+        features << roll_belongings(alignment)
+      end
 
       sex = male?(sex) ? "Male" : "Female"
 
-      "Alignment: #{alignment.capitalize}, Sex: #{sex}, Features: #{features}, Build: #{build}, " \
-        "Height: #{height_string}, Weight: #{weight_string}, Eyes: #{eye_color}, " \
-        "Skin Color: #{skin_color}, Hair: #{hair_texture} #{hair_color}, Ethnicity: #{ethnicity.capitalize}"
+      [
+        "  Alignment: #{alignment.capitalize}, Sex: #{sex}, Features: #{features.join(", ")}",
+        "  Build: #{build}, Height: #{height_string}, Weight: #{weight_string}",
+        "  Ethnicity: #{ethnicity.capitalize}, Eyes: #{eye_color}, Skin Color: #{skin_color}, Hair: #{hair_texture} #{hair_color}",
+      ]
     end
 
-    BASIC_HUMAN_CATEGORY = {
-      7 => "belongings",
-      20 => "appearance",
-    }.freeze
-    def basic_human(ethnicity, stats, alignment)
-      alignment ||= roll_table(RANDOM_ALIGNMENT)
-      category = roll_table(BASIC_HUMAN_CATEGORY)
-      feature = if category == "belongings"
-                  roll_belongings(alignment)
-                elsif category == "appearance"
-                  roll_features(stats)
-                else
-                  raise "Unknown basic human category: #{category}"
-                end
-      "Alignment: #{alignment}, #{category.capitalize}: #{feature}, Ethnicity: #{ethnicity.capitalize}"
-    end
-
-    def roll_features(stats)
+    def roll_features(stats, sex)
       features = []
       features << roll_table(NEUTRAL_PHYSICAL_FEATURES)
       if stats.cha_bonus.negative?
@@ -96,7 +90,15 @@ class Character
         features << roll_table(POSITIVE_PHYSICAL_FEATURES)
         features << roll_table(POSITIVE_PHYSICAL_FEATURES)
       end
-      features.join(" & ")
+      features.map do |feature|
+        if feature.include?("/")
+          type, results = feature.split(" - ")
+          result = results.split("/")[male?(sex) ? 0 : 1].strip
+          "#{type} - #{result}"
+        else
+          feature
+        end
+      end
     end
 
     def roll_belongings(alignment)
