@@ -10,7 +10,7 @@ class Building
 
     def initialize(size, type)
       @merchant_occupation = random_weighted(Occupant::MERCHANT_OCCUPATIONS)
-      super(size, type)
+      super
     end
 
     def generate_occupants

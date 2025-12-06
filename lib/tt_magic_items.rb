@@ -29,12 +29,18 @@ class TTMagicItems
     @magic_items_by_rarity[:common] = generate_items("common", common) if common.positive?
     @magic_items_by_rarity[:uncommon] = generate_items("uncommon", uncommon) if uncommon.positive?
     @magic_items_by_rarity[:rare] = generate_items("rare", rare) if rare.positive?
-    @magic_items_by_rarity[:very_rare] = generate_items("very_rare", rare) if very_rare.positive?
+    @magic_items_by_rarity[:very_rare] = generate_items("very_rare", very_rare) if very_rare.positive?
     @magic_items_by_rarity[:legendary] = generate_items("legendary", legendary) if legendary.positive?
     @magic_items_by_rarity.each_value do |items|
       items.map! do |item|
         item.gsub(/Spell Scroll \((\d+) levels?\)/) do
           SpellScroll.new(::Regexp.last_match(1).to_i).roll_details
+        end
+        item.gsub(/Scroll of Creature Warding/) do
+          MagicItems::ScrollCreatureWarding.new.roll_details
+        end
+        item.gsub(/ versus X/) do
+          " versus #{MagicItems::ScrollCreatureWarding.new.roll_details.sub("Scroll of Warding vs. ", "")}"
         end
       end
     end

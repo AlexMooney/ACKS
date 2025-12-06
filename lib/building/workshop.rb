@@ -10,7 +10,7 @@ class Building
 
     def initialize(size, type)
       @artisan_type = random_weighted(Occupant::ARTISAN_SUBTYPES)
-      super(size, type)
+      super
     end
 
     def generate_occupants

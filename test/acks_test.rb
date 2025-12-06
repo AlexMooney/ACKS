@@ -100,6 +100,20 @@ describe Acks do
     end
   end
 
+  describe "domain_encounters" do
+    it "puts a domain encounter" do
+      output = capture_io do
+        def $stdout.ioctl(*) = 80
+
+        Acks.new.domain_encounters 2, "scrubland_sparse", 15, 14
+      end
+
+      output = output.join
+      assert_match(/\ABorderlands scrubland, sparse with 15 hexes.$/, output)
+      assert_match(/^Chance of encounter per day is 14.0%.  Rolling 14 days.$/, output)
+    end
+  end
+
   describe "weather" do
     it "puts weather for a month" do
       output = capture_io do

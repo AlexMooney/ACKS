@@ -5,30 +5,31 @@ require "csv"
 require_relative "monsters"
 require_relative "wilderness_monster"
 
-TERRAIN_TYPES = %w[
-  barrens_rocky
-  barrens_tundra
-  desert_any
-  forest_deciduous
-  forest_tiaga
-  grassland_farmland
-  grassland_savana
-  grassland_steppe
-  hills_any
-  jungle_any
-  mountains_forested
-  mountains_snowy
-  mountains_volcanic
-  river_desert
-  river_other
-  scrubland_dense
-  scrubland_sparse
-  swamp_any
-  sea_monster
-  sea_civilized
-].freeze # TODO: deal with river_jungle which uses same monsters but different civilized
 class Terrain
   include Tables
+
+  TERRAIN_TYPES = %w[
+    barrens_rocky
+    barrens_tundra
+    desert_any
+    forest_deciduous
+    forest_tiaga
+    grassland_farmland
+    grassland_savana
+    grassland_steppe
+    hills_any
+    jungle_any
+    mountains_forested
+    mountains_snowy
+    mountains_volcanic
+    river_desert
+    river_other
+    scrubland_dense
+    scrubland_sparse
+    swamp_any
+    sea_monster
+    sea_civilized
+  ].freeze # TODO: deal with river_jungle which uses same monsters but different civilized
 
   attr_reader :name, :table_by_rarity, :missing_monsters
 

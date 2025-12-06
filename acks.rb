@@ -20,15 +20,19 @@ class Acks
       key(:common).ask("Numebr of Common magic items:", convert: :int)
       key(:uncommon).ask("Number of Uncommon magic items:", convert: :int)
       key(:rare).ask("Number of Rare magic items:", convert: :int)
+      key(:very_rare).ask("Number of Very Rare magic items:", convert: :int)
+      key(:legendary).ask("Number of Legendary magic items:", convert: :int)
     end)
   end
 
-  def magic_items(common:, uncommon: 0, rare: 0)
+  def magic_items(common:, uncommon: 0, rare: 0, very_rare: 0, legendary: 0)
     common = common.to_i
     uncommon = uncommon.to_i
     rare = rare.to_i
+    very_rare = very_rare.to_i
+    legendary = legendary.to_i
 
-    puts TTMagicItems.new(common:, uncommon:, rare:)
+    puts TTMagicItems.new(common:, uncommon:, rare:, very_rare:, legendary:)
   end
 
   def character
@@ -121,6 +125,48 @@ class Acks
     end
   end
 
+  def domain_encounters_prompt
+    prompt = TTY::Prompt.new
+    choices = %w[Civilized Borderlands Outlands Unsettled].each_with_index.to_h
+    danger_level = prompt.select("Choose a danger level:", choices, filter: true, convert: :int, per_page: 15)
+    danger_level += 1 # Convert to 1-based index
+    terrain = prompt.select("What terrain type is the domain?",
+                            Terrain::TERRAIN_TYPES, filter: true, per_page: 15, default: "scrubland_sparse")
+    hexes = prompt.ask("How many hexes in the domain?", convert: :int, default: 39)
+    days = prompt.ask("How many days to generate?", convert: :int, default: 28)
+
+    domain_encounters(danger_level, terrain, hexes, days)
+  end
+
+  def domain_encounters(danger_level, terrain, hexes, days)
+    puts Encounters::WildernessEncounters.new(danger_level).domain_encounters(terrain, hexes, days)
+  end
+
+  def saesh_encounters_prompt
+    prompt = TTY::Prompt.new
+    days = prompt.ask("How many days to generate?", convert: :int, default: 28)
+    puts "Saesh's Scrublands (3)"
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 3, days)
+    puts ""
+    puts "Saesh's Swamp (1)"
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("swamp_any", 3, days)
+    puts ""
+    puts "Saesh's Coast (2)"
+    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(2, days)
+    puts ""
+    puts "Fort Ardana (1)"
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 1, days)
+    puts ""
+    puts "Ardana's Coast (1)"
+    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(1, days)
+    puts ""
+    puts "Fort Haftvad (1)"
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 1, days)
+    puts ""
+    puts "Haftvad's Coast (1)"
+    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(1, days)
+  end
+
   def treasure_prompt
     prompt = TTY::Prompt.new
     treasure_types = prompt.ask("Enter treasure types (e.g., 'R' or 'AAAC'):")
@@ -139,19 +185,14 @@ class Acks
     prompt.say("Weather modifiers are found in JJ page 41.")
     day_modifier = prompt.ask("Day temperature modifier:", convert: :int, default: 0)
     night_modifier = prompt.ask("Night temperature modifier:", convert: :int, default: 0)
-    precipitation = prompt.ask("Precipitation modifier:", convert: :int, default: 0)
-    wind = prompt.ask("Wind modifier:", convert: :int, default: 0)
+    precipitation_modifier = prompt.ask("Precipitation modifier:", convert: :int, default: 0)
+    wind_modifier = prompt.ask("Wind modifier:", convert: :int, default: 0)
 
-    weather(day_modifier, night_modifier, precipitation, wind)
+    weather(day_modifier, night_modifier, precipitation_modifier, wind_modifier)
   end
 
-  def weather(day_modifier, night_modifier, precipitation, wind, prevailing = nil)
-    day_modifier = day_modifier.to_i
-    night_modifier = night_modifier.to_i
-    precipitation = precipitation.to_i
-    wind = wind.to_i
-
-    puts Weather.new(day_modifier:, night_modifier:, precipitation:, wind:, prevailing:).roll
+  def weather(day_modifier, night_modifier, precipitation_modifier, wind_modifier)
+    puts Weather.new(day_modifier:, night_modifier:, precipitation_modifier:, wind_modifier:).roll
   end
 
   def spell_scrolls
@@ -183,16 +224,27 @@ class Acks
     binding.irb # rubocop:disable Lint/Debugger
   end
 
+  def potion_appearances
+    names = ["potion of eagle eyes", "potion of cure light injury", "potion of Giant strength", "potion of delay disease", "potion of simmering rage", "Potion of Ogre Strength", "Potion of arcane armor", "Potion of deathly appearance", "Oil of Excavation", "Potion of Clairaudiency", "Potion of Clairvoyancy", "Potion of Cure Serious Injury", "Potion of Deflect Ordinary Missiles", "Potion of Growth", "Potion of Remove Curse", "potion of discern invisible", "potion of energy invulnerability", "potion of delay disease", "potion of water breathing", "Potion of arcane armor"]
+    names.map! { |n| n.split.map(&:capitalize).join(" ").sub(/\s+Of\s+/, " of ") }
+    names.sort!
+    potions = MagicItems::Potions.new
+    names.each { |n| puts "#{n}: #{potions.appearance_by_potion(n)}" }
+  end
+
   def start
     loop do
       puts
       prompt = TTY::Prompt.new
       command = prompt.select("Choose a command:", filter: true, per_page: 15) do |menu|
+        menu.choice("xx potion appearances", "potion_appearances")
         menu.choice("Random Treasure", "treasure_prompt")
         menu.choice("Random Magic Items", "magic_item_prompt")
         menu.choice("Random Character", "character")
         menu.choice("Henchmen at Market", "henchmen")
-        menu.choice("Random Encounter", "encounter_prompt")
+        menu.choice("Detailed Encounter", "encounter_prompt")
+        menu.choice("Random Domain Encounters", "domain_encounters_prompt")
+        menu.choice("Saesh Domain Encounters", "saesh_encounters_prompt")
         menu.choice("Random Nautical Encounter List", "nautical_encounters_prompt")
         menu.choice("Random Weather", "weather_prompt")
         menu.choice("Merchant Mariners", "merchant_mariners")

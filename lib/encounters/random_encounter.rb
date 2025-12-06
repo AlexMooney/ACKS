@@ -2,6 +2,7 @@
 
 module Encounters
   class RandomEncounter
+    include SpellCheck
     include Tables
 
     DANGER_LEVELS = %w[road_only Civilized Borderlands Outlands Unsettled].freeze
