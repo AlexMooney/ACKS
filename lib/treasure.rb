@@ -52,9 +52,9 @@ class Treasure
     @treasure_types.each_char(&method(:roll_for_type))
     treasure_lots.delete_if { |lot| lot.amount.zero? }
 
-    magic_items_by_rarity = { common: 0, uncommon: 0, rare: 0, very_rare: 0, legendary: 0 }
-    @treasure_types.each_char { |type| roll_for_magic_items!(magic_items_by_rarity, type) }
-    @magic_items = TTMagicItems.new(**magic_items_by_rarity)
+    @magic_items_by_rarity = { common: 0, uncommon: 0, rare: 0, very_rare: 0, legendary: 0 }
+    @treasure_types.each_char { |type| roll_for_magic_items!(type) }
+    @magic_items = TTMagicItems.new(**@magic_items_by_rarity)
   end
 
   def to_s
@@ -72,6 +72,7 @@ class Treasure
     table = TTY::Table.new(["Treasure", "Value Subtotal", "Weight Subtotal"], treasure_table_data, width: 100)
 
     ["Average treasure: #{average_value}gp",
+     "Magic items by rarity: #{@magic_items_by_rarity}",
      "Treasure worth #{running_value_total}gp (#{(100 * running_value_total / average_value).round}%)",
      table.render_with(MarkdownBorder),
      "",
@@ -116,7 +117,7 @@ class Treasure
     end
   end
 
-  def roll_for_magic_items!(magic_items_by_rarity, type)
+  def roll_for_magic_items!(type)
     # "100% 5d6 common, 100% 4d6 uncommon, 90% 3d6 rare, 80% 2d4 very_rare, 60% 1d3 legendary"
     magic_item_string = self.class.treasure_table.dig(type, :magic_items)
     return unless magic_item_string
@@ -130,7 +131,7 @@ class Treasure
       extra = rand(divisor) < remainder ? 1 : 0
       quantity = (quantity / divisor).to_i + extra
 
-      magic_items_by_rarity[rarity.to_sym] += quantity
+      @magic_items_by_rarity[rarity.to_sym] += quantity
     end
   end
 

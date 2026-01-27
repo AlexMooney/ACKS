@@ -5,6 +5,9 @@ class Character
   include Descriptions
   include ClassTables
   include Names
+  include SpellCheck
+
+  SPELLING_ETHNICITIES = (HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys + ["dwarven", "elven"]).freeze
 
   attr_accessor :level, :title, :character_class, :stats, :template, :ethnicity
   attr_accessor :alignment, :sex, :name, :descriptions, :magic_items_by_rarity
@@ -39,7 +42,7 @@ class Character
     elsif @character_class.start_with? "Elven"
       ethnicity = "elven"
     end
-    @ethnicity = ethnicity
+    @ethnicity = spell_check(ethnicity, SPELLING_ETHNICITIES)
     @name = random_name(ethnicity, sex)
     stat_preference = STAT_PREFERENCE_BY_CLASS[@character_class] || STAT_PREFERENCE_BY_CLASS_TYPE[class_type]
     @stats = Stats.new(stat_preference)

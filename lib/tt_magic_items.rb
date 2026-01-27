@@ -20,7 +20,14 @@ class TTMagicItems
       end
       @item_weights_by_rarity_and_type[rarity][type]
     end
+
+    def one_item_by_rarity_and_type(rarity, type)
+      item_weights = item_weights_by_rarity_and_type(rarity, type)
+      new.roll_weighted(item_weights)
+    end
   end
+
+  include Tables
 
   attr_reader :magic_items_by_rarity
 
@@ -63,17 +70,6 @@ class TTMagicItems
       item_weights = self.class.item_weights_by_rarity_and_type(rarity, type)
       roll_weighted(item_weights)
     end.sort
-  end
-
-  def roll_weighted(value_by_weight)
-    total_weight = value_by_weight.values.sum
-    roll = rand(1..total_weight)
-    cumulative_weight = 0
-    value_by_weight.each do |value, weight|
-      cumulative_weight += weight
-      return value if roll <= cumulative_weight
-    end
-    raise "Unexpected roll weight"
   end
 end
 

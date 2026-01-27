@@ -20,6 +20,17 @@ module Tables
     end
   end
 
+  def roll_weighted(value_by_weight)
+    total_weight = value_by_weight.values.sum
+    roll = rand(1..total_weight)
+    cumulative_weight = 0
+    value_by_weight.each do |value, weight|
+      cumulative_weight += weight
+      return value if roll <= cumulative_weight
+    end
+    raise "Unexpected roll weight"
+  end
+
   def roll_dice(dice_string)
     return dice_string if dice_string.is_a? Numeric
     return 0 if dice_string.nil? || dice_string.empty?

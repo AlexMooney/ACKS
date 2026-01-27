@@ -118,12 +118,13 @@ module Encounters
       20.times do |i|
         roll = rand(1..20)
         danger_label = ""
-        while roll == 1 && danger_level < 4
+        current_danger_level = danger_level
+        while roll == 1 && current_danger_level < 4
           danger_label += "+"
-          danger_level += 1
+          current_danger_level += 1
           roll = rand(1..20)
         end
-        result = roll_table(ENCOUNTER_TYPE_BY_DANGER_LEVEL[danger_level], roll)
+        result = roll_table(ENCOUNTER_TYPE_BY_DANGER_LEVEL[current_danger_level], roll)
         result = case result
                  when /\ADangerous Terrain Encounter\z/
                    "#{result}: #{roll_table(DANGEROUS_TERRAIN_ENCOUNTERS, rand(1..12))}"
@@ -134,7 +135,7 @@ module Encounters
                  when /\ACivilized Encounter\z/
                    "#{result}: #{civilized_encounter(terrain_name)}"
                  when /\AMonster Encounter\z/
-                   rarity = roll_rarity(danger_level)
+                   rarity = roll_rarity(current_danger_level)
                    "#{result} (#{rarity}): #{monster_encounter(terrain, rarity)}"
                  else
                    result

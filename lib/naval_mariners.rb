@@ -12,7 +12,7 @@
 class NavalMariners
   include Tables
 
-  attr_accessor :number_of_ships, :ship_type, :ships, :commodore, :flag
+  attr_accessor :number_of_ships, :ships, :commodore, :flag
 
   SHIP_TYPES_BY_ROLL = {
     1 => Ship::Galley1,
@@ -27,7 +27,6 @@ class NavalMariners
   LAIR_CHANCE = 0.25
   def initialize(flag: nil, lair: nil)
     @flag = flag || roll_table(Ship::RANDOM_FLAG_SYRNASOS)
-    @ship_type = roll_table(SHIP_TYPES_BY_ROLL)
     @lair = (lair.nil? ? rand < LAIR_CHANCE : lair)
 
     @number_of_ships = (@lair ? roll_dice("1d6!") : 1)
@@ -47,7 +46,7 @@ class NavalMariners
 
   def to_s
     if @commodore
-      "#{flag} fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships.map(&:to_s).join("\n")}"
+      "#{flag} fleet of #{@number_of_ships} ships\n#{@commodore}\n\n#{ships.map(&:to_s).join("\n")}"
     else
       "#{flag} #{ships.first.ship_class}\n#{ships.first}"
     end

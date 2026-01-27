@@ -5,10 +5,10 @@ class Character
     module Human
       HUMAN_BUILD = {
         1 => "Small",
-        4 => "Slim",
-        8 => "Average",
-        10 => "Broad",
-        12 => "Large",
+        3 => "Slim",
+        7 => "Average",
+        11 => "Broad",
+        13 => "Large",
         18 => "Huge",
       }.freeze
 

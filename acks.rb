@@ -107,6 +107,24 @@ class Acks
          end)
   end
 
+  def wilderness_encounters_prompt
+    Encounters::WildernessEncounters.new(2, road: false).wilderness_encounters("scrubland_sparse")
+
+    prompt = TTY::Prompt.new
+    choices = %w[Civilized Borderlands Outlands Unsettled].each_with_index.to_h
+    danger_level = prompt.select("Choose a danger level:", choices, filter: true, convert: :int, per_page: 15)
+    danger_level += 1 # Convert to 1-based index; roads basically subtract 1
+    road = prompt.no?("On a road?")
+    terrain = prompt.select("What terrain type?", Terrain::TERRAIN_TYPES, filter: true, per_page: 15, default: "scrubland_sparse")
+    num = prompt.ask("How many encounters to generate?", convert: :int, default: 20)
+
+    wilderness_encounters(danger_level, road, terrain, num)
+  end
+
+  def wilderness_encounters(danger_level, road, terrain, num)
+    Encounters::WildernessEncounters.new(danger_level, road:).wilderness_encounters(terrain)
+  end
+
   def nautical_encounters_prompt
     prompt = TTY::Prompt.new
     choices = %w[Civilized Borderlands Outlands Unsettled].each_with_index.to_h
@@ -237,6 +255,7 @@ class Acks
       puts
       prompt = TTY::Prompt.new
       command = prompt.select("Choose a command:", filter: true, per_page: 15) do |menu|
+        menu.choice("Debug console", "console")
         menu.choice("xx potion appearances", "potion_appearances")
         menu.choice("Random Treasure", "treasure_prompt")
         menu.choice("Random Magic Items", "magic_item_prompt")
@@ -245,13 +264,13 @@ class Acks
         menu.choice("Detailed Encounter", "encounter_prompt")
         menu.choice("Random Domain Encounters", "domain_encounters_prompt")
         menu.choice("Saesh Domain Encounters", "saesh_encounters_prompt")
+        menu.choice("Random Wilderness Encounter List", "wilderness_encounters_prompt")
         menu.choice("Random Nautical Encounter List", "nautical_encounters_prompt")
         menu.choice("Random Weather", "weather_prompt")
         menu.choice("Merchant Mariners", "merchant_mariners")
         menu.choice("Naval Mariners", "naval_mariners")
         menu.choice("Spell Scrolls", "spell_scrolls")
         menu.choice("Random Building", "building")
-        menu.choice("Debug console", "console")
         menu.choice("Quit")
       end
       break if command == "Quit"
