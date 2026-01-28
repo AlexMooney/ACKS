@@ -1,0 +1,9 @@
+class,max_armor_type,best_armor,base_ac
+Fighter,Heavy Armor,Plate Armor,6
+Explorer,Medium Armor,Chain Mail Armor,4
+Venturer,Medium Armor,Chain Mail Armor,4
+Thief,Light Armor,Leather Armor,2
+Bard,Medium Armor,Chain Mail Armor,4
+Barbarian,Medium Armor,Chain Mail Armor,4
+Mage,None,,0
+Crusader,Heavy Armor,Plate Armor,6
