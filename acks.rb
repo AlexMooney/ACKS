@@ -108,8 +108,6 @@ class Acks
   end
 
   def wilderness_encounters_prompt
-    Encounters::WildernessEncounters.new(2, road: false).wilderness_encounters("scrubland_sparse")
-
     prompt = TTY::Prompt.new
     choices = %w[Civilized Borderlands Outlands Unsettled].each_with_index.to_h
     danger_level = prompt.select("Choose a danger level:", choices, filter: true, convert: :int, per_page: 15)
@@ -122,7 +120,7 @@ class Acks
   end
 
   def wilderness_encounters(danger_level, road, terrain, num)
-    Encounters::WildernessEncounters.new(danger_level, road:).wilderness_encounters(terrain)
+    puts Encounters::WildernessEncounters.new(danger_level, road:).wilderness_encounters(terrain).join("\n")
   end
 
   def nautical_encounters_prompt
@@ -164,25 +162,25 @@ class Acks
     prompt = TTY::Prompt.new
     days = prompt.ask("How many days to generate?", convert: :int, default: 28)
     puts "Saesh's Scrublands (3)"
-    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 3, days)
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 3, days).join("\n")
     puts ""
     puts "Saesh's Swamp (1)"
-    puts Encounters::WildernessEncounters.new(2).domain_encounters("swamp_any", 3, days)
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("swamp_any", 3, days).join("\n")
     puts ""
     puts "Saesh's Coast (2)"
-    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(2, days)
+    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(2, days).join("\n")
     puts ""
     puts "Fort Ardana (1)"
-    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 1, days)
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 1, days).join("\n")
     puts ""
     puts "Ardana's Coast (1)"
-    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(1, days)
+    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(1, days).join("\n")
     puts ""
     puts "Fort Haftvad (1)"
-    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 1, days)
+    puts Encounters::WildernessEncounters.new(2).domain_encounters("scrubland_sparse", 1, days).join("\n")
     puts ""
     puts "Haftvad's Coast (1)"
-    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(1, days)
+    puts Encounters::WildernessEncounters.new(2).littoral_domain_encounters(1, days).join("\n")
   end
 
   def treasure_prompt

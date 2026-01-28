@@ -1,16 +1,16 @@
 name,type,ac,encumbrance,cost,special
-Hide and Fur Armor,Very Light Armor,1,1,10,
-Padded Armor,Very Light Armor,1,1,10,
-Leather Armor,Light Armor,2,2,20,
-Arena Armor Light,Light Armor,2,2,30,Revealing
+Hide and Fur,Very Light Armor,1,1,10,
+Padded,Very Light Armor,1,1,10,
+Leather,Light Armor,2,2,20,
+Light Arena,Light Armor,2,2,30,Revealing
 Ring Mail,Medium Armor,3,3,30,
-Scale Armor,Medium Armor,3,3,30,
-Chain Mail Armor,Medium Armor,4,4,40,
-Laminated Linen Armor,Medium Armor,4,4,40,
-Arena Armor Heavy,Medium Armor,4,4,50,Revealing
-Banded Plate Armor,Heavy Armor,5,5,50,
-Lamellar Armor,Heavy Armor,5,5,50,
-Plate Armor,Heavy Armor,6,6,60,Scarce
+Scale,Medium Armor,3,3,30,
+Chain Mail,Medium Armor,4,4,40,
+Laminated Linen,Medium Armor,4,4,40,
+Heavy Arena,Medium Armor,4,4,50,Revealing
+Banded Plate,Heavy Armor,5,5,50,
+Lamellar,Heavy Armor,5,5,50,
+Plate,Heavy Armor,6,6,60,Scarce
 Shield,Shield,1,1,10,
 Shield Mirror,Shield,1,1,250,
 Helmet Light,Very Light Armor,0,0.17,5,

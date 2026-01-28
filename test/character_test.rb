@@ -27,4 +27,20 @@ describe Character do
     character = Character.new(0)
     assert_match(/Normal Man/, character.to_s)
   end
+
+  it "calculates armor class based on character class" do
+    character = Character.new(5, character_class: "Barbarian")
+    assert_equal 4, character.base_ac
+    assert_equal "Chain Mail", character.best_armor
+    assert_equal "Medium Armor", character.max_armor_type
+  end
+
+  it "generates combat stats line" do
+    character = Character.new(2, character_class: "Fighter")
+
+    assert_match(/\AHP: \d+, /, character.combat_stats_line)
+    assert_match(/AC: \d+ \(Plate \+1/, character.combat_stats_line)
+    assert_match(/Melee Attack: \d+\+, 1d6\+\d, /, character.combat_stats_line)
+    assert_match(/Ranged Attack: \d+\+, 1d6\+\d\z/, character.combat_stats_line)
+  end
 end

@@ -115,7 +115,7 @@ module Encounters
     def wilderness_encounters(terrain)
       terrain_name = terrain
       terrain = Terrain.new(terrain_name)
-      20.times do |i|
+      20.times.map do |i|
         roll = rand(1..20)
         danger_label = ""
         current_danger_level = danger_level
@@ -142,7 +142,7 @@ module Encounters
                  end
         result += " (danger #{danger_label})" unless danger_label.empty?
 
-        puts "- [ ] #{i + 1}: #{result}"
+        "- [ ] #{i + 1}: #{result}"
       end
     end
 

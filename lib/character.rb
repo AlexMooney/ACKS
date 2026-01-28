@@ -6,6 +6,9 @@ class Character
   include ClassTables
   include Names
   include SpellCheck
+  include Combat
+  include ClassData
+  include ClassThrows
 
   SPELLING_ETHNICITIES = (HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys + ["dwarven", "elven"]).freeze
 
@@ -61,79 +64,10 @@ class Character
     magic_item_list = nil if magic_item_list.empty?
     [
       "#{[title, name].compact.join(' ')}, #{character_class} level #{level}#{stat_summary} template: #{template}",
-      attack_throw_lines,
+      combat_stats_line,
       descriptions,
       magic_item_list,
     ].flatten.compact.join("\n")
-  end
-
-  def base_attack_throw
-    Character::AttackThrows.attack_throw(character_class, level)
-  end
-
-  MASTERWORK_BONUS = 1
-
-  def base_damage_bonus
-    Character::AttackThrows.damage_bonus(character_class, level)
-  end
-
-  def melee_damage_bonus
-    base = base_damage_bonus
-    return nil unless base
-
-    stats.str_bonus + base + MASTERWORK_BONUS
-  end
-
-  def ranged_damage_bonus
-    MASTERWORK_BONUS
-  end
-
-  def melee_attack
-    base = base_attack_throw
-    return nil unless base
-
-    base - stats.str_bonus - MASTERWORK_BONUS
-  end
-
-  def ranged_attack
-    base = base_attack_throw
-    return nil unless base
-
-    base - stats.dex_bonus - MASTERWORK_BONUS
-  end
-
-  SHIELD_CLASSES = %w[Fighter Crusader Explorer Barbarian Bard].freeze
-
-  def base_armor_ac
-    Character::Armor.base_ac(character_class) || 0
-  end
-
-  def uses_shield?
-    SHIELD_CLASSES.include?(character_class)
-  end
-
-  def shield_ac
-    uses_shield? ? (1 + MASTERWORK_BONUS) : 0
-  end
-
-  def armor_class
-    base_armor_ac + MASTERWORK_BONUS + shield_ac + stats.dex_bonus
-  end
-
-  def attack_throw_lines
-    return nil unless base_attack_throw
-
-    [
-      "  AC: #{armor_class}",
-      "  Melee Attack: #{melee_attack}+, #{format_damage_dice(melee_damage_bonus)}",
-      "  Ranged Attack: #{ranged_attack}+, #{format_damage_dice(ranged_damage_bonus)}"
-    ]
-  end
-
-  def format_damage_dice(bonus)
-    return "1d6" if bonus.zero?
-
-    bonus.positive? ? "1d6+#{bonus}" : "1d6#{bonus}"
   end
 
   def <=>(other)

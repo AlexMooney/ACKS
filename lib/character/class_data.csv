@@ -1,0 +1,10 @@
+class,hit_die,max_armor_type,best_armor,base_ac
+Fighter,d8,Heavy Armor,Plate,6
+Explorer,d6,Medium Armor,Chain Mail,4
+Thief,d4,Light Armor,Leather,2
+Mage,d4,None,,0
+Crusader,d6,Heavy Armor,Plate,6
+Venturer,d6,Medium Armor,Chain Mail,4
+Bard,d4,Medium Armor,Chain Mail,4
+Barbarian,d8,Medium Armor,Chain Mail,4
+Normal Man,d4,Medium Armor,Leather,2
