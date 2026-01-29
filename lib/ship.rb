@@ -6,11 +6,11 @@ class Ship
 
   attr_accessor :flag, :crew_size, :cargo, :artillery_pieces, :passenger_type, :passenger_count, :passengers, :captain
 
-  def initialize(flag:)
+  def initialize(flag:, skip_captain: false)
     @flag = flag
     @cargo ||= {}
     assign_artillery!
-    generate_captain!
+    generate_captain! unless skip_captain
   end
 
   def generate_passengers!(dice_expression, multiplier = 1, ethnicity:, passenger_type: nil)
@@ -90,21 +90,39 @@ class Ship
   end
 
   def stat_line
-    "#{ship_class}. #{self.class::STAT_LINE}"
+    stats = self.class::STAT_LINE
+    if has_bulwark?
+      shp = stats.match(/(\d+)\s*SHP/)[1].to_i
+      shp *= 1.05
+      stats = stats.sub(/(\d+)\s*SHP/, "#{shp.round} SHP")
+      stats += ", with Bulwark"
+    end
+    stats
   end
 
   def ship_class
     "#{self.class::LABEL.capitalize} ship"
   end
 
+  def has_bulwark?
+    false
+  end
+
+  def has_ram?
+    false
+  end
+
   def to_s
     cargo_list = @cargo.values.sort_by(&:price).map { |c| "  #{c}" }.join("\n")
-    [stat_line,
-     "#{crew_size}× crew, #{artillery_string}, #{weight_string}",
-     captain,
-     passengers,
-     "Cargo worth #{cargo_value} gp weighing #{cargo_weight} st",
-     cargo_list,
-     ""].join("\n")
+    [
+      "### #{ship_class}",
+      stat_line,
+      "#{crew_size}× crew, #{artillery_string}, #{weight_string}",
+      captain,
+      passengers,
+      "Cargo worth #{cargo_value} gp weighing #{cargo_weight} st",
+      cargo_list,
+      "",
+    ].join("\n")
   end
 end

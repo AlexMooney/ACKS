@@ -75,6 +75,17 @@ class Acks
     puts NavalMariners.new
   end
 
+  def pirate_mariners
+    # TODO: 2.5 rower galley pirate ship and generate pirate king or whatever if it's a fleet
+    # TODO: Allow choosing flag nation
+    puts Ship::Galley15.new(flag: "somirean", skip_captain: true)
+    [5, 4, 4].each do |l|
+      puts Character.new(l, ethnicity: "somirean",
+                            character_class: roll_table(Ship::ShipTables::PIRATE_CAPTAIN_CLASS_TABLE))
+      puts
+    end
+  end
+
   def encounter_prompt
     prompt = TTY::Prompt.new
     listing = prompt.select("Choose a monster listing:", filter: true, per_page: 15) do |menu|
@@ -237,6 +248,7 @@ class Acks
   end
 
   def console
+    extend Tables
     binding.irb # rubocop:disable Lint/Debugger
   end
 
@@ -267,6 +279,7 @@ class Acks
         menu.choice("Random Weather", "weather_prompt")
         menu.choice("Merchant Mariners", "merchant_mariners")
         menu.choice("Naval Mariners", "naval_mariners")
+        menu.choice("Pirate Ship", "pirate_mariners")
         menu.choice("Spell Scrolls", "spell_scrolls")
         menu.choice("Random Building", "building")
         menu.choice("Quit")

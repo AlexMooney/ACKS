@@ -9,7 +9,7 @@ class Ship
     ARTILLERY_TABLE = ["Medium Ballista", "Medium Catapult"].freeze
     TREASURE_TYPE = "G"
 
-    def initialize(flag:)
+    def initialize(flag:, skip_captain: false)
       self.crew_size = 5
       self.rowers = 90
       generate_passengers!("10", ethnicity: flag.downcase, passenger_type: Marines)
