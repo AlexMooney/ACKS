@@ -72,10 +72,11 @@ class Treasure
     table = TTY::Table.new(["Treasure", "Value Subtotal", "Weight Subtotal"], treasure_table_data, width: 100)
 
     ["Average treasure: #{average_value}gp",
-     "Magic items by rarity: #{@magic_items_by_rarity}",
      "Treasure worth #{running_value_total}gp (#{(100 * running_value_total / average_value).round}%)",
+     "",
      table.render_with(MarkdownBorder),
      "",
+     "Magic items by rarity: #{@magic_items_by_rarity}",
      magic_items.to_s].join("\n")
   end
 

@@ -39,6 +39,7 @@ module Tables
     dice_string.split("+").sum do |dice_substring|
       dice_substring.split("*").reduce(1) do |product, dice_subsubstring|
         quantity, sides = dice_subsubstring.split("d")
+        quantity = 1 if quantity.empty?
         product * if sides
                     sides, keep = sides.split("k")
                     explodes = sides.end_with?("!")

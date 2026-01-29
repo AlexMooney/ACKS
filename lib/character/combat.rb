@@ -10,21 +10,20 @@ class Character
       return nil unless attack_throw
 
       [
-        "HP: #{hit_points}",
-        "AC: #{armor_class} (#{best_armor} +1#{uses_shield? ? ', shield +1' : ''}#{stats.dex_bonus != 0 && %(, Dex #{stats.dex_bonus})})",
+        "  HP: #{hit_points}",
+        "AC: #{armor_class} (#{best_armor} +1#{uses_shield? ? ', shield +1' : ''}#{stats.dex_bonus.zero? ? '' : %(, Dex #{stats.dex_bonus})})",
         "Melee Attack: #{melee_attack}+, #{format_damage_dice(melee_damage_bonus)}",
-        "Ranged Attack: #{ranged_attack}+, #{format_damage_dice(ranged_damage_bonus)}"
+        "Ranged Attack: #{ranged_attack}+, #{format_damage_dice(ranged_damage_bonus)}",
       ].join(", ")
     end
 
     def hit_points
-      @hit_points ||= begin
-                        hp = 4 + stats.con_bonus
-                        (level).times do
-                          hp = [hp + 1, level.times.sum { roll_dice(hit_die) + stats.con_bonus }].max
-                        end
-                        hp
-                      end
+      hp = 3 + stats.con_bonus
+      level.times do |i|
+        new_roll = (i + 1).times.sum { roll_dice(hit_die) + stats.con_bonus }
+        hp = [hp + 1, new_roll].max
+      end
+      hp
     end
 
     def melee_damage_bonus

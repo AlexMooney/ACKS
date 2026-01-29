@@ -200,11 +200,10 @@ module Encounters
           lingering = rand(1..100)
           lair = rand(1..100)
           encounter = Encounters::NauticalEncounter.new(danger_level).to_s
-          while encounter.match?(/No Encounter/)
-            encounter = Encounters::NauticalEncounter.new(danger_level).to_s
-          end
+          encounter = Encounters::NauticalEncounter.new(danger_level).to_s while encounter.match?(/No Encounter/)
 
-          data << [i + 1, Encounters::NauticalEncounter.new(danger_level).to_s, lingering, lair, recon_roll, recon_roll, domain_reaction]
+          data << [i + 1, Encounters::NauticalEncounter.new(danger_level).to_s, lingering, lair, recon_roll,
+                   recon_roll, domain_reaction]
         end
       end
       table = TTY::Table.new(labels, data)

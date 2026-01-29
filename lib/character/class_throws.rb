@@ -9,8 +9,7 @@ class Character
     end
 
     def lookup
-      key = [character_class, level]
-      table[key]
+      table[[character_class.downcase, level]] || table[[class_type, level]]
     end
 
     def attack_throw
@@ -39,7 +38,7 @@ class Character
           implements: row["implements"].to_i,
           spells: row["spells"].to_i,
           attack_throw: row["attack_throw"].to_i,
-          damage_bonus: row["damage_bonus"].to_i
+          damage_bonus: row["damage_bonus"].to_i,
         }
       end
       result

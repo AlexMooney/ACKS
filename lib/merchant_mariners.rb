@@ -75,6 +75,10 @@ class Passengers
     raise NotImplementedError, "Subclasses must implement a member method"
   end
 
+  def total_count
+    @characters_by_count.values.sum
+  end
+
   def assign_characters!(count)
     count = assign_gang!(count, 0) while count.positive?
   end

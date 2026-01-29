@@ -38,7 +38,7 @@ describe Character do
   it "generates combat stats line" do
     character = Character.new(2, character_class: "Fighter")
 
-    assert_match(/\AHP: \d+, /, character.combat_stats_line)
+    assert_match(/\A  HP: \d+, /, character.combat_stats_line)
     assert_match(/AC: \d+ \(Plate \+1/, character.combat_stats_line)
     assert_match(/Melee Attack: \d+\+, 1d6\+\d, /, character.combat_stats_line)
     assert_match(/Ranged Attack: \d+\+, 1d6\+\d\z/, character.combat_stats_line)

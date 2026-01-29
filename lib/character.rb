@@ -10,10 +10,9 @@ class Character
   include ClassData
   include ClassThrows
 
-  SPELLING_ETHNICITIES = (HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys + ["dwarven", "elven"]).freeze
-
-  attr_accessor :level, :title, :character_class, :stats, :template, :ethnicity
-  attr_accessor :alignment, :sex, :name, :descriptions, :magic_items_by_rarity
+  SPELLING_ETHNICITIES = (HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys + %w[dwarven elven]).freeze
+  attr_accessor :level, :title, :class_type, :character_class, :stats, :template, :ethnicity, :alignment, :sex, :name,
+                :descriptions, :magic_items_by_rarity
 
   def initialize(level, title = nil, class_type: nil, character_class: nil, ethnicity: nil, sex: nil, magic_items: true)
     @level = level
@@ -33,6 +32,7 @@ class Character
       class_type = "normal_man"
       @character_class = "Normal Man"
     end
+    @class_type = class_type
     @alignment = roll_table(RANDOM_ALIGNMENT)
     sex ||= roll_table(SEX_BY_CLASS[@character_class])
     @sex = sex
@@ -113,7 +113,13 @@ class Character
     end.to_h
     return if count_by_rarity.empty?
 
-    @magic_items_by_rarity = TTMagicItems.new(**count_by_rarity).magic_items_by_rarity
+    @magic_items_by_rarity = TTMagicItems.new(**count_by_rarity, exclude_items:).magic_items_by_rarity
+  end
+
+  def exclude_items
+    exclude = ["Treasure Map"]
+    exclude << "Scroll" unless %w[mage crusader].include?(class_type)
+    exclude
   end
 
   def generate_descriptions

@@ -29,9 +29,10 @@ class TTMagicItems
 
   include Tables
 
-  attr_reader :magic_items_by_rarity
+  attr_reader :magic_items_by_rarity, :exclude_items
 
-  def initialize(common: 0, uncommon: 0, rare: 0, very_rare: 0, legendary: 0)
+  def initialize(common: 0, uncommon: 0, rare: 0, very_rare: 0, legendary: 0, exclude_items: [])
+    @exclude_items = exclude_items
     @magic_items_by_rarity = {}
     @magic_items_by_rarity[:common] = generate_items("common", common) if common.positive?
     @magic_items_by_rarity[:uncommon] = generate_items("uncommon", uncommon) if uncommon.positive?
@@ -43,11 +44,11 @@ class TTMagicItems
         item.gsub(/Spell Scroll \((\d+) levels?\)/) do
           SpellScroll.new(::Regexp.last_match(1).to_i).roll_details
         end
-        item.gsub(/Scroll of Creature Warding/) do
+        item.gsub("Scroll of Creature Warding") do
           MagicItems::ScrollCreatureWarding.new.roll_details
         end
-        item.gsub(/ versus X/) do
-          " versus #{MagicItems::ScrollCreatureWarding.new.roll_details.sub("Scroll of Warding vs. ", "")}"
+        item.gsub(" versus X") do
+          " versus #{MagicItems::ScrollCreatureWarding.new.roll_details.sub('Scroll of Warding vs. ', '')}"
         end
       end
     end
@@ -66,10 +67,16 @@ class TTMagicItems
   def generate_items(rarity, quantity)
     type_by_frequency = self.class.type_by_rarity[rarity]
     quantity.times.map do
-      type = roll_weighted(type_by_frequency)
-      item_weights = self.class.item_weights_by_rarity_and_type(rarity, type)
-      roll_weighted(item_weights)
+      result = roll_one(type_by_frequency, rarity)
+      result = roll_one(type_by_frequency, rarity) while exclude_items.any? { |excluded| result.include?(excluded) }
+      result
     end.sort
+  end
+
+  def roll_one(type_by_frequency, rarity)
+    type = roll_weighted(type_by_frequency)
+    item_weights = self.class.item_weights_by_rarity_and_type(rarity, type)
+    roll_weighted(item_weights)
   end
 end
 

@@ -64,14 +64,12 @@ class Character
 
       features = roll_features(stats, sex)
       category = roll_table(BASIC_HUMAN_CATEGORY)
-      if category == "belongings"
-        features << roll_belongings(alignment)
-      end
+      features << roll_belongings(alignment) if category == "belongings"
 
       sex = male?(sex) ? "Male" : "Female"
 
       [
-        "  Alignment: #{alignment.capitalize}, Sex: #{sex}, Features: #{features.join(", ")}",
+        "  Alignment: #{alignment.capitalize}, Sex: #{sex}, Features: #{features.join(', ')}",
         "  Build: #{build}, Height: #{height_string}, Weight: #{weight_string}",
         "  Ethnicity: #{ethnicity.capitalize}, Eyes: #{eye_color}, Skin Color: #{skin_color}, Hair: #{hair_texture} #{hair_color}",
       ]

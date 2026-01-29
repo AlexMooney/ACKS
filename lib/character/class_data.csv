@@ -1,10 +1,11 @@
 class,hit_die,max_armor_type,best_armor,base_ac
-Fighter,d8,Heavy Armor,Plate,6
-Explorer,d6,Medium Armor,Chain Mail,4
-Thief,d4,Light Armor,Leather,2
-Mage,d4,None,,0
-Crusader,d6,Heavy Armor,Plate,6
-Venturer,d6,Medium Armor,Chain Mail,4
-Bard,d4,Medium Armor,Chain Mail,4
-Barbarian,d8,Medium Armor,Chain Mail,4
-Normal Man,d4,Medium Armor,Leather,2
+fighter,d8,Heavy Armor,Plate,6
+explorer,d6,Medium Armor,Chain Mail,4
+thief,d4,Light Armor,Leather,2
+mage,d4,None,None,0
+crusader,d6,Heavy Armor,Plate,6
+venturer,d6,Medium Armor,Chain Mail,4
+bard,d4,Medium Armor,Chain Mail,4
+barbarian,d8,Medium Armor,Chain Mail,4
+assassin,d4,Medium Armor,Chain Mail,4
+normal man,d4,Medium Armor,Leather,2

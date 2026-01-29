@@ -38,10 +38,10 @@ module Encounters
       raise "Invalid danger level: #{danger_level}. Valid values are 1-4." unless (1..4).include?(danger_level)
 
       @danger_label = DANGER_LEVELS[danger_level]
-      if road && road != "false" && road != "0"
-        @danger_level -= 1
-        @danger_label += " with Road"
-      end
+      return unless road && road != "false" && road != "0"
+
+      @danger_level -= 1
+      @danger_label += " with Road"
     end
 
     def roll_encounter_type
