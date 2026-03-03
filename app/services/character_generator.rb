@@ -185,7 +185,9 @@ class CharacterGenerator
             else
               CharacterLegacy::Descriptions::Belongings.const_get(any_table_name)
             end
-    "#{belonging_type.capitalize}: #{roll_table(table)}"
+    text = roll_table(table)
+    text = text.gsub(%r{(\w+)/(\w+)}) { [::Regexp.last_match(1), ::Regexp.last_match(2)].sample }
+    "#{belonging_type.capitalize}: #{text}"
   end
 
   def roll_die(count)
