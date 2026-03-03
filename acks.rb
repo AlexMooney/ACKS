@@ -254,7 +254,8 @@ class Acks
   end
 
   def potion_appearances
-    names = ["potion of eagle eyes", "potion of cure light injury", "potion of Giant strength", "potion of delay disease", "potion of simmering rage", "Potion of Ogre Strength", "Potion of arcane armor", "Potion of deathly appearance", "Oil of Excavation", "Potion of Clairaudiency", "Potion of Clairvoyancy", "Potion of Cure Serious Injury", "Potion of Deflect Ordinary Missiles", "Potion of Growth", "Potion of Remove Curse", "potion of discern invisible", "potion of energy invulnerability", "potion of delay disease", "potion of water breathing", "Potion of arcane armor"]
+    names = ["potion of eagle eyes", "potion of cure light injury", "potion of Giant strength",
+             "potion of delay disease", "potion of simmering rage", "Potion of Ogre Strength", "Potion of arcane armor", "Potion of deathly appearance", "Oil of Excavation", "Potion of Clairaudiency", "Potion of Clairvoyancy", "Potion of Cure Serious Injury", "Potion of Deflect Ordinary Missiles", "Potion of Growth", "Potion of Remove Curse", "potion of discern invisible", "potion of energy invulnerability", "potion of delay disease", "potion of water breathing", "Potion of arcane armor"]
     names.map! { |n| n.split.map(&:capitalize).join(" ").sub(/\s+Of\s+/, " of ") }
     names.sort!
     potions = MagicItems::Potions.new
