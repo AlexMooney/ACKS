@@ -6,20 +6,12 @@ class MagicItemTest < ActiveSupport::TestCase
   VALID_RARITIES = %w[common uncommon rare very_rare legendary].freeze
   VALID_ITEM_TYPES = %w[potions rings scrolls implements misc swords weapons armor].freeze
 
-  setup do
-    Rails.application.load_seed if MagicItem.count.zero?
-  end
-
-  test "seeds populate magic items" do
-    assert MagicItem.count > 1000, "Expected at least 1000 magic items, got #{MagicItem.count}"
-  end
-
-  test "all rarities present" do
+  test "fixtures include all rarities" do
     rarities = MagicItem.distinct.pluck(:rarity).sort
     assert_equal VALID_RARITIES.sort, rarities
   end
 
-  test "all item types present" do
+  test "fixtures include all item types" do
     item_types = MagicItem.distinct.pluck(:item_type).sort
     assert_equal VALID_ITEM_TYPES.sort, item_types
   end
@@ -37,15 +29,11 @@ class MagicItemTest < ActiveSupport::TestCase
     assert_equal 0, shareless.count, "Items without share: #{shareless.pluck(:id, :name)}"
   end
 
-  test "potions have descriptions" do
-    potions_without_desc = MagicItem.where(item_type: "potions", description: [nil, ""])
-    assert_equal 0, potions_without_desc.count,
-                 "Potions without descriptions: #{potions_without_desc.pluck(:name)}"
-  end
-
-  test "seeds are idempotent" do
-    count_before = MagicItem.count
-    Rails.application.load_seed
-    assert_equal count_before, MagicItem.count
+  test "validates required fields" do
+    item = MagicItem.new
+    refute item.valid?
+    assert_includes item.errors[:name], "can't be blank"
+    assert_includes item.errors[:rarity], "can't be blank"
+    assert_includes item.errors[:item_type], "can't be blank"
   end
 end

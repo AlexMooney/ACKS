@@ -1,2 +1,273 @@
-# Magic items are seeded from CSV data; no fixtures needed.
-# See test/models/magic_item_test.rb for seed-based tests.
+# Template items that get resolved by MagicItemGenerator
+creature_warding:
+  name: "Scroll of Creature Warding"
+  rarity: common
+  item_type: scrolls
+  base_cost: 500
+  apparent_value: "500 gp"
+  share: 4
+
+spell_scroll_1:
+  name: "Spell Scroll (1 level)"
+  rarity: common
+  item_type: scrolls
+  base_cost: 500
+  apparent_value: "500 gp"
+  share: 16
+
+spell_scroll_3:
+  name: "Spell Scroll (3 levels)"
+  rarity: uncommon
+  item_type: scrolls
+  base_cost: 1000
+  apparent_value: "1,000 gp"
+  share: 6
+
+spell_scroll_5:
+  name: "Spell Scroll (5 levels)"
+  rarity: rare
+  item_type: scrolls
+  base_cost: 2500
+  apparent_value: "2,500 gp"
+  share: 6
+
+spell_scroll_7:
+  name: "Spell Scroll (7 levels)"
+  rarity: very_rare
+  item_type: scrolls
+  base_cost: 5000
+  apparent_value: "5,000 gp"
+  share: 4
+
+spell_scroll_9:
+  name: "Spell Scroll (9 levels)"
+  rarity: legendary
+  item_type: scrolls
+  base_cost: 7500
+  apparent_value: "7,500 gp"
+  share: 4
+
+versus_x_sword:
+  name: "Sword +1, +2 versus X"
+  rarity: rare
+  item_type: swords
+  base_cost: 5000
+  apparent_value: "5,000 gp"
+  share: 12
+
+# Non-template items — one per non-zero (rarity, item_type) combo
+# Common: potions, misc
+common_potion:
+  name: "Healing Salve"
+  rarity: common
+  item_type: potions
+  base_cost: 200
+  apparent_value: "200 gp"
+  share: 10
+  description: "smell of camphor and wormwood"
+
+common_misc:
+  name: "Bag of Holding"
+  rarity: common
+  item_type: misc
+  base_cost: 5000
+  apparent_value: "5,000 gp"
+  share: 1
+
+# Uncommon: potions, rings, misc, swords, weapons, armor
+uncommon_potion:
+  name: "Potion of Clairvoyance"
+  rarity: uncommon
+  item_type: potions
+  base_cost: 300
+  apparent_value: "300 gp"
+  share: 8
+  description: "bitter herbal taste"
+
+uncommon_ring:
+  name: "Ring of Protection +1"
+  rarity: uncommon
+  item_type: rings
+  base_cost: 5000
+  apparent_value: "5,000 gp"
+  share: 5
+
+uncommon_misc:
+  name: "Rope of Climbing"
+  rarity: uncommon
+  item_type: misc
+  base_cost: 7000
+  apparent_value: "7,000 gp"
+  share: 2
+
+uncommon_sword:
+  name: "Sword +1"
+  rarity: uncommon
+  item_type: swords
+  base_cost: 5000
+  apparent_value: "5,000 gp"
+  share: 10
+
+uncommon_weapon:
+  name: "War Hammer +1"
+  rarity: uncommon
+  item_type: weapons
+  base_cost: 5000
+  apparent_value: "5,000 gp"
+  share: 6
+
+uncommon_armor:
+  name: "Chain Mail +1"
+  rarity: uncommon
+  item_type: armor
+  base_cost: 2500
+  apparent_value: "2,500 gp"
+  share: 10
+
+# Rare: rings, implements, misc, weapons, armor
+rare_ring:
+  name: "Ring of Spell Turning"
+  rarity: rare
+  item_type: rings
+  base_cost: 20000
+  apparent_value: "20,000 gp"
+  share: 3
+
+rare_implement:
+  name: "Staff of Healing"
+  rarity: rare
+  item_type: implements
+  base_cost: 33600
+  apparent_value: "33,600 gp"
+  share: 4
+
+rare_misc:
+  name: "Crystal Ball"
+  rarity: rare
+  item_type: misc
+  base_cost: 25000
+  apparent_value: "25,000 gp"
+  share: 3
+
+rare_weapon:
+  name: "Mace +2"
+  rarity: rare
+  item_type: weapons
+  base_cost: 10000
+  apparent_value: "10,000 gp"
+  share: 4
+
+rare_armor:
+  name: "Plate Mail +1"
+  rarity: rare
+  item_type: armor
+  base_cost: 10000
+  apparent_value: "10,000 gp"
+  share: 6
+
+# Very rare: potions, rings, implements, misc, swords, weapons, armor
+very_rare_potion:
+  name: "Elixir of Life"
+  rarity: very_rare
+  item_type: potions
+  base_cost: 50000
+  apparent_value: "50,000 gp"
+  share: 1
+  description: "golden liquid smelling of honey"
+
+very_rare_ring:
+  name: "Ring of Djinni Summoning"
+  rarity: very_rare
+  item_type: rings
+  base_cost: 65000
+  apparent_value: "65,000 gp"
+  share: 2
+
+very_rare_implement:
+  name: "Staff of Wizardry"
+  rarity: very_rare
+  item_type: implements
+  base_cost: 85300
+  apparent_value: "85,300 gp"
+  share: 1
+
+very_rare_misc:
+  name: "Efreeti Bottle"
+  rarity: very_rare
+  item_type: misc
+  base_cost: 90000
+  apparent_value: "90,000 gp"
+  share: 1
+
+very_rare_sword:
+  name: "Sword +3"
+  rarity: very_rare
+  item_type: swords
+  base_cost: 15000
+  apparent_value: "15,000 gp"
+  share: 3
+
+very_rare_weapon:
+  name: "War Hammer +2"
+  rarity: very_rare
+  item_type: weapons
+  base_cost: 10000
+  apparent_value: "10,000 gp"
+  share: 3
+
+very_rare_armor:
+  name: "Plate Mail +2"
+  rarity: very_rare
+  item_type: armor
+  base_cost: 30000
+  apparent_value: "30,000 gp"
+  share: 2
+
+# Legendary: rings, implements, misc, swords, weapons, armor
+legendary_ring:
+  name: "Ring of Spell Storing"
+  rarity: legendary
+  item_type: rings
+  base_cost: 100000
+  apparent_value: "100,000 gp"
+  share: 2
+
+legendary_implement:
+  name: "Staff of Power"
+  rarity: legendary
+  item_type: implements
+  base_cost: 100000
+  apparent_value: "100,000 gp"
+  share: 1
+
+legendary_misc:
+  name: "Flying Carpet"
+  rarity: legendary
+  item_type: misc
+  base_cost: 100000
+  apparent_value: "100,000 gp"
+  share: 2
+
+legendary_sword:
+  name: "Sword, Holy Avenger"
+  rarity: legendary
+  item_type: swords
+  base_cost: 40000
+  apparent_value: "40,000 gp"
+  share: 1
+
+legendary_weapon:
+  name: "War Hammer +3"
+  rarity: legendary
+  item_type: weapons
+  base_cost: 20000
+  apparent_value: "20,000 gp"
+  share: 1
+
+legendary_armor:
+  name: "Plate Mail +3"
+  rarity: legendary
+  item_type: armor
+  base_cost: 50000
+  apparent_value: "50,000 gp"
+  share: 1
