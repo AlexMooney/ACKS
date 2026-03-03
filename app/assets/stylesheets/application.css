@@ -10,19 +10,24 @@
  */
 
 :root {
-  --paper-bg: #f5f0e8;
-  --paper-border: #c8b89a;
-  --ink: #2c1810;
-  --ink-light: #5a3d2b;
-  --ink-faint: #8a7260;
-  --accent: #6b1a1a;
-  --field-bg: rgba(255, 255, 255, 0.35);
-  --field-border: #c8b89a;
+  --paper-bg: #f7f5f2;
+  --paper-border: #d4cdc4;
+  --ink: #2b2b2b;
+  --ink-light: #555;
+  --ink-faint: #888;
+  --green: #3a8a5c;
+  --green-hover: #2e7049;
+  --orange: #c4813a;
+  --orange-muted: #d4a76a;
+  --purple: #7b6b99;
+  --purple-muted: #a090b8;
+  --field-bg: rgba(255, 255, 255, 0.5);
+  --field-border: #ccc;
 }
 
 body {
   font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-  background: #d8cfc0;
+  background: #eae6e0;
   color: var(--ink);
   margin: 0;
   padding: 20px;
@@ -31,7 +36,7 @@ body {
 
 h1, h2, h3 {
   font-weight: normal;
-  color: var(--accent);
+  color: var(--purple);
   border-bottom: 1px solid var(--paper-border);
   padding-bottom: 4px;
   margin-top: 0;
@@ -42,7 +47,7 @@ h2 { font-size: 1.3rem; margin-bottom: 8px; }
 h3 { font-size: 1.1rem; border-bottom: none; margin-bottom: 4px; }
 
 a {
-  color: var(--accent);
+  color: var(--purple);
   text-decoration: none;
 }
 a:hover {
@@ -71,7 +76,7 @@ a:hover {
 
 .character-form legend {
   font-size: 1.1rem;
-  color: var(--accent);
+  color: var(--orange);
   padding: 0 8px;
   font-weight: normal;
 }
@@ -125,8 +130,8 @@ a:hover {
 .character-form input:focus,
 .character-form textarea:focus,
 .character-form select:focus {
-  border-bottom-color: var(--accent);
-  background: rgba(255,255,255,0.5);
+  border-bottom-color: var(--green);
+  background: rgba(255,255,255,0.7);
 }
 
 .character-form input[type="number"] {
@@ -162,25 +167,27 @@ a:hover {
 .btn {
   font-family: inherit;
   font-size: 1rem;
-  color: var(--paper-bg);
-  background: var(--accent);
+  line-height: 1.5;
+  box-sizing: border-box;
+  color: #fff;
+  background: var(--green);
   border: none;
   padding: 8px 24px;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
   margin-top: 8px;
 }
 
 .character-form input[type="submit"]:hover,
 .btn:hover {
-  background: #8a2424;
+  background: var(--green-hover);
 }
 
 .btn-secondary {
-  background: var(--ink-faint);
+  background: var(--purple-muted);
 }
 .btn-secondary:hover {
-  background: var(--ink-light);
+  background: var(--purple);
 }
 
 .form-actions {
@@ -238,7 +245,7 @@ a:hover {
 
 /* Flash notices */
 .notice {
-  color: #2d5a27;
+  color: var(--green);
   font-style: italic;
   margin-bottom: 12px;
 }
@@ -259,11 +266,11 @@ a:hover {
 
 /* Errors */
 .form-errors {
-  color: var(--accent);
-  border: 1px solid var(--accent);
+  color: var(--orange);
+  border: 1px solid var(--orange-muted);
   padding: 12px;
   margin-bottom: 16px;
-  background: rgba(107, 26, 26, 0.05);
+  background: rgba(196, 129, 58, 0.07);
 }
 
 .form-errors ul {
