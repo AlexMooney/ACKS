@@ -3,12 +3,12 @@
 require "csv"
 
 # Seed MagicItem table from CSV files in lib/magic_items/
-MAGIC_ITEMS_DIR = Rails.root.join("lib/magic_items")
-SKIP_FILES = %w[frequencies.csv potion_appearances.csv].freeze
+magic_items_dir = Rails.root.join("lib/magic_items")
+skip_files = %w[frequencies.csv potion_appearances.csv].freeze
 
-Dir.glob(MAGIC_ITEMS_DIR.join("*.csv")).sort.each do |csv_path|
+Dir.glob(magic_items_dir.join("*.csv")).sort.each do |csv_path|
   filename = File.basename(csv_path)
-  next if SKIP_FILES.include?(filename)
+  next if skip_files.include?(filename)
 
   # Derive rarity and item_type from filename: "common_potions.csv" => ["common", "potions"]
   parts = filename.delete_suffix(".csv").split("_")
