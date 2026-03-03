@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_03_215747) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_03_233222) do
   create_table "characters", force: :cascade do |t|
     t.string "alignment"
     t.string "build"
@@ -39,6 +39,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_215747) do
     t.integer "wil"
   end
 
+  create_table "magic_item_instances", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "magic_item_id", null: false
+    t.text "override_description"
+    t.string "override_name"
+    t.integer "owner_id"
+    t.string "owner_type"
+    t.datetime "updated_at", null: false
+    t.index ["magic_item_id"], name: "index_magic_item_instances_on_magic_item_id"
+    t.index ["owner_type", "owner_id"], name: "index_magic_item_instances_on_owner"
+  end
+
   create_table "magic_items", force: :cascade do |t|
     t.string "apparent_value", null: false
     t.integer "base_cost", null: false
@@ -51,4 +63,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_215747) do
     t.datetime "updated_at", null: false
     t.integer "weighted_share"
   end
+
+  add_foreign_key "magic_item_instances", "magic_items"
 end
