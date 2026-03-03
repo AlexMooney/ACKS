@@ -20,8 +20,8 @@ module MagicItems
 
     def appearance_csv
       @appearance_csv ||= CSV.parse(File.read(File.expand_path("potion_appearances.csv", __dir__)), headers: true)
-                             .each_with_object({}) do |line, result|
-        result[clean_potion_name(line["potion"])] = line["appearance"]
+                             .to_h do |line|
+        [clean_potion_name(line["potion"]), line["appearance"]]
       end
     end
 

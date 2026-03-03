@@ -6,16 +6,16 @@ class TTMagicItems
   class << self
     def type_by_rarity
       @type_by_rarity ||= CSV.parse(File.read(File.expand_path("magic_items/frequencies.csv", __dir__)), headers: true)
-                             .each_with_object({}) do |line, result|
-                               result[line["rarity"]] = line.to_h.except("rarity").transform_values(&:to_i)
-                             end
+                             .to_h do |line|
+        [line["rarity"], line.to_h.except("rarity").transform_values(&:to_i)]
+      end
     end
 
     def item_weights_by_rarity_and_type(rarity, type)
       @item_weights_by_rarity_and_type ||= Hash.new do |h, k|
         h[k] = Hash.new do |hh, kk|
           hh[kk] = CSV.parse(File.read(File.expand_path("magic_items/#{k}_#{kk}.csv", __dir__)), headers: true)
-                      .each_with_object({}) { |line, result| result[line["Name"]] = line["Share"].to_i }
+                      .to_h { |line| [line["Name"], line["Share"].to_i] }
         end
       end
       @item_weights_by_rarity_and_type[rarity][type]

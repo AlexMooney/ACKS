@@ -54,7 +54,7 @@ Room = Struct.new("Room", :type, :monster, :trap, :treasure) do
   end
 
   def to_s
-    stuff = "#{monster} #{trap} #{treasure} #{type == :unique ? 'unique' : nil}".squeeze(" ").strip
+    stuff = "#{monster} #{trap} #{treasure} #{'unique' if type == :unique}".squeeze(" ").strip
     stuff.empty? ? "empty" : stuff
   end
 

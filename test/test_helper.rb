@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ENV["RAILS_ENV"] ||= "test"
 ENV["COLUMNS"] ||= "200" # TTY::Screen uses this for terminal width in tests
 require_relative "../config/environment"

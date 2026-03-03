@@ -80,9 +80,9 @@ class Ship
 
   def generate_captain!
     self.captain = CharacterLegacy.new(self.class::CAPTAIN,
-                                 "Captain",
-                                 character_class: roll_table(captain_class_table),
-                                 ethnicity: flag.downcase)
+                                       "Captain",
+                                       character_class: roll_table(captain_class_table),
+                                       ethnicity: flag.downcase)
   end
 
   def captain_class_table

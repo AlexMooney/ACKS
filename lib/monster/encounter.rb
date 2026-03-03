@@ -27,7 +27,7 @@ module Monster
         end
       end
 
-      ["#{listing.name}#{in_lair ? ' Lair' : nil}", creature_list].concat(leader_list).join("\n")
+      ["#{listing.name}#{' Lair' if in_lair}", creature_list].concat(leader_list).join("\n")
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-WildernessMonster = Struct.new(:name, :total_xp, :total_spoils_value, :treasure_type, keyword_init: true)
+WildernessMonster = Struct.new(:name, :total_xp, :total_spoils_value, :treasure_type)
 WILDERNESS_MONSTER_BY_NAME = {} # rubocop:disable Style/MutableConstant
 # CSV.read("encounter_treasure_data.csv", headers: true).map do |row|
 #   monster = WildernessMonster.new(

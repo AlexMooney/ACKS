@@ -81,7 +81,7 @@ class CharacterLegacy
       6 => "Base + 2",
     }.freeze
 
-    StatPreference = Struct.new(:best, :always_good, :never_good, keyword_init: true)
+    StatPreference = Struct.new(:best, :always_good, :never_good)
     STAT_PREFERENCE_BY_CLASS = {
       "Elven Spellsword" => StatPreference.new(best: "INT", always_good: %w[DEX STR]),
       "Nobiran Wonderworker" => StatPreference.new(best: "INT", always_good: %w[WIL]),

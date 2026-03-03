@@ -6,7 +6,7 @@ DungeonMonster = Struct.new(
   attr_accessor :lair, :number_appearing
 
   def to_s
-    "#{number_appearing} #{name} #{lair ? 'lair' : ''} #{treasure}".squeeze(" ").strip
+    "#{number_appearing} #{name} #{'lair' if lair} #{treasure}".squeeze(" ").strip
   end
 
   def number_appearing

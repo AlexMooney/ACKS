@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class CharactersController < ApplicationController
-  before_action :set_character, only: %i[ show edit update destroy ]
+  before_action :set_character, only: %i[show edit update destroy]
 
   # GET /characters or /characters.json
   def index
@@ -7,8 +9,7 @@ class CharactersController < ApplicationController
   end
 
   # GET /characters/1 or /characters/1.json
-  def show
-  end
+  def show; end
 
   # GET /characters/new
   def new
@@ -16,8 +17,7 @@ class CharactersController < ApplicationController
   end
 
   # GET /characters/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /characters or /characters.json
   def create
@@ -58,13 +58,15 @@ class CharactersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_character
-      @character = Character.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def character_params
-      params.expect(character: [ :name, :title, :level, :character_class, :class_type, :template, :ethnicity, :sex, :alignment, :str, :int, :wil, :dex, :con, :cha, :build, :height_inches, :weight_lbs, :eye_color, :skin_color, :hair_color, :hair_texture, :features ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_character
+    @character = Character.find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def character_params
+    params.expect(character: %i[name title level character_class class_type template ethnicity sex
+                                alignment str int wil dex con cha build height_inches weight_lbs eye_color skin_color hair_color hair_texture features])
+  end
 end

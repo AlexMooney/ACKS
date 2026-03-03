@@ -39,14 +39,14 @@ class NavalMariners
     return unless @lair
 
     @commodore = CharacterLegacy.new(@ships.first.captain.level + 1,
-                               "Commodore",
-                               character_class: roll_table(captain_class_table),
-                               ethnicity: @flag.downcase)
+                                     "Commodore",
+                                     character_class: roll_table(captain_class_table),
+                                     ethnicity: @flag.downcase)
   end
 
   def to_s
     if @commodore
-      "#{flag} fleet of #{@number_of_ships} ships\n#{@commodore}\n\n#{ships.map(&:to_s).join("\n")}"
+      "#{flag} fleet of #{@number_of_ships} ships\n#{@commodore}\n\n#{ships.join("\n")}"
     else
       "#{flag} #{ships.first.ship_class}\n#{ships.first}"
     end

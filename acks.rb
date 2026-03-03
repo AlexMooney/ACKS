@@ -81,7 +81,7 @@ class Acks
     puts Ship::Galley15.new(flag: "somirean", skip_captain: true)
     [5, 4, 4].each do |l|
       puts CharacterLegacy.new(l, ethnicity: "somirean",
-                            character_class: roll_table(Ship::ShipTables::PIRATE_CAPTAIN_CLASS_TABLE))
+                                  character_class: roll_table(Ship::ShipTables::PIRATE_CAPTAIN_CLASS_TABLE))
       puts
     end
   end
@@ -250,6 +250,7 @@ class Acks
 
   def console
     extend Tables
+
     binding.irb # rubocop:disable Lint/Debugger
   end
 

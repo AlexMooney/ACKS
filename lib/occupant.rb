@@ -13,7 +13,7 @@ class Occupant
   end
 
   def to_s
-    "#{type} #{subtype ? "(#{subtype})" : ''}".strip
+    "#{type} #{"(#{subtype})" if subtype}".strip
   end
 
   GENERAL_OCCUPATIONS = {

@@ -11,7 +11,7 @@ class CharacterLegacy
 
       [
         "  HP: #{hit_points}",
-        "AC: #{armor_class} (#{best_armor} +1#{uses_shield? ? ', shield +1' : ''}#{stats.dex_bonus.zero? ? '' : %(, Dex #{stats.dex_bonus})})",
+        "AC: #{armor_class} (#{best_armor} +1#{', shield +1' if uses_shield?}#{%(, Dex #{stats.dex_bonus}) unless stats.dex_bonus.zero?})",
         "Melee Attack: #{melee_attack}+, #{format_damage_dice(melee_damage_bonus)}",
         "Ranged Attack: #{ranged_attack}+, #{format_damage_dice(ranged_damage_bonus)}",
       ].join(", ")

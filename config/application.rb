@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails/all"
@@ -15,9 +17,9 @@ module StrictRecords
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks
-                                     settlement_encounters dungeon_stocking
-                                     scavenged_gear gems_and_art_objects
-                                     encounter_tables/docx_to_csv])
+                                   settlement_encounters dungeon_stocking
+                                   scavenged_gear gems_and_art_objects
+                                   encounter_tables/docx_to_csv])
 
     # Configuration for the application, engines, and railties goes here.
     #

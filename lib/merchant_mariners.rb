@@ -156,6 +156,7 @@ end
 
 class MerchantMariners
   include Tables
+
   attr_accessor :number_of_ships, :ship_type, :ships, :commodore, :flag
 
   SHIP_TYPES_BY_ROLL = {
@@ -171,9 +172,9 @@ class MerchantMariners
     if rand < LAIR_CHANCE
       @number_of_ships = roll_dice(ship_type::FLEET_SIZE)
       @commodore = CharacterLegacy.new(ship_type::CAPTAIN + 2,
-                                 "Commodore",
-                                 character_class: roll_table(captain_class_table),
-                                 ethnicity: @flag.downcase)
+                                       "Commodore",
+                                       character_class: roll_table(captain_class_table),
+                                       ethnicity: @flag.downcase)
     else
       @number_of_ships = 1
       @commodore = nil
@@ -191,7 +192,7 @@ class MerchantMariners
 
   def to_s
     if @commodore
-      "#{flag} fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships.map(&:to_s).join("\n")}"
+      "#{flag} fleet of #{@number_of_ships} #{@ship_type::LABEL} ships\n#{@commodore}\n\n#{ships.join("\n")}"
     else
       "#{flag} #{ships.first.ship_class}\n#{ships.first}"
     end
