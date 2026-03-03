@@ -125,10 +125,15 @@ class CharacterGeneratorTest < ActiveSupport::TestCase
   end
 
   test "features resolves gendered slash notation" do
-    # Features like "Face - Handsome/Beautiful" should resolve to one word
+    # Features like "Face - Handsome/Beautiful" should resolve to one side
+    # but belongings can legitimately contain "/" (e.g. "Too Big/Small")
     20.times do
       character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
-      refute_match %r{/}, character.features, "Features should not contain unresolved slash: #{character.features}"
+      character.features.split(", ").each do |feature|
+        next unless feature.match?(/\A\w+ - /)
+
+        refute_match %r{/}, feature, "Gendered feature should be resolved: #{feature}"
+      end
     end
   end
 
