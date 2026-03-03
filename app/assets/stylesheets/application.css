@@ -250,18 +250,39 @@ a:hover {
   margin-bottom: 12px;
 }
 
-/* Home page */
-.home-links {
-  list-style: none;
-  padding: 0;
+/* Navbar */
+.navbar {
+  max-width: 900px;
+  margin: 0 auto 12px;
+  padding: 0 32px;
 }
 
-.home-links li {
-  margin-bottom: 8px;
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--paper-border);
 }
 
-.home-links a {
+.navbar-brand {
   font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--purple);
+}
+
+.navbar-links {
+  display: flex;
+  gap: 16px;
+}
+
+.navbar-links a {
+  font-size: 0.9rem;
+  color: var(--ink-light);
+}
+
+.navbar-links a:hover {
+  color: var(--purple);
 }
 
 /* Errors */

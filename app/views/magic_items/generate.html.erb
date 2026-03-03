@@ -2,37 +2,35 @@
 
 <h1>Generate Magic Items</h1>
 
-<div class="paper">
-  <%= form_with url: generate_magic_items_path, method: :get, class: "character-form" do |f| %>
-    <fieldset>
-      <legend>Quantities by Rarity</legend>
-      <div class="field-row">
-        <% MagicItemsController::RARITIES.each do |rarity| %>
-          <div class="field field-narrow">
-            <%= f.label rarity, rarity.to_s.titleize %>
-            <%= f.number_field rarity, value: @quantities[rarity], min: 0 %>
-          </div>
-        <% end %>
-      </div>
-    </fieldset>
-
-    <div class="form-actions">
-      <%= f.submit "Generate", class: "btn" %>
-    </div>
-  <% end %>
-
-  <% if @magic_items %>
-    <div class="magic-items-results">
-      <h2>Results</h2>
-      <% @magic_items.magic_items_by_rarity.each do |rarity, items| %>
-        <% next if items.empty? %>
-        <h3><%= rarity.to_s.titleize %></h3>
-        <ul>
-          <% items.sort.each do |item| %>
-            <li><%= item %></li>
-          <% end %>
-        </ul>
+<%= form_with url: generate_magic_items_path, method: :get, class: "character-form" do |f| %>
+  <fieldset>
+    <legend>Quantities by Rarity</legend>
+    <div class="field-row">
+      <% MagicItemsController::RARITIES.each do |rarity| %>
+        <div class="field field-narrow">
+          <%= f.label rarity, rarity.to_s.titleize %>
+          <%= f.number_field rarity, value: @quantities[rarity], min: 0 %>
+        </div>
       <% end %>
     </div>
-  <% end %>
-</div>
+  </fieldset>
+
+  <div class="form-actions">
+    <%= f.submit "Generate", class: "btn" %>
+  </div>
+<% end %>
+
+<% if @magic_items %>
+  <div class="magic-items-results">
+    <h2>Results</h2>
+    <% @magic_items.magic_items_by_rarity.each do |rarity, items| %>
+      <% next if items.empty? %>
+      <h3><%= rarity.to_s.titleize %></h3>
+      <ul>
+        <% items.sort.each do |item| %>
+          <li><%= item %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>
