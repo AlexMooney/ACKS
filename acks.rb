@@ -124,13 +124,14 @@ class Acks
     danger_level = prompt.select("Choose a danger level:", choices, filter: true, convert: :int, per_page: 15)
     danger_level += 1 # Convert to 1-based index; roads basically subtract 1
     road = prompt.no?("On a road?")
-    terrain = prompt.select("What terrain type?", Terrain::TERRAIN_TYPES, filter: true, per_page: 15, default: "scrubland_sparse")
+    terrain = prompt.select("What terrain type?", Terrain::TERRAIN_TYPES, filter: true, per_page: 15,
+                                                                          default: "scrubland_sparse")
     num = prompt.ask("How many encounters to generate?", convert: :int, default: 20)
 
     wilderness_encounters(danger_level, road, terrain, num)
   end
 
-  def wilderness_encounters(danger_level, road, terrain, num)
+  def wilderness_encounters(danger_level, road, terrain, _num)
     puts Encounters::WildernessEncounters.new(danger_level, road:).wilderness_encounters(terrain).join("\n")
   end
 
