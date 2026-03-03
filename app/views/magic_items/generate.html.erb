@@ -20,15 +20,14 @@
   </div>
 <% end %>
 
-<% if @magic_items %>
+<% if @magic_item_instances %>
   <div class="magic-items-results">
     <h2>Results</h2>
-    <% @magic_items.magic_items_by_rarity.each do |rarity, items| %>
-      <% next if items.empty? %>
-      <h3><%= rarity.to_s.titleize %></h3>
+    <% @magic_item_instances.group_by { |i| i.magic_item.rarity }.each do |rarity, instances| %>
+      <h3><%= rarity.titleize %></h3>
       <ul>
-        <% items.sort.each do |item| %>
-          <li><%= item %></li>
+        <% instances.sort_by(&:display_name).each do |instance| %>
+          <li><%= instance.display_name %></li>
         <% end %>
       </ul>
     <% end %>

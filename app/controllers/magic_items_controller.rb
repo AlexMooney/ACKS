@@ -7,7 +7,7 @@ class MagicItemsController < ApplicationController
     @quantities = RARITIES.index_with { |r| params[r].to_i }
 
     if @quantities.values.any?(&:positive?)
-      @magic_items = TTMagicItems.new(**@quantities)
+      @magic_item_instances = MagicItemGenerator.new(**@quantities).generate
     end
   end
 end
