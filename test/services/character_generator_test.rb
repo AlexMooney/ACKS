@@ -101,4 +101,20 @@ class CharacterGeneratorTest < ActiveSupport::TestCase
     assert_nil character.height_inches
     assert_nil character.weight_lbs
   end
+
+  test "generates appearance for human character" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
+    assert_not_nil character.eye_color
+    assert_not_nil character.skin_color
+    assert_not_nil character.hair_color
+    assert_not_nil character.hair_texture
+  end
+
+  test "non-human ethnicity skips appearance" do
+    character = CharacterGenerator.new(character_class: "Dwarven Vaultguard", level: 1).generate
+    assert_nil character.eye_color
+    assert_nil character.skin_color
+    assert_nil character.hair_color
+    assert_nil character.hair_texture
+  end
 end

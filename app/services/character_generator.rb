@@ -13,6 +13,10 @@ class CharacterGenerator
   HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY
   BUILD_HEIGHT_MODIFIER = CharacterLegacy::Descriptions::BUILD_HEIGHT_MODIFIER
   BUILD_WEIGHT_MODIFIER = CharacterLegacy::Descriptions::BUILD_WEIGHT_MODIFIER
+  HUMAN_EYE_COLOR_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_EYE_COLOR_BY_ETHNICITY
+  HUMAN_SKIN_COLOR_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_SKIN_COLOR_BY_ETHNICITY
+  HUMAN_HAIR_COLOR_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_HAIR_COLOR_BY_ETHNICITY
+  HUMAN_HAIR_TEXTURE_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_HAIR_TEXTURE_BY_ETHNICITY
 
   def initialize(character_class: nil, class_type: nil, level: 1)
     @level = level
@@ -119,7 +123,15 @@ class CharacterGenerator
     base_weight = male?(sex) ? 110 : 90
     weight = ((base_weight + roll_die(8).sum) * BUILD_WEIGHT_MODIFIER[build] * weight_mod).round
 
-    { build: build, height_inches: height, weight_lbs: weight }
+    {
+      build: build,
+      height_inches: height,
+      weight_lbs: weight,
+      eye_color: roll_table(HUMAN_EYE_COLOR_BY_ETHNICITY[ethnicity]),
+      skin_color: roll_table(HUMAN_SKIN_COLOR_BY_ETHNICITY[ethnicity]),
+      hair_color: roll_table(HUMAN_HAIR_COLOR_BY_ETHNICITY[ethnicity]),
+      hair_texture: roll_table(HUMAN_HAIR_TEXTURE_BY_ETHNICITY[ethnicity]),
+    }
   end
 
   def roll_die(count)
