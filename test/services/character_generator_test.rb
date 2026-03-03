@@ -78,4 +78,27 @@ class CharacterGeneratorTest < ActiveSupport::TestCase
     character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
     assert_includes 3..18, character.template
   end
+
+  test "generates build for human character" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
+    valid_builds = CharacterLegacy::Descriptions::Human::HUMAN_BUILD.values.uniq
+    assert_includes valid_builds, character.build
+  end
+
+  test "generates height in reasonable range" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
+    assert_includes 45..90, character.height_inches
+  end
+
+  test "generates weight in reasonable range" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
+    assert_includes 40..450, character.weight_lbs
+  end
+
+  test "non-human ethnicity skips physical description" do
+    character = CharacterGenerator.new(character_class: "Dwarven Vaultguard", level: 1).generate
+    assert_nil character.build
+    assert_nil character.height_inches
+    assert_nil character.weight_lbs
+  end
 end
