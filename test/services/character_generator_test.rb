@@ -121,7 +121,7 @@ class CharacterGeneratorTest < ActiveSupport::TestCase
   test "generates features for human character" do
     character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
     assert_not_nil character.features
-    assert character.features.length > 0
+    assert_not_empty character.features
   end
 
   test "features resolves gendered slash notation" do
