@@ -16,6 +16,12 @@ class CharactersController < ApplicationController
     @character = Character.new
   end
 
+  # GET /characters/generate
+  def generate
+    @character = CharacterGenerator.new.generate
+    render :new
+  end
+
   # GET /characters/1/edit
   def edit; end
 

@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(bundle exec rails test *)",
-      "Bash(bundle exec rails test*)"
+      "Bash(bundle exec rails test*)",
+      "Bash(bundle exec rails routes | grep*)"
     ]
   }
 }
