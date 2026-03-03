@@ -7,6 +7,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :magic_items, only: [] do
+    collection do
+      get :generate
+    end
+  end
+
   root "home#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
