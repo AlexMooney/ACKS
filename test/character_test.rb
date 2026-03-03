@@ -17,7 +17,7 @@ describe Character do
   it "handles every ethnicity" do
     not_implemented_names = %w[krysean kushtu shebatean skysos]
     Character::HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.each_key do |ethnicity|
-      character = Character.new(2, ethnicity:)
+      character = Character.new(2, ethnicity:, class_type: "fighter")
       assert_match(/#{ethnicity}/i, character.descriptions.join(" "))
       refute_match(/\ANot Implemented/, character.name) unless not_implemented_names.include?(ethnicity)
     end

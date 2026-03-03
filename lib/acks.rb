@@ -1,14 +1,5 @@
 # frozen_string_literal: true
 
-require "bundler/setup"
-
-require "csv"
-require "tty-prompt"
-require "tty-table"
-require "zeitwerk"
-
-loader = Zeitwerk::Loader.new
-loader.push_dir("lib")
-loader.setup
-
-require_relative "tt_magic_items" # Manually load the TTMagicItems class with non-Zeitwerk capitalization
+# This file previously bootstrapped the standalone CLI with its own Zeitwerk loader.
+# Under Rails, autoloading is handled by config.autoload_lib in config/application.rb.
+# The csv, tty-prompt, and tty-table gems are loaded via the Gemfile.
