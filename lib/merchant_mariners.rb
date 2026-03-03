@@ -22,7 +22,7 @@ class Gang
   end
 
   def generate_leader!(ethnicity:)
-    Character.new(leader_level, leader_title, character_class: leader_class, ethnicity:)
+    CharacterLegacy.new(leader_level, leader_title, character_class: leader_class, ethnicity:)
   end
 
   def attempt_extra_gang!(characters_by_count, leaders, max_count = nil, ethnicity:)
@@ -170,7 +170,7 @@ class MerchantMariners
 
     if rand < LAIR_CHANCE
       @number_of_ships = roll_dice(ship_type::FLEET_SIZE)
-      @commodore = Character.new(ship_type::CAPTAIN + 2,
+      @commodore = CharacterLegacy.new(ship_type::CAPTAIN + 2,
                                  "Commodore",
                                  character_class: roll_table(captain_class_table),
                                  ethnicity: @flag.downcase)

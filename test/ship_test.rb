@@ -8,7 +8,7 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley1, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 
   it "Galley2 generation" do
@@ -16,7 +16,7 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley2, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 
   it "Galley25 generation" do
@@ -24,7 +24,7 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley25, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 
   it "Galley3 generation" do
@@ -32,7 +32,7 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley3, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 
   it "Galley4 generation" do
@@ -40,7 +40,7 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley4, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 
   it "Galley5 generation" do
@@ -48,7 +48,7 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley5, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 
   it "Galley6 generation" do
@@ -56,7 +56,7 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley6, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 
   it "Galley8 generation" do
@@ -64,6 +64,6 @@ describe "Galley generation" do
     assert_instance_of Ship::Galley8, ship
     assert_equal "Tirenean", ship.flag
     assert_instance_of Treasure, ship.treasure
-    assert_instance_of Character, ship.captain
+    assert_instance_of CharacterLegacy, ship.captain
   end
 end

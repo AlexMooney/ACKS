@@ -40,7 +40,7 @@ class Henchmen
 
       count.times do
         ethnicity = roll_table(Ship::ShipTables::RANDOM_FLAG_CELDOREA, roll_dice("2d6")).downcase
-        @henchmen << Character.new(level, ethnicity:, magic_items: false)
+        @henchmen << CharacterLegacy.new(level, ethnicity:, magic_items: false)
       end
     end
   end

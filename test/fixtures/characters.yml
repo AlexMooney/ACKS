@@ -1,0 +1,51 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  title: MyString
+  level: 1
+  character_class: MyString
+  class_type: MyString
+  template: 1
+  ethnicity: MyString
+  sex: MyString
+  alignment: MyString
+  str: 1
+  int: 1
+  wil: 1
+  dex: 1
+  con: 1
+  cha: 1
+  build: MyString
+  height_inches: 1
+  weight_lbs: 1
+  eye_color: MyString
+  skin_color: MyString
+  hair_color: MyString
+  hair_texture: MyString
+  features: MyText
+
+two:
+  name: MyString
+  title: MyString
+  level: 1
+  character_class: MyString
+  class_type: MyString
+  template: 1
+  ethnicity: MyString
+  sex: MyString
+  alignment: MyString
+  str: 1
+  int: 1
+  wil: 1
+  dex: 1
+  con: 1
+  cha: 1
+  build: MyString
+  height_inches: 1
+  weight_lbs: 1
+  eye_color: MyString
+  skin_color: MyString
+  hair_color: MyString
+  hair_texture: MyString
+  features: MyText

@@ -38,7 +38,7 @@ class NavalMariners
 
     return unless @lair
 
-    @commodore = Character.new(@ships.first.captain.level + 1,
+    @commodore = CharacterLegacy.new(@ships.first.captain.level + 1,
                                "Commodore",
                                character_class: roll_table(captain_class_table),
                                ethnicity: @flag.downcase)

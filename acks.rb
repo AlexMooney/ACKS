@@ -39,7 +39,7 @@ class Acks
     level = TTY::Prompt.new.ask("Character level:", convert: :int, default: 1, min: 1, max: 14)
     class_type = TTY::Prompt.new.select("Character class type:", filter: true, per_page: 15) do |menu|
       menu.choice("Random", nil)
-      Character::CLASS_TYPE.each_value do |class_type|
+      CharacterLegacy::CLASS_TYPE.each_value do |class_type|
         menu.choice(class_type.capitalize, class_type)
       end
     end
@@ -47,14 +47,14 @@ class Acks
     unless class_type.nil?
       character_class = TTY::Prompt.new.select("Character class:", filter: true, per_page: 15) do |menu|
         menu.choice("Random", nil)
-        Character::ClassTables::CLASS_BY_TYPE[class_type].values.uniq.each do |klass|
+        CharacterLegacy::ClassTables::CLASS_BY_TYPE[class_type].values.uniq.each do |klass|
           menu.choice(klass.capitalize, klass)
         end
       end
     end
     ethnicity = TTY::Prompt.new.select("Ethnicity:", filter: true, per_page: 20) do |menu|
       menu.choice("Random", nil)
-      Character::Descriptions::HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.each_key do |ethnicity|
+      CharacterLegacy::Descriptions::HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.each_key do |ethnicity|
         menu.choice(ethnicity.capitalize, ethnicity)
       end
     end
@@ -64,7 +64,7 @@ class Acks
       menu.choice("Female", "female")
     end
 
-    puts Character.new(level, class_type:, character_class:, ethnicity:, sex:)
+    puts CharacterLegacy.new(level, class_type:, character_class:, ethnicity:, sex:)
   end
 
   def merchant_mariners
@@ -80,7 +80,7 @@ class Acks
     # TODO: Allow choosing flag nation
     puts Ship::Galley15.new(flag: "somirean", skip_captain: true)
     [5, 4, 4].each do |l|
-      puts Character.new(l, ethnicity: "somirean",
+      puts CharacterLegacy.new(l, ethnicity: "somirean",
                             character_class: roll_table(Ship::ShipTables::PIRATE_CAPTAIN_CLASS_TABLE))
       puts
     end
