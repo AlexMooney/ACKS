@@ -17,6 +17,11 @@ class CharacterGenerator
   HUMAN_SKIN_COLOR_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_SKIN_COLOR_BY_ETHNICITY
   HUMAN_HAIR_COLOR_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_HAIR_COLOR_BY_ETHNICITY
   HUMAN_HAIR_TEXTURE_BY_ETHNICITY = CharacterLegacy::Descriptions::Human::HUMAN_HAIR_TEXTURE_BY_ETHNICITY
+  NEUTRAL_PHYSICAL_FEATURES = CharacterLegacy::Descriptions::PhysicalFeatures::NEUTRAL_PHYSICAL_FEATURES
+  POSITIVE_PHYSICAL_FEATURES = CharacterLegacy::Descriptions::PhysicalFeatures::POSITIVE_PHYSICAL_FEATURES
+  NEGATIVE_PHYSICAL_FEATURES = CharacterLegacy::Descriptions::PhysicalFeatures::NEGATIVE_PHYSICAL_FEATURES
+  BASIC_HUMAN_CATEGORY = CharacterLegacy::Descriptions::BASIC_HUMAN_CATEGORY
+  BELONGING_TYPE = CharacterLegacy::Descriptions::Belongings::BELONGING_TYPE
 
   def initialize(character_class: nil, class_type: nil, level: 1)
     @level = level
@@ -38,7 +43,7 @@ class CharacterGenerator
   def generate
     stats = roll_stats
     template = roll_die(3).sum
-    alignment = roll_table(RANDOM_ALIGNMENT)
+    @alignment = roll_table(RANDOM_ALIGNMENT)
     sex = roll_sex
     ethnicity = roll_ethnicity
     name = random_name(ethnicity, sex)
@@ -54,7 +59,7 @@ class CharacterGenerator
       character_class: @character_class,
       class_type: @class_type,
       template: template,
-      alignment: alignment,
+      alignment: @alignment,
       sex: sex,
       ethnicity: ethnicity,
       name: name,
@@ -131,7 +136,56 @@ class CharacterGenerator
       skin_color: roll_table(HUMAN_SKIN_COLOR_BY_ETHNICITY[ethnicity]),
       hair_color: roll_table(HUMAN_HAIR_COLOR_BY_ETHNICITY[ethnicity]),
       hair_texture: roll_table(HUMAN_HAIR_TEXTURE_BY_ETHNICITY[ethnicity]),
+      features: roll_features(stats, sex).join(", "),
     }
+  end
+
+  def roll_features(stats, sex)
+    cha_bonus = stat_bonus(stats[:cha])
+
+    features = [roll_table(NEUTRAL_PHYSICAL_FEATURES)]
+    if cha_bonus.negative?
+      cha_bonus.abs.times { features << roll_table(NEGATIVE_PHYSICAL_FEATURES) }
+    elsif cha_bonus.positive?
+      cha_bonus.times { features << roll_table(POSITIVE_PHYSICAL_FEATURES) }
+    end
+
+    # Handle "Roll Twice" results from positive features table
+    while features.include?("Roll Twice")
+      features.delete_at(features.index("Roll Twice"))
+      features << roll_table(POSITIVE_PHYSICAL_FEATURES)
+      features << roll_table(POSITIVE_PHYSICAL_FEATURES)
+    end
+
+    # Resolve gendered slash notation (e.g. "Face - Handsome/Beautiful")
+    features.map! do |feature|
+      if feature.include?("/")
+        type, results = feature.split(" - ")
+        result = results.split("/")[male?(sex) ? 0 : 1].strip
+        "#{type} - #{result}"
+      else
+        feature
+      end
+    end
+
+    # ~35% chance of a belonging (from BASIC_HUMAN_CATEGORY roll)
+    category = roll_table(BASIC_HUMAN_CATEGORY)
+    features << roll_belonging if category == "belongings"
+
+    features
+  end
+
+  def roll_belonging
+    belonging_type = BELONGING_TYPE.sample
+    alignment_table_name = "#{@alignment.upcase}_#{belonging_type.upcase}"
+    any_table_name = "ANY_#{belonging_type.upcase}"
+
+    table = if CharacterLegacy::Descriptions::Belongings.const_defined?(alignment_table_name) && rand < 0.666
+              CharacterLegacy::Descriptions::Belongings.const_get(alignment_table_name)
+            else
+              CharacterLegacy::Descriptions::Belongings.const_get(any_table_name)
+            end
+    "#{belonging_type.capitalize}: #{roll_table(table)}"
   end
 
   def roll_die(count)

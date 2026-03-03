@@ -117,4 +117,23 @@ class CharacterGeneratorTest < ActiveSupport::TestCase
     assert_nil character.hair_color
     assert_nil character.hair_texture
   end
+
+  test "generates features for human character" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
+    assert_not_nil character.features
+    assert character.features.length > 0
+  end
+
+  test "features resolves gendered slash notation" do
+    # Features like "Face - Handsome/Beautiful" should resolve to one word
+    20.times do
+      character = CharacterGenerator.new(character_class: "Fighter", level: 1).generate
+      refute_match %r{/}, character.features, "Features should not contain unresolved slash: #{character.features}"
+    end
+  end
+
+  test "non-human ethnicity skips features" do
+    character = CharacterGenerator.new(character_class: "Dwarven Vaultguard", level: 1).generate
+    assert_nil character.features
+  end
 end
