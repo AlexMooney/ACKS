@@ -2,8 +2,12 @@
 
 class CharacterGenerator
   include Tables
+  include CharacterLegacy::Names
 
   STATS = %w[STR INT WIL DEX CON CHA].freeze
+  HUMAN_ETHNICITIES = CharacterLegacy::Descriptions::Human::HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.keys.freeze
+  RANDOM_ALIGNMENT = CharacterLegacy::Descriptions::RANDOM_ALIGNMENT
+  SEX_BY_CLASS = CharacterLegacy::ClassTables::SEX_BY_CLASS
 
   def initialize(character_class: nil, class_type: nil, level: 1)
     @level = level
@@ -24,10 +28,21 @@ class CharacterGenerator
 
   def generate
     stats = roll_stats
+    template = roll_die(3).sum
+    alignment = roll_table(RANDOM_ALIGNMENT)
+    sex = roll_sex
+    ethnicity = roll_ethnicity
+    name = random_name(ethnicity, sex)
+
     Character.new(
       level: @level,
       character_class: @character_class,
       class_type: @class_type,
+      template: template,
+      alignment: alignment,
+      sex: sex,
+      ethnicity: ethnicity,
+      name: name,
       **stats,
     )
   end
@@ -55,6 +70,20 @@ class CharacterGenerator
                 roll_die(3).sum
               end
       [stat.downcase.to_sym, value]
+    end
+  end
+
+  def roll_sex
+    SEX_BY_CLASS[@character_class].sample
+  end
+
+  def roll_ethnicity
+    if @character_class.start_with?("Dwarven")
+      "dwarven"
+    elsif @character_class.start_with?("Elven")
+      "elven"
+    else
+      HUMAN_ETHNICITIES.sample
     end
   end
 
