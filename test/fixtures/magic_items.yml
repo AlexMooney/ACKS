@@ -1,21 +1,2 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: MyString
-  rarity: MyString
-  item_type: MyString
-  base_cost: 1
-  apparent_value: MyString
-  share: 1
-  weighted_share: 1
-  description: MyString
-
-two:
-  name: MyString
-  rarity: MyString
-  item_type: MyString
-  base_cost: 1
-  apparent_value: MyString
-  share: 1
-  weighted_share: 1
-  description: MyString
+# Magic items are seeded from CSV data; no fixtures needed.
+# See test/models/magic_item_test.rb for seed-based tests.
