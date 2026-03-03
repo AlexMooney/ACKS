@@ -45,7 +45,7 @@ class Ship
 
     def additional_weapons
       [
-        "#{(passengers.total_count / 8.0).ceil}× boarding ramps",
+        passengers ? "#{(passengers.total_count / 8.0).ceil}× boarding ramps" : "",
         (has_ram? ? "Naval Ram" : "").to_s,
         "Fire Pot Pole",
       ].reject(&:empty?).join(", ")

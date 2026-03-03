@@ -26,6 +26,19 @@ class Character
       hp
     end
 
+    # Rolling PC HP requires printing out stuff and can hardcode hit die and con bonus
+    # def hit_points
+    #   hp = 3 + 1 # con
+    #   8.times do |i|
+    #     rolls = (i + 1).times.map { rand(1..4) } # hit die
+    #     new_roll = rolls.sum + i + 1 # con
+    #     new_hp = [hp + 1, new_roll].max
+    #     puts "Level #{i + 1}.  Rolled #{rolls.join(',')}+#{i+1} = #{new_roll}.  HP increase from #{hp} to #{new_hp}."
+    #     hp = new_hp
+    #   end
+    #   hp
+    # end
+
     def melee_damage_bonus
       base = damage_bonus
       return nil unless base

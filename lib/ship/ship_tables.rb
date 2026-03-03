@@ -60,7 +60,7 @@ class Ship
       8 => "Fighter",
       11 => "Barbarian",
       14 => "Explorer",
-      15 => "Ruingaurd",
+      15 => "Zaharan Ruinguard",
       16 => "Venturer",
       20 => nil,
     }.freeze
