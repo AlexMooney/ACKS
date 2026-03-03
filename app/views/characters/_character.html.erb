@@ -1,117 +1,77 @@
 <div id="<%= dom_id character %>">
-  <div>
-    <strong>Name:</strong>
-    <%= character.name %>
-  </div>
+  <h2><%= [character.title, character.name].compact_blank.join(" ") %></h2>
+  <p><%= character.character_class %> level <%= character.level %><%= ", #{character.alignment}" if character.alignment.present? %></p>
 
-  <div>
-    <strong>Title:</strong>
-    <%= character.title %>
-  </div>
+  <% if [character.str, character.int, character.wil, character.dex, character.con, character.cha].any? %>
+    <div class="stat-line">
+      <% { STR: character.str, INT: character.int, WIL: character.wil, DEX: character.dex, CON: character.con, CHA: character.cha }.each do |label, value| %>
+        <% next unless value %>
+        <div class="stat">
+          <div class="stat-value"><%= value %></div>
+          <div class="stat-label"><%= label %></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 
-  <div>
-    <strong>Level:</strong>
-    <%= character.level %>
-  </div>
+  <div class="character-sheet">
+    <% if character.ethnicity.present? || character.sex.present? %>
+      <div>
+        <dt>Ethnicity</dt>
+        <dd><%= character.ethnicity&.capitalize %></dd>
+      </div>
+      <div>
+        <dt>Sex</dt>
+        <dd><%= character.sex&.capitalize %></dd>
+      </div>
+    <% end %>
 
-  <div>
-    <strong>Character class:</strong>
-    <%= character.character_class %>
-  </div>
+    <% if character.build.present? || character.height_inches.present? || character.weight_lbs.present? %>
+      <div>
+        <dt>Build</dt>
+        <dd><%= character.build %></dd>
+      </div>
+      <div>
+        <dt>Height / Weight</dt>
+        <dd>
+          <%= "#{character.height_inches / 12}' #{character.height_inches % 12}\"" if character.height_inches %>
+          <%= " / #{character.weight_lbs} lbs" if character.weight_lbs %>
+        </dd>
+      </div>
+    <% end %>
 
-  <div>
-    <strong>Class type:</strong>
-    <%= character.class_type %>
-  </div>
+    <% if [character.eye_color, character.skin_color, character.hair_color, character.hair_texture].any?(&:present?) %>
+      <div>
+        <dt>Eyes</dt>
+        <dd><%= character.eye_color %></dd>
+      </div>
+      <div>
+        <dt>Skin</dt>
+        <dd><%= character.skin_color %></dd>
+      </div>
+      <div>
+        <dt>Hair</dt>
+        <dd><%= [character.hair_texture, character.hair_color].compact_blank.join(" ") %></dd>
+      </div>
+      <div></div>
+    <% end %>
 
-  <div>
-    <strong>Template:</strong>
-    <%= character.template %>
-  </div>
+    <% if character.features.present? %>
+      <div class="full-width">
+        <dt>Features</dt>
+        <dd><%= character.features %></dd>
+      </div>
+    <% end %>
 
-  <div>
-    <strong>Ethnicity:</strong>
-    <%= character.ethnicity %>
+    <% if character.class_type.present? || character.template.present? %>
+      <div>
+        <dt>Class Type</dt>
+        <dd><%= character.class_type&.capitalize %></dd>
+      </div>
+      <div>
+        <dt>Template</dt>
+        <dd><%= character.template %></dd>
+      </div>
+    <% end %>
   </div>
-
-  <div>
-    <strong>Sex:</strong>
-    <%= character.sex %>
-  </div>
-
-  <div>
-    <strong>Alignment:</strong>
-    <%= character.alignment %>
-  </div>
-
-  <div>
-    <strong>Str:</strong>
-    <%= character.str %>
-  </div>
-
-  <div>
-    <strong>Int:</strong>
-    <%= character.int %>
-  </div>
-
-  <div>
-    <strong>Wil:</strong>
-    <%= character.wil %>
-  </div>
-
-  <div>
-    <strong>Dex:</strong>
-    <%= character.dex %>
-  </div>
-
-  <div>
-    <strong>Con:</strong>
-    <%= character.con %>
-  </div>
-
-  <div>
-    <strong>Cha:</strong>
-    <%= character.cha %>
-  </div>
-
-  <div>
-    <strong>Build:</strong>
-    <%= character.build %>
-  </div>
-
-  <div>
-    <strong>Height inches:</strong>
-    <%= character.height_inches %>
-  </div>
-
-  <div>
-    <strong>Weight lbs:</strong>
-    <%= character.weight_lbs %>
-  </div>
-
-  <div>
-    <strong>Eye color:</strong>
-    <%= character.eye_color %>
-  </div>
-
-  <div>
-    <strong>Skin color:</strong>
-    <%= character.skin_color %>
-  </div>
-
-  <div>
-    <strong>Hair color:</strong>
-    <%= character.hair_color %>
-  </div>
-
-  <div>
-    <strong>Hair texture:</strong>
-    <%= character.hair_texture %>
-  </div>
-
-  <div>
-    <strong>Features:</strong>
-    <%= character.features %>
-  </div>
-
 </div>

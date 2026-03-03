@@ -1,10 +1,12 @@
-<p style="color: green"><%= notice %></p>
+<% if notice.present? %>
+  <p class="notice"><%= notice %></p>
+<% end %>
 
 <%= render @character %>
 
-<div>
-  <%= link_to "Edit this character", edit_character_path(@character) %> |
-  <%= link_to "Back to characters", characters_path %>
-
-  <%= button_to "Destroy this character", @character, method: :delete %>
+<div class="form-actions">
+  <%= link_to "Edit", edit_character_path(@character), class: "btn" %>
+  <%= link_to "Back to characters", characters_path, class: "btn btn-secondary" %>
+  <%= button_to "Delete", @character, method: :delete, class: "btn btn-secondary",
+      data: { turbo_confirm: "Are you sure?" } %>
 </div>

@@ -1,8 +1,7 @@
-<%= form_with(model: character) do |form| %>
+<%= form_with(model: character, html: { class: "character-form" }) do |form| %>
   <% if character.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(character.errors.count, "error") %> prohibited this character from being saved:</h2>
-
+    <div class="form-errors">
+      <strong><%= pluralize(character.errors.count, "error") %> prohibited this character from being saved:</strong>
       <ul>
         <% character.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,122 +10,115 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
+  <fieldset>
+    <legend>Identity</legend>
+    <div class="field-row">
+      <div class="field field-wide">
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+      </div>
+      <div class="field">
+        <%= form.label :title %>
+        <%= form.text_field :title %>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <%= form.label :character_class %>
+        <%= form.text_field :character_class %>
+      </div>
+      <div class="field">
+        <%= form.label :class_type %>
+        <%= form.text_field :class_type %>
+      </div>
+      <div class="field field-narrow">
+        <%= form.label :level %>
+        <%= form.number_field :level %>
+      </div>
+      <div class="field field-narrow">
+        <%= form.label :template %>
+        <%= form.number_field :template %>
+      </div>
+    </div>
+  </fieldset>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
-  </div>
+  <fieldset>
+    <legend>Ability Scores</legend>
+    <div class="stat-grid">
+      <% %i[str int wil dex con cha].each do |stat| %>
+        <div class="field">
+          <%= form.label stat %>
+          <%= form.number_field stat %>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
 
-  <div>
-    <%= form.label :level, style: "display: block" %>
-    <%= form.number_field :level %>
-  </div>
+  <fieldset>
+    <legend>Description</legend>
+    <div class="field-row">
+      <div class="field">
+        <%= form.label :ethnicity %>
+        <%= form.text_field :ethnicity %>
+      </div>
+      <div class="field field-narrow">
+        <%= form.label :sex %>
+        <%= form.text_field :sex %>
+      </div>
+      <div class="field">
+        <%= form.label :alignment %>
+        <%= form.text_field :alignment %>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <%= form.label :build %>
+        <%= form.text_field :build %>
+      </div>
+      <div class="field field-narrow">
+        <%= form.label :height_inches, "Height (in)" %>
+        <%= form.number_field :height_inches %>
+      </div>
+      <div class="field field-narrow">
+        <%= form.label :weight_lbs, "Weight (lbs)" %>
+        <%= form.number_field :weight_lbs %>
+      </div>
+    </div>
+  </fieldset>
 
-  <div>
-    <%= form.label :character_class, style: "display: block" %>
-    <%= form.text_field :character_class %>
-  </div>
+  <fieldset>
+    <legend>Appearance</legend>
+    <div class="field-row">
+      <div class="field">
+        <%= form.label :eye_color %>
+        <%= form.text_field :eye_color %>
+      </div>
+      <div class="field">
+        <%= form.label :skin_color %>
+        <%= form.text_field :skin_color %>
+      </div>
+      <div class="field">
+        <%= form.label :hair_color %>
+        <%= form.text_field :hair_color %>
+      </div>
+      <div class="field">
+        <%= form.label :hair_texture %>
+        <%= form.text_field :hair_texture %>
+      </div>
+    </div>
+  </fieldset>
 
-  <div>
-    <%= form.label :class_type, style: "display: block" %>
-    <%= form.text_field :class_type %>
-  </div>
+  <fieldset>
+    <legend>Features</legend>
+    <div class="field-row">
+      <div class="field field-wide">
+        <%= form.textarea :features, rows: 3 %>
+      </div>
+    </div>
+  </fieldset>
 
-  <div>
-    <%= form.label :template, style: "display: block" %>
-    <%= form.number_field :template %>
-  </div>
-
-  <div>
-    <%= form.label :ethnicity, style: "display: block" %>
-    <%= form.text_field :ethnicity %>
-  </div>
-
-  <div>
-    <%= form.label :sex, style: "display: block" %>
-    <%= form.text_field :sex %>
-  </div>
-
-  <div>
-    <%= form.label :alignment, style: "display: block" %>
-    <%= form.text_field :alignment %>
-  </div>
-
-  <div>
-    <%= form.label :str, style: "display: block" %>
-    <%= form.number_field :str %>
-  </div>
-
-  <div>
-    <%= form.label :int, style: "display: block" %>
-    <%= form.number_field :int %>
-  </div>
-
-  <div>
-    <%= form.label :wil, style: "display: block" %>
-    <%= form.number_field :wil %>
-  </div>
-
-  <div>
-    <%= form.label :dex, style: "display: block" %>
-    <%= form.number_field :dex %>
-  </div>
-
-  <div>
-    <%= form.label :con, style: "display: block" %>
-    <%= form.number_field :con %>
-  </div>
-
-  <div>
-    <%= form.label :cha, style: "display: block" %>
-    <%= form.number_field :cha %>
-  </div>
-
-  <div>
-    <%= form.label :build, style: "display: block" %>
-    <%= form.text_field :build %>
-  </div>
-
-  <div>
-    <%= form.label :height_inches, style: "display: block" %>
-    <%= form.number_field :height_inches %>
-  </div>
-
-  <div>
-    <%= form.label :weight_lbs, style: "display: block" %>
-    <%= form.number_field :weight_lbs %>
-  </div>
-
-  <div>
-    <%= form.label :eye_color, style: "display: block" %>
-    <%= form.text_field :eye_color %>
-  </div>
-
-  <div>
-    <%= form.label :skin_color, style: "display: block" %>
-    <%= form.text_field :skin_color %>
-  </div>
-
-  <div>
-    <%= form.label :hair_color, style: "display: block" %>
-    <%= form.text_field :hair_color %>
-  </div>
-
-  <div>
-    <%= form.label :hair_texture, style: "display: block" %>
-    <%= form.text_field :hair_texture %>
-  </div>
-
-  <div>
-    <%= form.label :features, style: "display: block" %>
-    <%= form.textarea :features %>
-  </div>
-
-  <div>
+  <div class="form-actions">
     <%= form.submit %>
+    <%= link_to "Back to characters", characters_path, class: "btn btn-secondary" %>
   </div>
 <% end %>

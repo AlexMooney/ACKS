@@ -1,16 +1,49 @@
-<p style="color: green"><%= notice %></p>
+<% if notice.present? %>
+  <p class="notice"><%= notice %></p>
+<% end %>
 
 <% content_for :title, "Characters" %>
 
 <h1>Characters</h1>
 
-<div id="characters">
-  <% @characters.each do |character| %>
-    <%= render character %>
-    <p>
-      <%= link_to "Show this character", character %>
-    </p>
-  <% end %>
-</div>
+<% if @characters.any? %>
+  <table class="character-list">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Class</th>
+        <th>Level</th>
+        <th>STR</th>
+        <th>INT</th>
+        <th>WIL</th>
+        <th>DEX</th>
+        <th>CON</th>
+        <th>CHA</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @characters.each do |character| %>
+        <tr>
+          <td><%= link_to character.name || "Unnamed", character %></td>
+          <td><%= character.character_class %></td>
+          <td><%= character.level %></td>
+          <td><%= character.str %></td>
+          <td><%= character.int %></td>
+          <td><%= character.wil %></td>
+          <td><%= character.dex %></td>
+          <td><%= character.con %></td>
+          <td><%= character.cha %></td>
+          <td><%= link_to "Edit", edit_character_path(character) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No characters yet.</p>
+<% end %>
 
-<%= link_to "New character", new_character_path %>
+<div class="form-actions">
+  <%= link_to "Generate Random Character", generate_characters_path, class: "btn" %>
+  <%= link_to "New Blank Character", new_character_path, class: "btn btn-secondary" %>
+</div>
