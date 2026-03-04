@@ -7,9 +7,9 @@
       "Bash(bundle exec rails runner *)",
       "Bash(bundle exec rubocop*)",
       "Bash(bundle exec ruby -Ilib -Itest*)",
-      "Bash(bundle exec ruby -Itest *)"
+      "Bash(bundle exec ruby -Itest *)",
       "Bash(bundle exec rake test*)",
-      "Bash(ls *)",
+      "Bash(ls *)"
     ]
   },
   "enabledPlugins": {
