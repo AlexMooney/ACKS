@@ -56,6 +56,14 @@ class MagicItemGeneratorTest < ActiveSupport::TestCase
     assert_match(/versus /, resolved)
   end
 
+  test "resolves Weapon +N into specific weapon type" do
+    resolved = MagicItemGenerator.new.send(:resolve_name, "Weapon +1")
+
+    assert_not_nil resolved
+    refute_equal "Weapon +1", resolved
+    assert_match(/\+1\z/, resolved)
+  end
+
   test "non-template items have nil override_name" do
     instances = MagicItemGenerator.new(common: 20).generate
     non_template = instances.find { |i| !i.magic_item.name.match?(/Spell Scroll|Creature Warding|versus X/) }

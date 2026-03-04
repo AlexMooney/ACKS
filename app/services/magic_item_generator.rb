@@ -8,6 +8,7 @@ class MagicItemGenerator
     spell_scroll: /\ASpell Scroll \((\d+) levels?\)\z/,
     creature_warding: "Scroll of Creature Warding",
     versus_x: / versus X/,
+    weapon: /\AWeapon \+(\d+)\z/,
   }.freeze
 
   def initialize(**quantities)
@@ -54,6 +55,8 @@ class MagicItemGenerator
     elsif name.match?(TEMPLATE_PATTERNS[:versus_x])
       creature = MagicItemResolvers::ScrollCreatureWarding.new.roll_details.sub("Scroll of Warding vs. ", "")
       name.sub(" versus X", " versus #{creature}")
+    elsif (match = name.match(TEMPLATE_PATTERNS[:weapon]))
+      MagicItemResolvers::Weapon.new(plus: match[1].to_i).roll_details
     end
   end
 end
