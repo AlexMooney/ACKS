@@ -16,10 +16,23 @@ class CharactersController < ApplicationController
     @character = Character.new
   end
 
-  # GET /characters/generate
+  # POST /characters/generate
+  INTEGER_OVERRIDE_KEYS = %i[level template str int wil dex con cha height_inches weight_lbs].freeze
+
   def generate
-    @character = CharacterGenerator.new.generate
-    render :new
+    overrides = character_params.to_h.reject { |_, v| v.blank? }.symbolize_keys
+    INTEGER_OVERRIDE_KEYS.each { |k| overrides[k] = overrides[k].to_i if overrides[k] }
+    character_class = overrides.delete(:character_class)
+    class_type = overrides.delete(:class_type)
+    level = overrides.delete(:level) || 1
+
+    @character = CharacterGenerator.new(
+      character_class: character_class,
+      class_type: class_type,
+      level: level,
+      overrides: overrides,
+    ).generate
+    render :new, status: :unprocessable_entity
   end
 
   # GET /characters/1/edit

@@ -141,4 +141,76 @@ class CharacterGeneratorTest < ActiveSupport::TestCase
     character = CharacterGenerator.new(character_class: "Dwarven Vaultguard", level: 1).generate
     assert_nil character.features
   end
+
+  test "overrides name when provided" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { name: "TestName" }).generate
+    assert_equal "TestName", character.name
+  end
+
+  test "overrides sex when provided" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { sex: "female" }).generate
+    assert_equal "female", character.sex
+  end
+
+  test "overrides alignment when provided" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { alignment: "Chaotic" }).generate
+    assert_equal "Chaotic", character.alignment
+  end
+
+  test "overrides ethnicity when provided" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { ethnicity: "kemeshi" }).generate
+    assert_equal "kemeshi", character.ethnicity
+  end
+
+  test "overrides template when provided" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { template: 10 }).generate
+    assert_equal 10, character.template
+  end
+
+  test "overrides individual stats when provided" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { str: 18, cha: 3 }).generate
+    assert_equal 18, character.str
+    assert_equal 3, character.cha
+    # Non-overridden stats should still be rolled
+    assert_includes 3..18, character.int
+  end
+
+  test "overrides physical attributes when provided" do
+    character = CharacterGenerator.new(
+      character_class: "Fighter", level: 1,
+      overrides: { build: "Skinny", height_inches: 72, weight_lbs: 180 },
+    ).generate
+    assert_equal "Skinny", character.build
+    assert_equal 72, character.height_inches
+    assert_equal 180, character.weight_lbs
+  end
+
+  test "overrides appearance when provided" do
+    character = CharacterGenerator.new(
+      character_class: "Fighter", level: 1,
+      overrides: { eye_color: "red", hair_color: "white" },
+    ).generate
+    assert_equal "red", character.eye_color
+    assert_equal "white", character.hair_color
+  end
+
+  test "overrides features when provided" do
+    character = CharacterGenerator.new(
+      character_class: "Fighter", level: 1,
+      overrides: { features: "Tall, Dark, Handsome" },
+    ).generate
+    assert_equal "Tall, Dark, Handsome", character.features
+  end
+
+  test "passes through title override" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { title: "Lord" }).generate
+    assert_equal "Lord", character.title
+  end
+
+  test "ignores blank override values" do
+    character = CharacterGenerator.new(character_class: "Fighter", level: 1, overrides: { name: "", alignment: "" }).generate
+    assert_not_nil character.name
+    assert_not_empty character.name
+    assert_includes %w[Lawful Neutral Chaotic], character.alignment
+  end
 end

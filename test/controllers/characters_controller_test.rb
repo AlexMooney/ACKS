@@ -44,6 +44,16 @@ class CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to character_url(@character)
   end
 
+  test "should generate a random character" do
+    post generate_characters_url, params: { character: { name: "", level: "" } }
+    assert_response :unprocessable_entity
+  end
+
+  test "should generate a character with overrides" do
+    post generate_characters_url, params: { character: { character_class: "Fighter", level: "5", name: "TestHero" } }
+    assert_response :unprocessable_entity
+  end
+
   test "should destroy character" do
     assert_difference("Character.count", -1) do
       delete character_url(@character)

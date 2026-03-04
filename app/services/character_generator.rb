@@ -23,7 +23,8 @@ class CharacterGenerator
   BASIC_HUMAN_CATEGORY = CharacterLegacy::Descriptions::BASIC_HUMAN_CATEGORY
   BELONGING_TYPE = CharacterLegacy::Descriptions::Belongings::BELONGING_TYPE
 
-  def initialize(character_class: nil, class_type: nil, level: 1)
+  def initialize(character_class: nil, class_type: nil, level: 1, overrides: {})
+    @overrides = overrides
     @level = level
 
     if character_class.nil? && class_type.nil?
@@ -42,11 +43,11 @@ class CharacterGenerator
 
   def generate
     stats = roll_stats
-    template = roll_die(3).sum
-    @alignment = roll_table(RANDOM_ALIGNMENT)
-    sex = roll_sex
-    ethnicity = roll_ethnicity
-    name = random_name(ethnicity, sex)
+    template = override(:template) || roll_die(3).sum
+    @alignment = override(:alignment) || roll_table(RANDOM_ALIGNMENT)
+    sex = override(:sex) || roll_sex
+    ethnicity = override(:ethnicity) || roll_ethnicity
+    name = override(:name) || random_name(ethnicity, sex)
 
     physical = if HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY.key?(ethnicity)
                  roll_physical(stats, sex, ethnicity)
@@ -63,12 +64,18 @@ class CharacterGenerator
       sex: sex,
       ethnicity: ethnicity,
       name: name,
+      title: override(:title),
       **stats,
       **physical,
     )
   end
 
   private
+
+  def override(key)
+    value = @overrides[key]
+    value.presence
+  end
 
   def roll_stats
     stat_preference = CharacterLegacy::ClassTables::STAT_PREFERENCE_BY_CLASS[@character_class] ||
@@ -83,14 +90,15 @@ class CharacterGenerator
     end.sample
 
     STATS.to_h do |stat|
-      value = if stat == best
-                [roll_die(5).sort.last(3).sum, 13].max
-              elsif stat == boost1 || stat == boost2
-                [roll_die(4).sort.last(3).sum, 9].max
-              else
-                roll_die(3).sum
-              end
-      [stat.downcase.to_sym, value]
+      key = stat.downcase.to_sym
+      value = override(key) || if stat == best
+                                  [roll_die(5).sort.last(3).sum, 13].max
+                                elsif stat == boost1 || stat == boost2
+                                  [roll_die(4).sort.last(3).sum, 9].max
+                                else
+                                  roll_die(3).sum
+                                end
+      [key, value]
     end
   end
 
@@ -119,24 +127,24 @@ class CharacterGenerator
   def roll_physical(stats, sex, ethnicity)
     str_bonus = stat_bonus(stats[:str])
     build_roll = roll_die(2).sum + (2 * str_bonus)
-    build = roll_table(HUMAN_BUILD, build_roll)
+    build = override(:build) || roll_table(HUMAN_BUILD, build_roll)
 
     height_mod, weight_mod = HUMAN_HEIGHT_WEIGHT_BY_ETHNICITY[ethnicity]
     base_height = male?(sex) ? 60 : 55
-    height = ((base_height + roll_die(2).sum + height_mod) * BUILD_HEIGHT_MODIFIER[build]).round
+    height = override(:height_inches) || ((base_height + roll_die(2).sum + height_mod) * BUILD_HEIGHT_MODIFIER[build]).round
 
     base_weight = male?(sex) ? 110 : 90
-    weight = ((base_weight + roll_die(8).sum) * BUILD_WEIGHT_MODIFIER[build] * weight_mod).round
+    weight = override(:weight_lbs) || ((base_weight + roll_die(8).sum) * BUILD_WEIGHT_MODIFIER[build] * weight_mod).round
 
     {
       build: build,
       height_inches: height,
       weight_lbs: weight,
-      eye_color: roll_table(HUMAN_EYE_COLOR_BY_ETHNICITY[ethnicity]),
-      skin_color: roll_table(HUMAN_SKIN_COLOR_BY_ETHNICITY[ethnicity]),
-      hair_color: roll_table(HUMAN_HAIR_COLOR_BY_ETHNICITY[ethnicity]),
-      hair_texture: roll_table(HUMAN_HAIR_TEXTURE_BY_ETHNICITY[ethnicity]),
-      features: roll_features(stats, sex).join(", "),
+      eye_color: override(:eye_color) || roll_table(HUMAN_EYE_COLOR_BY_ETHNICITY[ethnicity]),
+      skin_color: override(:skin_color) || roll_table(HUMAN_SKIN_COLOR_BY_ETHNICITY[ethnicity]),
+      hair_color: override(:hair_color) || roll_table(HUMAN_HAIR_COLOR_BY_ETHNICITY[ethnicity]),
+      hair_texture: override(:hair_texture) || roll_table(HUMAN_HAIR_TEXTURE_BY_ETHNICITY[ethnicity]),
+      features: override(:features) || roll_features(stats, sex).join(", "),
     }
   end
 

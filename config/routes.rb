@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   resources :characters do
     collection do
-      get :generate
+      post :generate
     end
   end
 

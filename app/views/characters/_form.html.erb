@@ -119,6 +119,7 @@
 
   <div class="form-actions">
     <%= form.submit %>
+    <%= form.submit "Generate", formaction: generate_characters_path, formmethod: "post", class: "btn btn-secondary" %>
     <%= link_to "Back to characters", characters_path, class: "btn btn-secondary" %>
   </div>
 <% end %>
