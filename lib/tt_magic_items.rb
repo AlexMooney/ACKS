@@ -5,7 +5,9 @@ require "csv"
 class TTMagicItems
   class << self
     def type_by_rarity
-      @type_by_rarity ||= CSV.parse(File.read(File.expand_path("magic_items/frequencies.csv", __dir__)), headers: true)
+      @type_by_rarity ||= CSV.parse(
+        File.read(File.expand_path("magic_items/frequencies.csv", __dir__)), headers: true
+      )
                              .to_h do |line|
         [line["rarity"], line.to_h.except("rarity").transform_values(&:to_i)]
       end
@@ -45,10 +47,10 @@ class TTMagicItems
           SpellScroll.new(::Regexp.last_match(1).to_i).roll_details
         end
         item.gsub("Scroll of Creature Warding") do
-          MagicItems::ScrollCreatureWarding.new.roll_details
+          MagicItemResolvers::ScrollCreatureWarding.new.roll_details
         end
         item.gsub(" versus X") do
-          " versus #{MagicItems::ScrollCreatureWarding.new.roll_details.sub('Scroll of Warding vs. ', '')}"
+          " versus #{MagicItemResolvers::ScrollCreatureWarding.new.roll_details.sub('Scroll of Warding vs. ', '')}"
         end
       end
     end

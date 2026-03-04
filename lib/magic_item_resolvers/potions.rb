@@ -2,7 +2,7 @@
 
 require "csv"
 
-module MagicItems
+module MagicItemResolvers
   class Potions
     include SpellCheck
 
@@ -19,7 +19,7 @@ module MagicItems
     private
 
     def appearance_csv
-      @appearance_csv ||= CSV.parse(File.read(File.expand_path("potion_appearances.csv", __dir__)), headers: true)
+      @appearance_csv ||= CSV.parse(File.read(File.expand_path("../magic_items/potion_appearances.csv", __dir__)), headers: true)
                              .to_h do |line|
         [clean_potion_name(line["potion"]), line["appearance"]]
       end

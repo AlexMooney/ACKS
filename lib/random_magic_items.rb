@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "tables"
-require_relative "magic_items"
+require_relative "magic_item_resolvers"
 
 class RandomMagicItems
   include Tables

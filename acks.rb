@@ -259,7 +259,7 @@ class Acks
              "potion of delay disease", "potion of simmering rage", "Potion of Ogre Strength", "Potion of arcane armor", "Potion of deathly appearance", "Oil of Excavation", "Potion of Clairaudiency", "Potion of Clairvoyancy", "Potion of Cure Serious Injury", "Potion of Deflect Ordinary Missiles", "Potion of Growth", "Potion of Remove Curse", "potion of discern invisible", "potion of energy invulnerability", "potion of delay disease", "potion of water breathing", "Potion of arcane armor"]
     names.map! { |n| n.split.map(&:capitalize).join(" ").sub(/\s+Of\s+/, " of ") }
     names.sort!
-    potions = MagicItems::Potions.new
+    potions = MagicItemResolvers::Potions.new
     names.each { |n| puts "#{n}: #{potions.appearance_by_potion(n)}" }
   end
 

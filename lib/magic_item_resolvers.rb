@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MagicItems
+module MagicItemResolvers
   AMMO_TYPE_BY_ROLL = {
     13 => "Arrow",
     17 => "Crossbow Bolt",

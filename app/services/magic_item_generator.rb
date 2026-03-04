@@ -50,9 +50,9 @@ class MagicItemGenerator
     if (match = name.match(TEMPLATE_PATTERNS[:spell_scroll]))
       SpellScroll.new(match[1].to_i).roll_details
     elsif name == TEMPLATE_PATTERNS[:creature_warding]
-      MagicItems::ScrollCreatureWarding.new.roll_details
+      MagicItemResolvers::ScrollCreatureWarding.new.roll_details
     elsif name.match?(TEMPLATE_PATTERNS[:versus_x])
-      creature = MagicItems::ScrollCreatureWarding.new.roll_details.sub("Scroll of Warding vs. ", "")
+      creature = MagicItemResolvers::ScrollCreatureWarding.new.roll_details.sub("Scroll of Warding vs. ", "")
       name.sub(" versus X", " versus #{creature}")
     end
   end

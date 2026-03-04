@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MagicItems
+module MagicItemResolvers
   CREATURE_BY_ROLL = ["Angels", "Animals", "Beastment", "Constructs",
                       "Demons", "Dragons", "Dwarves, Gnomes, & Halflings", "Elementals",
                       "Elves, Faeries, & Fey", "Giants", "Humans", "Lycanthropes",
